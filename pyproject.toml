@@ -2,12 +2,14 @@
 name = "telegram-group-tag-bot"
 version = "0.0.1"
 description = "Group members tagging solution"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
 
-[organization]
+[project.organization]
 name = "IASA Student Council"
 email = "studrada@gmail.com"
 
-[details]
-readme = "README.md"
-license = {file = "LICENSE"}
-requires-python = ">=3.11"
+[[project.authors]]
+name = "Yulian Zavodnyk"
+email = "yulianzavodnyk@gmail.com"
