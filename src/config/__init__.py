@@ -1,2 +1,3 @@
-from .config import mongo_uri, bot_token, test_token
-from .logging_config import configure_logging
+from .config import *
+from .logging_config import *
+from .text_config import *
