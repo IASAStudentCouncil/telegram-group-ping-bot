@@ -13,10 +13,8 @@ async def main() -> None:
         Establishes connection to MongoDB, configures logging, and starts the bot polling.
     """
 
-    # Initialize logging configuration
     configure_logging()
 
-    # Establish MongoDB connection and configure database
     try:
         client = await connect_to_mongo()
         mdb = await setup_database(client)
@@ -26,7 +24,6 @@ async def main() -> None:
         logging.exception(e)
         return
 
-    # Begin polling to handle updates
     try:
         logging.info("Starting bot polling...")
         await dp.start_polling(bot, db=mdb)
@@ -34,7 +31,6 @@ async def main() -> None:
         logging.error("An error occurred while polling!")
         logging.exception(e)
     finally:
-        # Close bot session cleanly after polling ends
         await bot.session.close()
         logging.info("Bot session closed!")
 

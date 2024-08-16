@@ -1,14 +1,14 @@
 import os
 from dotenv import load_dotenv
 
-# Loading enviroment variables from .env file
+# Loading variables from .env file
 load_dotenv()
 
-# ------ load tokens ------
+# Load tokens
 bot_token = os.getenv("BOT_TOKEN")
 test_token = os.getenv("TEST_BOT_TOKEN")
 
-# ------ mongodb ------
+# MongoDB
 mongo_user = os.getenv("USER_NAME")
 mongo_pass = os.getenv("USER_PASS")
 mongo_host = os.getenv("MONGO_HOST")
@@ -17,7 +17,7 @@ mongo_uri = f"mongodb+srv://{mongo_user}:{mongo_pass}@{mongo_host}/?{mongo_param
 
 db_name = os.getenv("DB_NAME")
 
-# ------ checking all enviroment variables ------
+# Checking all enviroment variables
 env_var = [
     bot_token, test_token,
     mongo_user, mongo_pass, mongo_host, mongo_params,
@@ -27,7 +27,7 @@ env_var = [
 if not all(env_var):
     raise EnvironmentError("One or more critical environment variables are missing!")
 
-# ------ supported languages ------
+# Supported languages
 available_languages = {
     "en": "EN🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "uk": "UA🇺🇦"

@@ -12,14 +12,9 @@ def configure_logging(path: str = "src/config/logging_config.yaml", logger: str 
             logger (str): The name of the logger to configure. Defaults to 'development'.
     """
 
-    # Load logging configuration from YAML file
     with open(path) as file:
         config = yaml.safe_load(file.read())
-
-    # Apply logging configuration
     logging.config.dictConfig(config)
-
-    # Set the root logger
     logging.root = logging.getLogger(logger)
 
     logging.info("Successfully configured logging")

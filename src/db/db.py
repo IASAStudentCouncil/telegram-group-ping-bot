@@ -1,8 +1,10 @@
+import asyncio
 import logging
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from motor.core import AgnosticDatabase as MDB
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
+from pymongo import ASCENDING
 
 from src.config import mongo_uri, db_name
 from .schema_validators import *
@@ -111,43 +113,49 @@ class User:
         self.collection = db["users"]
         self._id = user_id
         self.username = username
-        self.language = "uk" if language_code in ["uk", "ru"] else "en"
+        self.default_language = "uk" if language_code in ["uk", "ru"] else "en"
+        self.language = None
+
+        asyncio.create_task(self.ensure_index())  # Ensure an index on _id for faster lookups
+
+    async def ensure_index(self) -> None:
+        """Ensures that an index exists on the '_id' field for faster lookups."""
+        await self.collection.create_index([("_id", ASCENDING)])
 
     async def user_validation(self) -> None:
-        """
-        Checks if the user exists in the database and updates or inserts data as necessary.
-        """
-        user = await self.collection.find_one({"_id": self._id})
-        if user is None:
-            await self.collection.insert_one(
-                {
-                    "_id": self._id,
+        """Checks if the user exists in the database and updates or inserts data as necessary."""
+        user_data = await self.collection.find_one({"_id": self._id})
+        if user_data is None:
+            await self.collection.update_one(
+                {"_id": self._id},
+                {"$set": {
                     "username": self.username,
-                    "language": self.language
-                }
+                    "language": self.default_language
+                }},
+                upsert=True
             )
+            self.language = self.default_language
         else:
-            self.language = user["language"]
-            if user["username"] != self.username:
+            if user_data["username"] != self.username:
                 await self.collection.update_one(
                     {"_id": self._id},
                     {"$set": {"username": self.username}}
                 )
+            self.language = user_data["language"]
 
-    async def change_language(self, language_code: str) -> None:
+    async def change_user_language(self, language_code: str) -> None:
         """
         Updates the user's preferred language in the database if it has changed.
 
         Args:
             language_code (str): New language code to be updated.
         """
-
-        if language_code != self.language:
-            self.language = language_code
+        if self.language != language_code:
             await self.collection.update_one(
                 {"_id": self._id},
-                {"$set": {"language": self.language}}
+                {"$set": {"language": language_code}}
             )
+            self.language = language_code
 
 
 __all__ = ("connect_to_mongo", "setup_database", "User")
