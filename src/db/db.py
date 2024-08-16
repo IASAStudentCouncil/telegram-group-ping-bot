@@ -120,13 +120,12 @@ class User:
         """Checks if the user exists in the database and updates or inserts data as necessary."""
         user_data = await self._collection.find_one({"_id": self._id})
         if user_data is None:
-            await self._collection.update_one(
-                {"_id": self._id},
-                {"$set": {
+            await self._collection.insert_one(
+                {
+                    "_id": self._id,
                     "username": self.username,
                     "language": self.default_language
-                }},
-                upsert=True
+                }
             )
             self.language = self.default_language
         else:

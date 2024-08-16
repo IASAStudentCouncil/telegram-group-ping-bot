@@ -3,15 +3,15 @@
 # These messages are used for private chat interactions
 private_messages = {
     "start": {
-        "en": "Hey! I'm *Mate Tag Bot* 😊\n\n"
+        "en": "Hey! I'm *Ping Bot* 😊\n\n"
               "Type /help to explore all my commands.\n"
-              "Or tap the button below to add me to your group chat and start tagging!",
-        "uk": "Привіт! Я — *Mate Tag Bot* 😊\n\n"
+              "Or tap the button below to add me to your group chat and start pinging!",
+        "uk": "Привіт! Я — *Ping Bot* 😊\n\n"
               "Напишіть /help, щоб ознайомитись з усіма моїми командами.\n"
               "Або натисніть кнопку нижче, щоб додати мене до вашої групи і почати відмічати учасників!"
     },
     "help": {
-        "en": "I can help you tag members in your group quickly. "
+        "en": "I can help you ping members in your group quickly, like in Discord. "
               "Here are some commands you can use:\n\n"
               "*Personal Chat Commands:*\n"
               "/language - to choose your preferred language.\n"
@@ -21,10 +21,10 @@ private_messages = {
               "Use these commands to enhance your group chat experience!",
         "uk": "Я можу допомогти вам швидко відмічати учасників у вашій групі. "
               "Ось деякі команди, які ви можете використовувати:\n\n"
-              "*Персонального чат:*\n"
-              "/language - для зміни мову чату.\n"
-              "/addtogroup - щоб додати мене до вашого групового чату.\n\n"
-              "*Групового чат:*\n"
+              "*Персональний чат:*\n"
+              "/language - для зміни мови чату.\n"
+              "/addtogroup - щоб додати мене до вашої групи.\n\n"
+              "*Груповий чат:*\n"
               "****\n\n"
               "Використовуйте ці команди, щоб покращити комунікацію в групових чатах!"
     },
@@ -37,7 +37,7 @@ private_messages = {
         "uk": "Мову обрано 🇺🇦󠁧󠁢󠁥󠁮󠁧󠁿"
     },
     "add_to_group": {
-        "en": "Tap the button to add me to your group chat. Let's get tagging!",
+        "en": "Tap the button to add me to your group chat. Let's get pinging!",
         "uk": "Натисніть, щоб додати мене до групи 😌"
     }
 }

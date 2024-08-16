@@ -19,8 +19,9 @@ db_name = os.getenv("DB_NAME")
 
 # Checking all enviroment variables
 env_var = [
-    bot_token, test_token,
-    mongo_user, mongo_pass, mongo_host, mongo_params,
+    bot_token,
+    mongo_user, mongo_pass,
+    mongo_host, mongo_params,
     db_name
 ]
 
