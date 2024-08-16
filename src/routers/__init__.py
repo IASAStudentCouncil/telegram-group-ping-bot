@@ -1,5 +1,5 @@
 from aiogram import Router
-from .commands_routers import commands_router
+from .command_routers import commands_router
 from .callback_routers import callbacks_router
 
 # Main router that handles everything

@@ -16,8 +16,8 @@ router = Router(name=__name__)      # Router for private command handling
 @router.message(Command(commands=['start', 'help']), F.chat.type == ChatType.PRIVATE)
 async def start(message: Message, db: MDB) -> None:
     """
-    Handles '/start' and '/help' commands in private chats. Clears any previous state, validates user,
-    and responds with the appropriate message and keyboard based on the command.
+        Handles '/start' and '/help' commands in private chats. Clears any previous state, validates user,
+        and responds with the appropriate message and keyboard based on the command.
     """
 
     user_id = message.from_user.id
@@ -36,9 +36,7 @@ async def start(message: Message, db: MDB) -> None:
 
 @router.message(Command('addtogroup'), F.chat.type == ChatType.PRIVATE)
 async def add_to_group(message: Message, db: MDB) -> None:
-    """
-    Handles the '/addtogroup' command which allows users to add the bot to a group chat.
-    """
+    """Handles the '/addtogroup' command which allows users to add the bot to a group chat."""
 
     user_id = message.from_user.id
     username = message.from_user.username
@@ -52,9 +50,8 @@ async def add_to_group(message: Message, db: MDB) -> None:
 
 @router.message(Command('language'), F.chat.type == ChatType.PRIVATE)
 async def change_language(message: Message, db: MDB) -> None:
-    """
-    Initiates language change process by presenting a language selection keyboard.
-    """
+    """Initiates language change process by presenting a language selection keyboard."""
+
     user_id = message.from_user.id
     username = message.from_user.username
 

@@ -7,10 +7,9 @@ from src.config import available_languages
 
 def build_language_markup() -> InlineKeyboardMarkup:
     """
-    Creates an inline keyboard with buttons for selecting the user's preferred language.
-
-    Returns:
-        InlineKeyboardMarkup: An inline keyboard with language selection buttons.
+        Creates an inline keyboard with buttons for selecting the user's preferred language.
+        Returns:
+            InlineKeyboardMarkup: An inline keyboard with language selection buttons.
     """
 
     builder = InlineKeyboardBuilder()
@@ -28,15 +27,12 @@ def build_language_markup() -> InlineKeyboardMarkup:
 
 def build_add_to_group_markup(language: str) -> InlineKeyboardMarkup:
     """
-    Creates an inline keyboard with a button that allows adding the bot to a group.
-
-    Args:
-        language (str): The language key to fetch appropriate button text.
-
-    Returns:
-        InlineKeyboardMarkup: The constructed inline keyboard with a single button.
-
-    The button directs users to a URL for adding the bot to their Telegram group.
+        Creates an inline keyboard with a button that allows adding the bot to a group.
+        Args:
+            language (str): The language key to fetch appropriate button text.
+        Returns:
+            InlineKeyboardMarkup: The constructed inline keyboard with a single button.
+        The button directs users to a URL for adding the bot to their Telegram group.
     """
 
     builder = InlineKeyboardBuilder()

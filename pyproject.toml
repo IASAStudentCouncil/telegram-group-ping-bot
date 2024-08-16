@@ -1,10 +1,13 @@
 [project]
 name = "telegram-group-tag-bot"
-version = "0.0.1"
-description = "Group members tagging solution"
+version = "0.2.0"
+description = "A Telegram bot for tagging group members quickly and easily."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
+keywords = ["telegram", "bot", "group", "tagging", "automation"]
+homepage = "https://t.me/group_mate_tag_bot"
+repository = "https://github.com/IASAStudentCouncil/telegram-group-tag-bot"
 
 [project.organization]
 name = "IASA Student Council"
@@ -13,3 +16,13 @@ email = "studrada@gmail.com"
 [[project.authors]]
 name = "Yulian Zavodnyk"
 email = "yulianzavodnyk@gmail.com"
+
+[project.dependencies]
+aiogram = "==3.11.0"
+asyncio = "==3.4.3"
+pymongo = "==4.8.0"
+motor = "==3.5.1"
+pytest = "==8.3.2"
+pytest-asyncio = "==0.23.8"
+pyyaml = "==6.0.2"
+python-dotenv = "==1.0.1"
