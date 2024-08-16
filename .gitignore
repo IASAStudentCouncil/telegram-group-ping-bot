@@ -1,18 +1,25 @@
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / Optimized / DLL Files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
+# C Extensions
 *.so
 
-# Idea dir
-.idea
+# Temporary Files and Backup Artifacts
+tmp/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.log
+*.seed
+*.pid
+*.out
+*.err
 
-#tmp dir
-tmp
-
-# Distribution / packaging
+# Distribution / Packaging Artifacts
 .Python
 build/
 develop-eggs/
@@ -32,17 +39,15 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+# PyInstaller Files
 *.manifest
 *.spec
 
-# Installer logs
+# Installer Logs
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit Test / Coverage Reports
 htmlcov/
 .tox/
 .nox/
@@ -57,109 +62,159 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# Translations
+# Localization Files
 *.mo
 *.pot
 
-# Django stuff:
-*.log
+# Django Files
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# Flask Files
 instance/
 .webassets-cache
 
-# Scrapy stuff:
-.scrapy
+# Scrapy Files
+.scrapy/
 
-# Sphinx documentation
+# Sphinx Documentation
 docs/_build/
 
-# PyBuilder
+# PyBuilder Files
 .pybuilder/
 target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# Jupyter Notebook Files
+.ipynb_checkpoints/
 
-# IPython
+# IPython Files
 profile_default/
 ipython_config.py
 
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
-
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#pdm.lock
-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
-#   in version control.
-#   https://pdm.fming.dev/#use-with-ide
-.pdm.toml
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.venv
+# Python Virtual Environments
+.venv/
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+__pypackages__/
 
-# Spyder project settings
-.spyderproject
-.spyproject
+# Python Environment Management
+.python-version
+Pipfile.lock
+poetry.lock
+.pdm.toml
+.pdm.lock
 
-# Rope project settings
-.ropeproject
+# Celery Files
+celerybeat-schedule
+celerybeat.pid
 
-# mkdocs documentation
-/site
+# SageMath Files
+*.sage.py
 
-# mypy
+# Spyder Project Settings
+.spyderproject/
+.spyproject/
+
+# Rope Project Settings
+.ropeproject/
+
+# mkdocs Documentation
+/site/
+
+# mypy Static Type Checker
 .mypy_cache/
 .dmypy.json
 dmypy.json
 
-# Pyre type checker
+# Pyre Type Checker
 .pyre/
 
-# pytype static type analyzer
+# pytype Static Type Analyzer
 .pytype/
 
-# Cython debug symbols
+# Cython Debug Symbols
 cython_debug/
 
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+# IDE / Editor Settings and Project Files
+.idea/
+*.iml
+*.iws
+.idea/*.xml
+.idea/modules.xml
+.idea/workspace.xml
+.idea/misc.xml
+.idea/*.iml
+.idea/dictionaries/
+.idea/libraries/
+.vscode/
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+*.sublime-project
+*.sublime-workspace
+*.kate-swp
+*.orig
+*.bak.*
+*.orig.*
+*.bak
+
+# macOS Files
+.DS_Store
+
+# Windows Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux Files
+*.lock
+*~
+.nfs*
+
+# Dependency / Lock Files
+Pipfile.lock
+poetry.lock
+.pdm.lock
+
+# Documentation Files
+*.rst
+*.md
+
+# Logs and Reports
+*.log
+*.out
+*.err
+
+# Specific Tools and Frameworks (e.g., PyCharm, VSCode)
+# For JetBrains / PyCharm / IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+.idea/*.xml
+
+# VSCode Settings and Project Files
+.vscode/
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# Additional Backup and Temporary Files
+*.bak
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Other Unnecessary Files
+*.pid
+*.seed
+*.out
+*.err
