@@ -29,7 +29,9 @@ async def main() -> None:
     except Exception as e:
         logging.error("An error occurred while polling!")
         logging.exception("Exception details:", exc_info=e)
+        client.close()
     finally:
+        client.close()
         await bot.session.close()
         logging.info("Bot session closed!")
 

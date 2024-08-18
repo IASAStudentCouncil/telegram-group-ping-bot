@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 # Loading variables from .env file
 load_dotenv()
 
-# Load tokens
+# Load bot variables
 bot_token = os.getenv("BOT_TOKEN")
-test_token = os.getenv("TEST_BOT_TOKEN")
+bot_name = os.getenv("BOT_NAME")
 
 # MongoDB
 mongo_user = os.getenv("USER_NAME")
@@ -19,7 +19,7 @@ db_name = os.getenv("DB_NAME")
 
 # Checking all enviroment variables
 env_var = [
-    bot_token,
+    bot_token, bot_name,
     mongo_user, mongo_pass,
     mongo_host, mongo_params,
     db_name
@@ -34,4 +34,4 @@ available_languages = {
     "uk": "UA🇺🇦"
 }
 
-__all__ = ("mongo_uri", "db_name", "bot_token", "test_token", "available_languages")
+__all__ = ("mongo_uri", "db_name", "bot_token", "bot_name", "available_languages")

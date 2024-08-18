@@ -22,9 +22,10 @@ async def start(message: Message, db: MDB) -> None:
 
     user_id = message.from_user.id
     username = message.from_user.username
+    first_name = message.from_user.first_name
     user_chat_language = message.from_user.language_code
 
-    user = User(db, user_id, username, user_chat_language)
+    user = User(db, user_id, username, first_name, user_chat_language)
     await user.user_validation()
 
     if "/start" in message.text:
@@ -40,8 +41,9 @@ async def add_to_group(message: Message, db: MDB) -> None:
 
     user_id = message.from_user.id
     username = message.from_user.username
+    first_name = message.from_user.first_name
 
-    user = User(db, user_id, username)
+    user = User(db, user_id, username, first_name)
     await user.user_validation()
 
     await message.answer(text=messages["add_to_group"][user.language],
@@ -54,9 +56,25 @@ async def change_language(message: Message, db: MDB) -> None:
 
     user_id = message.from_user.id
     username = message.from_user.username
+    first_name = message.from_user.first_name
 
-    user = User(db, user_id, username)
+    user = User(db, user_id, username, first_name)
     await user.user_validation()
 
     await message.answer(text=messages["choice_language"][user.language],
                          reply_markup=build_language_markup())
+
+
+@router.message(Command(commands=['pingme', 'dontpingme', 'here', 'everyone', 'showusers']),
+                F.chat.type == ChatType.PRIVATE)
+async def ignore_group_commands(message: Message, db: MDB) -> None:
+    """Handles commands that are meant for group chats but are mistakenly sent in private messages."""
+
+    user_id = message.from_user.id
+    username = message.from_user.username
+    first_name = message.from_user.first_name
+
+    user = User(db, user_id, username, first_name)
+    await user.user_validation()
+
+    await message.reply(text=messages["ignore_commands_in_private"][user.language])

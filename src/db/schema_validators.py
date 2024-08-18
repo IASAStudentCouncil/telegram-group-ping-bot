@@ -2,15 +2,19 @@
 user_validator = {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["_id", "username", "language"],
+        "required": ["_id", "username", "first_name", "language"],
         "properties": {
             "_id": {
-                "bsonType": "int",
-                "description": "Must be a string and is required"
+                "bsonType": ["int", "long"],
+                "description": "Must be int or long and is required"
             },
             "username": {
                 "bsonType": ["string", "null"],
                 "description": "Must be a string or null and is required"
+            },
+            "first_name": {
+                "bsonType": "string",
+                "description": "Must be a string and is required"
             },
             "language": {
                 "bsonType": "string",
@@ -24,30 +28,26 @@ user_validator = {
 group_validator = {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["_id", "users", "language", "subgroups"],
+        "required": ["_id", "users", "language"],
         "properties": {
             "_id": {
-                "bsonType": "int",
-                "description": "Must be a string and is required"
+                "bsonType": ["int", "long"],
+                "description": "Must be int or long and is required"
             },
             "users": {
                 "bsonType": "array",
                 "description": "Must be an array of users and is required",
                 "items": {
                     "bsonType": "object",
-                    "required": ["user_id", "tag_permission", "is_banned"],
+                    "required": ["user_id", "can_be_pinged"],
                     "properties": {
                         "user_id": {
-                            "bsonType": "int",
-                            "description": "Must be a string and is required"
+                            "bsonType": ["int", "long"],
+                            "description": "Must be int or long and is required"
                         },
-                        "tag_permission": {
+                        "can_be_pinged": {
                             "bsonType": "bool",
-                            "description": "Must be a boolean indicating if the user can be tagged"
-                        },
-                        "is_banned": {
-                            "bsonType": "bool",
-                            "description": "Must be a boolean indicating if the user is banned"
+                            "description": "Must be a boolean indicating if the user can be pinged"
                         }
                     }
                 }
@@ -55,29 +55,32 @@ group_validator = {
             "language": {
                 "bsonType": "string",
                 "description": "Must be a string and is required"
+            }
+        }
+    }
+}
+
+"""
+"subgroups": {
+    "bsonType": "array",
+    "description": "Must be an array of subgroups and is required",
+    "items": {
+        "bsonType": "object",
+        "required": ["subgroup_name", "users"],
+        "properties": {
+            "names": {
+                "bsonType": "string",
+                "description": "Must be a string representing the subgroup name"
             },
-            "subgroups": {
+            "users": {
                 "bsonType": "array",
-                "description": "Must be an array of subgroups and is required",
+                "description": "Must be an array of user IDs",
                 "items": {
-                    "bsonType": "object",
-                    "required": ["subgroup_name", "users"],
-                    "properties": {
-                        "names": {
-                            "bsonType": "string",
-                            "description": "Must be a string representing the subgroup name"
-                        },
-                        "users": {
-                            "bsonType": "array",
-                            "description": "Must be an array of user IDs",
-                            "items": {
-                                "bsonType": "int",
-                                "description": "Each item must be a string representing a user ID"
-                            }
-                        }
-                    }
+                    "bsonType": "int",
+                    "description": "Each item must be a string representing a user ID"
                 }
             }
         }
     }
 }
+"""

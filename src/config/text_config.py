@@ -39,6 +39,10 @@ private_messages = {
     "add_to_group": {
         "en": "Tap the button to add me to your group chat. Let's get pinging!",
         "uk": "Натисніть, щоб додати мене до групи 😌"
+    },
+    "ignore_commands_in_private": {
+        "en": "Command is only available in group chat. Check /help for more information.",
+        "uk": "Команда допуступна лише в груповому чаті. Скористайтеся /help аби дізнатися більше."
     }
 }
 
