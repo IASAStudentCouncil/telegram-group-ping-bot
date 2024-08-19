@@ -48,7 +48,36 @@ private_messages = {
 
 # Dictionary to store text for group messages
 group_messages = {
-
+    "start": {
+        "en": "Hey! I'm *Ping Bot* 😊\n\n"
+              "Type /help to explore all my commands.\n",
+        "uk": "Привіт! Я — *Ping Bot* 😊\n\n"
+              "Напишіть /help, щоб ознайомитись з усіма моїми командами.\n"
+    },
+    "help": {
+        "en": "I can help you ping members in your group quickly, like in Discord. "
+              "Here are commands you can use:\n\n"
+              "****\n\n",
+        "uk": "Я допоможу вам швидко відмічати учасників у вашій групі. "
+              "Ось команди, які ви можете використовувати:\n\n"
+              "****\n\n"
+    },
+    "choice_language": {
+        "en": "Choice language...",
+        "uk": "Оберіть мову..."
+    },
+    "language_selected": {
+        "en": "Language selected 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "uk": "Мову обрано 🇺🇦󠁧󠁢󠁥󠁮󠁧󠁿"
+    },
+    "allow_pinging": {
+        "en": "Let's get pinging!",
+        "uk": "Тепер я можу тебе відмічати!"
+    },
+    "forbide_pinging": {
+        "en": "Ok!",
+        "uk": "Добре, більше не буду"
+    },
 }
 
 # For texts associated with reply keyboard markup buttons

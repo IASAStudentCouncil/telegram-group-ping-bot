@@ -11,7 +11,6 @@ def build_language_markup() -> InlineKeyboardMarkup:
         Returns:
             InlineKeyboardMarkup: An inline keyboard with language selection buttons.
     """
-
     builder = InlineKeyboardBuilder()
     for language_code, language in available_languages.items():
         builder.add(
@@ -34,7 +33,6 @@ def build_add_to_group_markup(language: str) -> InlineKeyboardMarkup:
             InlineKeyboardMarkup: The constructed inline keyboard with a single button.
         The button directs users to a URL for adding the bot to their Telegram group.
     """
-
     builder = InlineKeyboardBuilder()
     builder.button(text=text["add_to_group_button"][language], url="https://t.me/group_mate_tag_bot?startgroup=test")
     return builder.as_markup()

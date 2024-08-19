@@ -11,7 +11,6 @@ async def main() -> None:
         Main asynchronous function to start the bot.
         Establishes connection to MongoDB, configures logging, and starts the bot polling.
     """
-
     configure_logging()
 
     try:

@@ -15,7 +15,6 @@ router = Router(name=__name__)      # Router for private callbacks handling
                        F.message.chat.type == ChatType.PRIVATE)
 async def set_language(call: CallbackQuery, db: MDB) -> None:
     """Sets the user's language based on their selection and confirms the update."""
-
     user_id = call.from_user.id
     username = call.from_user.username
     language = call.data

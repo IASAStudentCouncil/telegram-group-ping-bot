@@ -23,7 +23,6 @@ async def connect_to_mongo(uri: str = mongo_uri) -> AsyncIOMotorClient:
             OperationFailure: If there's an issue with MongoDB authentication.
             Exception: For other unexpected issues during connection.
     """
-
     client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=5000)
 
     try:
@@ -55,7 +54,6 @@ async def setup_database(client: AsyncIOMotorClient) -> MDB:
             MDB: Configured database with necessary collections.
         It checks for required collections and creates them if they are missing, applying validation rules.
     """
-
     db = client[db_name]
     logging.info(f"Connected to the '{db_name}' database")
 
@@ -92,13 +90,12 @@ class User:
         This class simplifies interactions with the 'users' collection in the database. It handles operations
         such as validating existing user data, updating usernames, and changing user language preferences.
         Attributes:
-            db (MDB): Reference to the MongoDB database.
-            _id (int): Unique identifier for the user, typically the user's Telegram ID.
-            username (str | None): User's Telegram username.
-            first_name (str): User's Telegram first name.
-            language (str): User's preferred language, used to localize responses.
+            db (MDB): The MongoDB database reference.
+            id (int): The unique identifier for the user, typically the user's Telegram ID.
+            username (str | None): The user's Telegram username.
+            first_name (str): The user's Telegram first name.
+            language (str): The user's preferred language for interaction.
     """
-
     def __init__(self, db: MDB, user_id: int, username: str | None, first_name: str, language_code: str = "en") -> None:
         """
             Initializes a User object for managing user data in the database.
@@ -109,9 +106,8 @@ class User:
                 first_name (str): First name.
                 language_code (str): Default language of the user, defaults to English.
         """
-
         self._collection = db["users"]
-        self._id = user_id
+        self.id = user_id
         self.username = username
         self.first_name = first_name
         self._default_language = "uk" if language_code in ["uk", "ru"] else "en"
@@ -125,11 +121,11 @@ class User:
 
     async def user_validation(self) -> None:
         """Checks if the user exists in the database and updates or inserts data as necessary."""
-        user_data = await self._collection.find_one({"_id": self._id})
+        user_data = await self._collection.find_one({"_id": self.id})
         if user_data is None:
             await self._collection.insert_one(
                 {
-                    "_id": self._id,
+                    "_id": self.id,
                     "username": self.username,
                     "first_name": self.first_name,
                     "language": self._default_language
@@ -144,7 +140,7 @@ class User:
                     updates[field] = getattr(self, field)
             if updates:
                 await self._collection.update_one(
-                    {"_id": self._id},
+                    {"_id": self.id},
                     {"$set": updates}
                 )
             self.language = user_data["language"]
@@ -157,7 +153,7 @@ class User:
         """
         if self.language != language_code:
             await self._collection.update_one(
-                {"_id": self._id},
+                {"_id": self.id},
                 {"$set": {"language": language_code}}
             )
             self.language = language_code
@@ -169,12 +165,10 @@ class Group:
         such as validating existing group data, updating users, and managing subgroups.
 
         Attributes:
-            db (MDB): Reference to the MongoDB database.
-            _id (int): Unique identifier for the group, typically the group's Telegram ID.
-            users (List[dict]): A list of users within the group.
-            language (str): The group's default language, used for communication within the group.
+            db (MDB): The MongoDB database reference.
+            id (int): The unique identifier for the group, typically the group's Telegram ID.
+            language (str): The group's default language for communication.
     """
-
     def __init__(self, db: MDB, group_id: int):
         """
             Initializes a Group object for managing group data in the database.
@@ -183,10 +177,9 @@ class Group:
                 db (MDB): The database connection.
                 group_id (int): Unique identifier for the group.
         """
-
-        self._collection = db["groups"]
-        self._id = group_id
-        self.users: List[dict] = []
+        self._db = db
+        self._collection = self._db["groups"]
+        self.id = group_id
         self.language: Optional[str] = None
 
         asyncio.create_task(self.__ensure_index())
@@ -196,17 +189,26 @@ class Group:
         await self._collection.create_index([("_id", ASCENDING)])
 
     async def add_group_to_db(self) -> None:
-        self.language = "en"
+        """Inserts a new group into the database."""
         await self._collection.insert_one(
             {
-                "_id": self._id,
-                "users": self.users,
+                "_id": self.id,
+                "users": [],
                 "language": self.language
             }
         )
 
-    async def delete_group_from_db(self) -> None:
-        await self._collection.delete_one({"_id": self._id})
+    async def get_group_language(self) -> None:
+        """
+        Retrieves the language of the group. If the group does not exist, the default language "en" is set and returned.
+
+        Returns:
+            str: The group's language or "en" if the group does not exist.
+        """
+        group_data = await self._collection.find_one({"_id": self.id}, {"language": 1, "_id": 0})
+        self.language = group_data["language"] if group_data else "en"
+        if not group_data:
+            await self.add_group_to_db()
 
     async def change_group_language(self, language_code: str) -> None:
         """
@@ -215,31 +217,156 @@ class Group:
             Args:
                 language_code (str): New language code to be updated.
         """
-
         if self.language != language_code:
             self.language = language_code
             await self._collection.update_one(
-                {"_id": self._id},
+                {"_id": self.id},
                 {"$set": {"language": self.language}}
             )
 
-    async def add_user(self, user: User) -> None:
-        pass
+    async def delete_group_from_db(self) -> None:
+        """Deletes the group from the database."""
+        await self._collection.delete_one({"_id": self.id})
 
-    async def delete_user(self, user: User) -> None:
-        pass
+    async def add_user(self, user_id: int, can_be_pinged: bool = True) -> None:
+        """
+        Adds a new user to the group with the specified ping permissions.
 
-    async def allow_to_ping_user(self, user: User) -> None:
-        pass
+        Args:
+            user_id (int): The user's Telegram ID.
+            can_be_pinged (bool): Indicates if the user can be pinged. Defaults to True.
+        """
+        await self._collection.update_one(
+            {"_id": self.id, "users.user_id": {"$ne": user_id}},
+            {
+                "$push": {
+                    "users": {
+                        "user_id": user_id,
+                        "can_be_pinged": can_be_pinged
+                    }
+                }
+            },
+            upsert=True
+        )
 
-    async def forbide_user_pinging(self, user: User) -> None:
-        pass
+    async def delete_user(self, user_id: int) -> None:
+        """
+        Removes a user from the group.
+
+        Args:
+            user_id (int): The user's Telegram ID.
+        """
+        await self._collection.update_one(
+            {"_id": self.id},
+            {
+                "$pull": {
+                    "users": {"user_id": user_id}
+                }
+            }
+        )
+
+    async def user_validation(self, user_id: int):
+        """
+            Validates if a user exists in the group. If not, adds the user to the group.
+
+            Args:
+                user_id (int): The user's Telegram ID.
+        """
+        user_exists = await self._collection.find_one(
+            {"_id": self.id, "users.user_id": user_id},
+            {"users.user_id": 1, "_id": 0}
+        )
+
+        if not user_exists:
+            await self.add_user(user_id)
+
+    async def allow_to_ping_user(self, user_id: int) -> None:
+        """
+        Allows the specified user to be pinged in the group.
+
+        Args:
+            user_id (int): The user's Telegram ID.
+        """
+        await self._collection.update_one(
+            {"_id": self.id, "users.user_id": user_id},
+            {
+                "$set": {
+                    "users.$.can_be_pinged": True
+                }
+            }
+        )
+
+    async def forbid_user_pinging(self, user_id: int) -> None:
+        """
+        Forbids the specified user from being pinged in the group.
+
+        Args:
+            user_id (int): The user's Telegram ID.
+        """
+        await self._collection.update_one(
+            {"_id": self.id, "users.user_id": user_id},
+            {
+                "$set": {
+                    "users.$.can_be_pinged": False
+                }
+            }
+        )
 
     async def get_all_usernames(self) -> List[str]:
-        pass
+        """
+        Retrieves the usernames of all users in the group.
 
-    async def get_all_users(self) -> List[dict]:
-        pass
+        Returns:
+            List[str]: A list of usernames for all users in the group.
+        """
+        all_user_data = await self.get_all_user_data()
+        return [user[1] for user in all_user_data if user[1]]
+
+    async def get_pingable_usernames(self) -> List[str]:
+        """
+        Retrieves the usernames of users in the group who allow themselves to be pinged.
+
+        Returns:
+            List[str]: A list of usernames for users who can be pinged.
+        """
+        all_user_data = await self.get_all_user_data()
+        return [user[1] for user in all_user_data if user[1] and user[2]]
+
+    async def get_all_user_data(self) -> List[List[Optional[str]]]:
+        """
+        Retrieves all user records from the group, including their `first_name`, `username`, and `can_be_pinged` status.
+
+        Returns:
+            List[List[Optional[str]]]: A list of lists where each sublist contains the `first_name`, `username`, and `can_be_pinged` status of a user.
+        """
+        group_data = await self._collection.find_one(
+            {"_id": self.id},
+            {"users.user_id": 1, "users.can_be_pinged": 1, "_id": 0}
+        )
+        if not group_data:
+            return []
+
+        users_info = group_data.get("users", [])
+
+        user_ids = [user["user_id"] for user in users_info]
+        can_be_pinged_map = {user["user_id"]: user["can_be_pinged"] for user in users_info}
+
+        user_collection = self._db["users"]
+        users_data = await user_collection.find(
+            {"_id": {"$in": user_ids}},
+            {"_id": 1, "first_name": 1, "username": 1}
+        ).to_list(length=None)
+
+        result = [
+            [
+                user["first_name"],
+                user["username"],
+                can_be_pinged_map.get(user["_id"])
+            ]
+            for user in users_data
+        ]
+
+        return result
 
 
 __all__ = ("connect_to_mongo", "setup_database", "User", "Group")

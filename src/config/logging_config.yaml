@@ -28,27 +28,27 @@ loggers:
 
     staging:
         level: INFO
-        handlers: [console, file]
+        handlers: [console]
         propagate: no
 
     production:
         level: WARNING
-        handlers: [file]
+        handlers: [console]
         propagate: no
 
     pymongo:
         level: WARNING
-        handlers: [console, file]
+        handlers: [console]
         propagate: False
 
     motor:
         level: WARNING
-        handlers: [console, file]
+        handlers: [console]
         propagate: False
 
     aiogram:
         level: INFO
-        handlers: [console, file]
+        handlers: [console]
         propagate: False
 
 root:
