@@ -161,7 +161,6 @@ cython_debug/
 *.orig
 *.bak.*
 *.orig.*
-*.bak
 
 # macOS Files
 .DS_Store
@@ -176,45 +175,3 @@ $RECYCLE.BIN/
 *.lock
 *~
 .nfs*
-
-# Dependency / Lock Files
-Pipfile.lock
-poetry.lock
-.pdm.lock
-
-# Documentation Files
-*.rst
-*.md
-
-# Logs and Reports
-*.log
-*.out
-*.err
-
-# Specific Tools and Frameworks (e.g., PyCharm, VSCode)
-# For JetBrains / PyCharm / IntelliJ IDEA
-.idea/
-*.iml
-*.iws
-.idea/*.xml
-
-# VSCode Settings and Project Files
-.vscode/
-.vscode/settings.json
-.vscode/tasks.json
-.vscode/launch.json
-.vscode/extensions.json
-
-# Additional Backup and Temporary Files
-*.bak
-*.tmp
-*.temp
-*.swp
-*.swo
-*~
-
-# Other Unnecessary Files
-*.pid
-*.seed
-*.out
-*.err

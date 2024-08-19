@@ -1,14 +1,12 @@
 from aiogram import Router
-from .private_commands import router as private_commands_router
-from .group_commands import router as group_commands_router
+from .command_routers import commands_router
+from .callback_routers import callbacks_router
 
-# Initialize the main router for handling all bot commands
+# Main router that handles everything
 main_router = Router(name=__name__)
-
-# Include routers from different modules
 main_router.include_routers(
-    private_commands_router,
-    group_commands_router
+    commands_router,
+    callbacks_router
 )
 
 __all__ = ("main_router",)
