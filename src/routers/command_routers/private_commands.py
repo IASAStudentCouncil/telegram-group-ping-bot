@@ -8,7 +8,6 @@ from motor.core import AgnosticDatabase as MDB
 from src.db import *
 from src.keyboards import *
 from src.config import private_messages as messages
-from src.config import available_languages as languages
 
 router = Router(name=__name__)      # Router for private command handling
 
@@ -25,7 +24,7 @@ async def start_help(message: Message, db: MDB) -> None:
     user_chat_language = message.from_user.language_code
 
     user = User(db, user_id, username, first_name, user_chat_language)
-    await user.user_validation()
+    await user.validation()
 
     if "/start" in message.text:
         await message.answer(text=messages["start"][user.language],
@@ -34,16 +33,29 @@ async def start_help(message: Message, db: MDB) -> None:
         await message.answer(text=messages["help"][user.language])
 
 
-@router.message(Command('addtogroup'), F.chat.type == ChatType.PRIVATE)
-async def add_to_group(message: Message, db: MDB) -> None:
-    """Handles the '/addtogroup' command which allows users to add the bot to a group chat."""
+async def setup_user(db: MDB, message: Message) -> User:
+    """
+        Helper function to initialize and validate a User object.
+        Args:
+            db (MDB): The MongoDB database connection.
+            message (Message): The incoming Telegram message containing user information.
+        Returns:
+            User: User objects.
+    """
     user_id = message.from_user.id
     username = message.from_user.username
     first_name = message.from_user.first_name
 
     user = User(db, user_id, username, first_name)
-    await user.user_validation()
+    await user.validation()
 
+    return user
+
+
+@router.message(Command('addtogroup'), F.chat.type == ChatType.PRIVATE)
+async def add_to_group(message: Message, db: MDB) -> None:
+    """Handles the '/addtogroup' command which allows users to add the bot to a group chat."""
+    user = await setup_user(db, message)
     await message.answer(text=messages["add_to_group"][user.language],
                          reply_markup=build_add_to_group_markup(user.language))
 
@@ -51,26 +63,14 @@ async def add_to_group(message: Message, db: MDB) -> None:
 @router.message(Command('language'), F.chat.type == ChatType.PRIVATE)
 async def change_language(message: Message, db: MDB) -> None:
     """Initiates language change process by presenting a language selection keyboard."""
-    user_id = message.from_user.id
-    username = message.from_user.username
-    first_name = message.from_user.first_name
-
-    user = User(db, user_id, username, first_name)
-    await user.user_validation()
-
+    user = await setup_user(db, message)
     await message.answer(text=messages["choice_language"][user.language],
                          reply_markup=build_language_markup())
 
 
-@router.message(Command(commands=['pingme', 'dontpingme', 'here', 'everyone', 'getusers']),
+@router.message(Command(commands=['pingme', 'dontpingme', 'here', 'everyone', 'members']),
                 F.chat.type == ChatType.PRIVATE)
 async def ignore_group_commands(message: Message, db: MDB) -> None:
     """Handles commands that are meant for group chats but are mistakenly sent in private messages."""
-    user_id = message.from_user.id
-    username = message.from_user.username
-    first_name = message.from_user.first_name
-
-    user = User(db, user_id, username, first_name)
-    await user.user_validation()
-
-    await message.reply(text=messages["ignore_commands_in_private"][user.language])
+    user = await setup_user(db, message)
+    await message.reply(text=messages["ignore_group_commands_in_private"][user.language])

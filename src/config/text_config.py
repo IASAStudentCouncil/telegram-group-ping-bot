@@ -17,7 +17,12 @@ private_messages = {
               "/language - to choose your preferred language.\n"
               "/add_to_group - to add me to a group chat.\n\n"
               "*Group Chat Commands:*\n"
-              "****\n\n"
+              "/language - change the group chat language.\n"
+              "/pingme - allow yourself to be pinged.\n"
+              "/dontpingme - disable pings for yourself.\n"
+              "/here - ping only users who allowed it.\n"
+              "/everyone - ping all users.\n"
+              "/members - get a list of all users in the group, that I know.\n\n"
               "Use these commands to enhance your group chat experience!",
         "uk": "Я можу допомогти вам швидко відмічати учасників у вашій групі. "
               "Ось деякі команди, які ви можете використовувати:\n\n"
@@ -25,14 +30,18 @@ private_messages = {
               "/language - для зміни мови чату.\n"
               "/addtogroup - щоб додати мене до вашої групи.\n\n"
               "*Груповий чат:*\n"
-              "****\n\n"
+              "/pingme - дозволити пінгати себе.\n"
+              "/dontpingme - заборонити пінгати себе.\n"
+              "/here - відмітити тільки тих, хто дозволив пінгати.\n"
+              "/everyone - відмітити всіх учасників.\n"
+              "/members - отримати список всіх учасників групи, які мені відомі.\n\n"
               "Використовуйте ці команди, щоб покращити комунікацію в групових чатах!"
     },
     "choice_language": {
         "en": "Choice language...",
         "uk": "Оберіть мову..."
     },
-    "language_selected": {
+    "language_changed": {
         "en": "Language selected 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
         "uk": "Мову обрано 🇺🇦󠁧󠁢󠁥󠁮󠁧󠁿"
     },
@@ -40,9 +49,9 @@ private_messages = {
         "en": "Tap the button to add me to your group chat. Let's get pinging!",
         "uk": "Натисніть, щоб додати мене до групи 😌"
     },
-    "ignore_commands_in_private": {
-        "en": "Command is only available in group chat. Check /help for more information.",
-        "uk": "Команда допуступна лише в груповому чаті. Скористайтеся /help аби дізнатися більше."
+    "ignore_group_commands_in_private": {
+        "en": "Command is only available in group chat. Check /help",
+        "uk": "Команда допуступна лише в груповому чаті. Скористайтеся /help"
     }
 }
 
@@ -50,34 +59,66 @@ private_messages = {
 group_messages = {
     "start": {
         "en": "Hey! I'm *Ping Bot* 😊\n\n"
-              "Type /help to explore all my commands.\n",
+              "Type /help to explore all my commands.",
         "uk": "Привіт! Я — *Ping Bot* 😊\n\n"
-              "Напишіть /help, щоб ознайомитись з усіма моїми командами.\n"
+              "Використуйте /help, щоб ознайомитись з усіма моїми командами."
     },
     "help": {
         "en": "I can help you ping members in your group quickly, like in Discord. "
-              "Here are commands you can use:\n\n"
-              "****\n\n",
+              "Here are some commands you can use:\n\n"
+              "/language - change the group chat language.\n"
+              "/pingme - allow yourself to be pinged.\n"
+              "/dontpingme - disable pings for yourself.\n"
+              "/here - ping only users who allowed it.\n"
+              "/everyone - ping all users.\n"
+              "/members - get a list of all users in the group, that I know.",
         "uk": "Я допоможу вам швидко відмічати учасників у вашій групі. "
               "Ось команди, які ви можете використовувати:\n\n"
-              "****\n\n"
+              "/language - змінити мову групового чату.\n"
+              "/pingme - дозволити пінгати себе.\n"
+              "/dontpingme - заборонити пінгати себе.\n"
+              "/here - відмітити тільки тих, хто дозволив пінгати.\n"
+              "/everyone - відмітити всіх учасників.\n"
+              "/members - список всіх учасників групи, які мені відомі."
+    },
+    "add_user": {
+        "en": "Welcome to the group! I'm *Ping Bot* 😊\n"
+              "Type /help to learn how to use me.",
+        "uk": "Ласкаво просимо до групи! Я — *Ping Bot* 😊\n"
+              "Напишіть /help, щоб дізнатися, як користуватися мною."
+    },
+    "delete_user": {
+        "en": "Goodbye! I'll miss you... 😣",
+        "uk": "Прощавайте! Я буду сумувати за вами... 😣"
     },
     "choice_language": {
         "en": "Choice language...",
         "uk": "Оберіть мову..."
     },
-    "language_selected": {
+    "language_changed": {
         "en": "Language selected 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
         "uk": "Мову обрано 🇺🇦󠁧󠁢󠁥󠁮󠁧󠁿"
     },
     "allow_pinging": {
-        "en": "Let's get pinging!",
-        "uk": "Тепер я можу тебе відмічати!"
+        "en": "Let's get pinging! 🙃",
+        "uk": "Тепер я можу відмічати вас! 🙃"
     },
     "forbide_pinging": {
-        "en": "Ok!",
-        "uk": "Добре, більше не буду"
+        "en": "Ok. I will not ping you 🥲",
+        "uk": "Добре, домовились 🥲"
     },
+    "get_all_pingable_users": {
+        "en": "*Able to be pinged:*",
+        "uk": "*Не заборонили пінгувати себе:*"
+    },
+    "get_all_unpingable_users": {
+        "en": "*Disable to ping them:*",
+        "uk": "*Заборонили пінгувати себе:*"
+    },
+    "how_to_ping_pinable_users": {
+        "en": "To ping only users who allow it, type /here",
+        "uk": "Щоб відмітити лише тих, хто дозволив це, використайте /here"
+    }
 }
 
 # For texts associated with reply keyboard markup buttons

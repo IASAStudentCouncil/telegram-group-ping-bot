@@ -119,7 +119,7 @@ class User:
         """Ensures that an index exists on the '_id' field for faster lookups."""
         await self._collection.create_index([("_id", ASCENDING)])
 
-    async def user_validation(self) -> None:
+    async def validation(self) -> None:
         """Checks if the user exists in the database and updates or inserts data as necessary."""
         user_data = await self._collection.find_one({"_id": self.id})
         if user_data is None:
@@ -145,7 +145,7 @@ class User:
                 )
             self.language = user_data["language"]
 
-    async def change_user_language(self, language_code: str) -> None:
+    async def change_language(self, language_code: str) -> None:
         """
             Updates the user's preferred language in the database if it has changed.
             Args:
@@ -163,7 +163,6 @@ class Group:
     """
         This class simplifies interactions with the 'groups' collection in the database. It handles operations
         such as validating existing group data, updating users, and managing subgroups.
-
         Attributes:
             db (MDB): The MongoDB database reference.
             id (int): The unique identifier for the group, typically the group's Telegram ID.
@@ -172,7 +171,6 @@ class Group:
     def __init__(self, db: MDB, group_id: int):
         """
             Initializes a Group object for managing group data in the database.
-
             Args:
                 db (MDB): The database connection.
                 group_id (int): Unique identifier for the group.
@@ -188,7 +186,7 @@ class Group:
         """Ensures that an index exists on the '_id' field for faster lookups."""
         await self._collection.create_index([("_id", ASCENDING)])
 
-    async def add_group_to_db(self) -> None:
+    async def add_to_db(self) -> None:
         """Inserts a new group into the database."""
         await self._collection.insert_one(
             {
@@ -198,22 +196,19 @@ class Group:
             }
         )
 
-    async def get_group_language(self) -> None:
+    async def validation(self) -> None:
         """
-        Retrieves the language of the group. If the group does not exist, the default language "en" is set and returned.
-
-        Returns:
-            str: The group's language or "en" if the group does not exist.
+            Validates the group's existence in the database. If the group exists, its language is retrieved.
+            If the group does not exist, it is added to the database with the default language set to "en".
         """
         group_data = await self._collection.find_one({"_id": self.id}, {"language": 1, "_id": 0})
         self.language = group_data["language"] if group_data else "en"
         if not group_data:
-            await self.add_group_to_db()
+            await self.add_to_db()
 
-    async def change_group_language(self, language_code: str) -> None:
+    async def change_language(self, language_code: str) -> None:
         """
             Updates the group's preferred language in the database if it has changed.
-
             Args:
                 language_code (str): New language code to be updated.
         """
@@ -224,17 +219,16 @@ class Group:
                 {"$set": {"language": self.language}}
             )
 
-    async def delete_group_from_db(self) -> None:
+    async def delete_from_db(self) -> None:
         """Deletes the group from the database."""
         await self._collection.delete_one({"_id": self.id})
 
     async def add_user(self, user_id: int, can_be_pinged: bool = True) -> None:
         """
-        Adds a new user to the group with the specified ping permissions.
-
-        Args:
-            user_id (int): The user's Telegram ID.
-            can_be_pinged (bool): Indicates if the user can be pinged. Defaults to True.
+            Adds a new user to the group with the specified ping permissions.
+            Args:
+                user_id (int): The user's Telegram ID.
+                can_be_pinged (bool): Indicates if the user can be pinged. Defaults to True.
         """
         await self._collection.update_one(
             {"_id": self.id, "users.user_id": {"$ne": user_id}},
@@ -251,10 +245,9 @@ class Group:
 
     async def delete_user(self, user_id: int) -> None:
         """
-        Removes a user from the group.
-
-        Args:
-            user_id (int): The user's Telegram ID.
+            Removes a user from the group.
+            Args:
+                user_id (int): The user's Telegram ID.
         """
         await self._collection.update_one(
             {"_id": self.id},
@@ -268,7 +261,6 @@ class Group:
     async def user_validation(self, user_id: int):
         """
             Validates if a user exists in the group. If not, adds the user to the group.
-
             Args:
                 user_id (int): The user's Telegram ID.
         """
@@ -282,10 +274,9 @@ class Group:
 
     async def allow_to_ping_user(self, user_id: int) -> None:
         """
-        Allows the specified user to be pinged in the group.
-
-        Args:
-            user_id (int): The user's Telegram ID.
+            Allows the specified user to be pinged in the group.
+            Args:
+                user_id (int): The user's Telegram ID.
         """
         await self._collection.update_one(
             {"_id": self.id, "users.user_id": user_id},
@@ -298,10 +289,9 @@ class Group:
 
     async def forbid_user_pinging(self, user_id: int) -> None:
         """
-        Forbids the specified user from being pinged in the group.
-
-        Args:
-            user_id (int): The user's Telegram ID.
+            Forbids the specified user from being pinged in the group.
+            Args:
+                user_id (int): The user's Telegram ID.
         """
         await self._collection.update_one(
             {"_id": self.id, "users.user_id": user_id},
@@ -312,32 +302,29 @@ class Group:
             }
         )
 
-    async def get_all_usernames(self) -> List[str]:
+    async def get_all_user_ids(self) -> List[str]:
         """
-        Retrieves the usernames of all users in the group.
-
-        Returns:
-            List[str]: A list of usernames for all users in the group.
-        """
-        all_user_data = await self.get_all_user_data()
-        return [user[1] for user in all_user_data if user[1]]
-
-    async def get_pingable_usernames(self) -> List[str]:
-        """
-        Retrieves the usernames of users in the group who allow themselves to be pinged.
-
-        Returns:
-            List[str]: A list of usernames for users who can be pinged.
+            Retrieves the usernames of all users in the group.
+            Returns:
+                List[str]: A list of user IDs for all users in the group.
         """
         all_user_data = await self.get_all_user_data()
-        return [user[1] for user in all_user_data if user[1] and user[2]]
+        return [user[0] for user in all_user_data]
+
+    async def get_pingable_user_ids(self) -> List[str]:
+        """
+            Retrieves the usernames of users in the group who allow themselves to be pinged.
+            Returns:
+                List[str]: A list of user IDs for users who can be pinged.
+        """
+        all_user_data = await self.get_all_user_data()
+        return [user[0] for user in all_user_data if user[3]]
 
     async def get_all_user_data(self) -> List[List[Optional[str]]]:
         """
-        Retrieves all user records from the group, including their `first_name`, `username`, and `can_be_pinged` status.
-
-        Returns:
-            List[List[Optional[str]]]: A list of lists where each sublist contains the `first_name`, `username`, and `can_be_pinged` status of a user.
+            Retrieves all user records from the group, including their `first_name`, `username`, and `can_be_pinged` status.
+            Returns:
+                List[List[Optional[str]]]: A list of lists where each sublist contains the `first_name`, `username`, and `can_be_pinged` status of a user.
         """
         group_data = await self._collection.find_one(
             {"_id": self.id},
@@ -354,13 +341,14 @@ class Group:
         user_collection = self._db["users"]
         users_data = await user_collection.find(
             {"_id": {"$in": user_ids}},
-            {"_id": 1, "first_name": 1, "username": 1}
+            {"_id": 1, "username": 1, "first_name": 1}
         ).to_list(length=None)
 
         result = [
             [
-                user["first_name"],
+                user["_id"],
                 user["username"],
+                user["first_name"],
                 can_be_pinged_map.get(user["_id"])
             ]
             for user in users_data
