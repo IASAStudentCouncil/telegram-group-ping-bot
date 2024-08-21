@@ -23,7 +23,7 @@ router = Router(name=__name__)      # Router for group event handling
     ),
     F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP])
 )
-async def new_group_member(message: Message, db: MDB) -> None:
+async def new_group_and_member(message: Message, db: MDB) -> None:
     """
         Handles new chat creation and members joining group.
         If the new member is the bot itself, it sends a welcome message.
@@ -148,7 +148,7 @@ async def allow_to_ping_user(message: Message, db: MDB) -> None:
         Allows the user to be pinged in the group.
     """
     group, user = await setup_group_and_user(db, message)
-    await group.allow_to_ping_user(user.id)
+    await group.update_user_ping_permission(user.id, allowed_to_be_pinged=True)
     await message.reply(text=messages["allow_pinging"][group.language])
 
 
@@ -160,7 +160,7 @@ async def do_not_ping_user(message: Message, db: MDB) -> None:
         Disables pinging for the user in the group.
     """
     group, user = await setup_group_and_user(db, message)
-    await group.forbid_user_pinging(user.id)
+    await group.update_user_ping_permission(user.id, allowed_to_be_pinged=False)
     await message.reply(text=messages["forbide_pinging"][group.language])
 
 
@@ -173,7 +173,7 @@ async def ping_pingable_users(message: Message, db: MDB) -> None:
     """
     group, user = await setup_group_and_user(db, message)
     message_text = markdown.link(f"@here", f"https://t.me/{bot_name}")
-    user_list = await group.get_pingable_user_ids()
+    user_list = await group.get_user_ids(only_pingable=True)
     for user_id in user_list:
         if user_id != message.from_user.id:
             message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
@@ -189,7 +189,7 @@ async def ping_everyone(message: Message, db: MDB) -> None:
     """
     group, user = await setup_group_and_user(db, message)
     message_text = markdown.link(f"@еvеryone", f"https://t.me/{bot_name}")
-    user_list = await group.get_all_user_ids()
+    user_list = await group.get_user_ids()
     for user_id in user_list:
         if user_id != message.from_user.id:
             message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
@@ -205,8 +205,7 @@ async def show_users_list(message: Message, db: MDB) -> None:
     """
     group, user = await setup_group_and_user(db, message)
 
-    pingable_users = ""
-    unpingable_users = ""
+    pingable_users, unpingable_users = "", ""
     i, j = 1, 1
     users_list = await group.get_all_user_data()
     for users in users_list:

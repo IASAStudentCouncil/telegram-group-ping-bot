@@ -134,10 +134,8 @@ class User:
             self.language = self._default_language
         else:
             fields_to_check = ["username", "first_name"]
-            updates = {}
-            for field in fields_to_check:
-                if user_data[field] != getattr(self, field):
-                    updates[field] = getattr(self, field)
+            updates = {field: getattr(self, field) for field in fields_to_check if
+                       user_data[field] != getattr(self, field)}
             if updates:
                 await self._collection.update_one(
                     {"_id": self.id},
@@ -168,6 +166,7 @@ class Group:
             id (int): The unique identifier for the group, typically the group's Telegram ID.
             language (str): The group's default language for communication.
     """
+
     def __init__(self, db: MDB, group_id: int):
         """
             Initializes a Group object for managing group data in the database.
@@ -206,6 +205,10 @@ class Group:
         if not group_data:
             await self.add_to_db()
 
+    async def delete_from_db(self) -> None:
+        """Deletes the group from the database."""
+        await self._collection.delete_one({"_id": self.id})
+
     async def change_language(self, language_code: str) -> None:
         """
             Updates the group's preferred language in the database if it has changed.
@@ -218,10 +221,6 @@ class Group:
                 {"_id": self.id},
                 {"$set": {"language": self.language}}
             )
-
-    async def delete_from_db(self) -> None:
-        """Deletes the group from the database."""
-        await self._collection.delete_one({"_id": self.id})
 
     async def add_user(self, user_id: int, can_be_pinged: bool = True) -> None:
         """
@@ -243,6 +242,20 @@ class Group:
             upsert=True
         )
 
+    async def user_validation(self, user_id: int):
+        """
+            Validates if a user exists in the group. If not, adds the user to the group.
+            Args:
+                user_id (int): The user's Telegram ID.
+        """
+        user_exists = await self._collection.find_one(
+            {"_id": self.id, "users.user_id": user_id},
+            {"users.user_id": 1, "_id": 0}
+        )
+
+        if not user_exists:
+            await self.add_user(user_id)
+
     async def delete_user(self, user_id: int) -> None:
         """
             Removes a user from the group.
@@ -258,67 +271,33 @@ class Group:
             }
         )
 
-    async def user_validation(self, user_id: int):
+    async def update_user_ping_permission(self, user_id: int, allowed_to_be_pinged: bool = True) -> None:
         """
-            Validates if a user exists in the group. If not, adds the user to the group.
+            Updates the pinging permission for a specified user in the group.
             Args:
-                user_id (int): The user's Telegram ID.
-        """
-        user_exists = await self._collection.find_one(
-            {"_id": self.id, "users.user_id": user_id},
-            {"users.user_id": 1, "_id": 0}
-        )
-
-        if not user_exists:
-            await self.add_user(user_id)
-
-    async def allow_to_ping_user(self, user_id: int) -> None:
-        """
-            Allows the specified user to be pinged in the group.
-            Args:
-                user_id (int): The user's Telegram ID.
+                user_id (int): The unique Telegram ID of the user.
+                allowed_to_be_pinged (bool): Indicates whether the user is allowed to be pinged.
+                                             Defaults to True (allowed).
         """
         await self._collection.update_one(
             {"_id": self.id, "users.user_id": user_id},
             {
                 "$set": {
-                    "users.$.can_be_pinged": True
+                    "users.$.can_be_pinged": allowed_to_be_pinged
                 }
             }
         )
 
-    async def forbid_user_pinging(self, user_id: int) -> None:
+    async def get_user_ids(self, only_pingable: bool = False) -> List[str]:
         """
-            Forbids the specified user from being pinged in the group.
+            Retrieves a list of user IDs in the group, with an option to filter by ping permission.
             Args:
-                user_id (int): The user's Telegram ID.
-        """
-        await self._collection.update_one(
-            {"_id": self.id, "users.user_id": user_id},
-            {
-                "$set": {
-                    "users.$.can_be_pinged": False
-                }
-            }
-        )
-
-    async def get_all_user_ids(self) -> List[str]:
-        """
-            Retrieves the usernames of all users in the group.
+                only_pingable (bool): If True, return only the IDs of users who can be pinged. Defaults to False.
             Returns:
-                List[str]: A list of user IDs for all users in the group.
+                List[str]: A list of user IDs for users in the group.
         """
         all_user_data = await self.get_all_user_data()
-        return [user[0] for user in all_user_data]
-
-    async def get_pingable_user_ids(self) -> List[str]:
-        """
-            Retrieves the usernames of users in the group who allow themselves to be pinged.
-            Returns:
-                List[str]: A list of user IDs for users who can be pinged.
-        """
-        all_user_data = await self.get_all_user_data()
-        return [user[0] for user in all_user_data if user[3]]
+        return [user[0] for user in all_user_data if not only_pingable or user[3]]
 
     async def get_all_user_data(self) -> List[List[Optional[str]]]:
         """

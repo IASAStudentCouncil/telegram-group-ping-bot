@@ -40,7 +40,7 @@ async def setup_user(db: MDB, message: Message) -> User:
             db (MDB): The MongoDB database connection.
             message (Message): The incoming Telegram message containing user information.
         Returns:
-            User: User objects.
+            User object.
     """
     user_id = message.from_user.id
     username = message.from_user.username

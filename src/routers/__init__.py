@@ -1,12 +1,12 @@
 from aiogram import Router
-from .command_routers import commands_router
-from .callback_routers import callbacks_router
+from .message_routers import message_router
+from .callback_routers import callback_router
 
 # Main router that handles everything
 main_router = Router(name=__name__)
 main_router.include_routers(
-    commands_router,
-    callbacks_router
+    message_router,
+    callback_router
 )
 
 __all__ = ("main_router",)
