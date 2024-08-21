@@ -12,32 +12,41 @@ from src.keyboards import *
 from src.config import bot_name
 from src.config import group_messages as messages
 
-router = Router(name=__name__)      # Router for group command handling
+router = Router(name=__name__)      # Router for group event handling
 
 
-@router.message(F.content_type == ContentType.NEW_CHAT_MEMBERS,
-                F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP]))
+@router.message(
+    F.content_type.in_(
+        [ContentType.NEW_CHAT_MEMBERS,
+         ContentType.GROUP_CHAT_CREATED,
+         ContentType.SUPERGROUP_CHAT_CREATED]
+    ),
+    F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP])
+)
 async def new_group_member(message: Message, db: MDB) -> None:
     """
-        Handles new chat members in a group. If the new member is the bot, it sends a welcome message.
+        Handles new chat creation and members joining group.
+        If the new member is the bot itself, it sends a welcome message.
         If the new member is a user, it adds them to the group in the database.
     """
     group_id = message.chat.id
     group = Group(db, group_id)
     await group.validation()
-
-    for chat_member in message.new_chat_members:
-        if chat_member.is_bot:
-            if chat_member.username == bot_name:
-                await message.answer(text=messages["start"][group.language])
-        else:
-            user_id = chat_member.id
-            username = chat_member.username
-            first_name = chat_member.first_name
-            user = User(db, user_id, username, first_name)
-            await user.validation()
-            await group.add_user(user_id)
-            await message.reply(text=messages["add_user"][group.language])
+    if message.group_chat_created or message.supergroup_chat_created:
+        await message.answer(text=messages["start"][group.language])
+    else:
+        for chat_member in message.new_chat_members:
+            if chat_member.is_bot:
+                if chat_member.username == bot_name:
+                    await message.answer(text=messages["start"][group.language])
+            else:
+                user_id = chat_member.id
+                username = chat_member.username
+                first_name = chat_member.first_name
+                user = User(db, user_id, username, first_name)
+                await user.validation()
+                await group.add_user(user_id)
+                await message.reply(text=messages["add_user"][group.language])
 
 
 @router.message(F.content_type == ContentType.LEFT_CHAT_MEMBER,
@@ -63,6 +72,22 @@ async def delete_group_member(message: Message, db: MDB) -> None:
         await user.validation()
         await group.delete_user(user_id)
         await message.reply(text=messages["delete_user"][group.language])
+
+
+@router.message(
+    F.from_user.is_bot,
+    Command(
+        commands=['start', 'help', 'language', 'pingme',
+                  'dontpingme', 'here', 'everyone', 'members']
+    )
+)
+async def ignore_commands_from_other_bot(message: Message):
+    """
+        Ignores commands issued by other bots.
+        This function is triggered when a message is sent by another bot
+        containing any of the specified commands
+    """
+    pass
 
 
 async def setup_group_and_user(db: MDB, message: Message) -> (Group, User):
@@ -124,7 +149,7 @@ async def allow_to_ping_user(message: Message, db: MDB) -> None:
     """
     group, user = await setup_group_and_user(db, message)
     await group.allow_to_ping_user(user.id)
-    await message.answer(text=messages["allow_pinging"][group.language])
+    await message.reply(text=messages["allow_pinging"][group.language])
 
 
 @router.message(Command("dontpingme"),
@@ -136,7 +161,7 @@ async def do_not_ping_user(message: Message, db: MDB) -> None:
     """
     group, user = await setup_group_and_user(db, message)
     await group.forbid_user_pinging(user.id)
-    await message.answer(text=messages["forbide_pinging"][group.language])
+    await message.reply(text=messages["forbide_pinging"][group.language])
 
 
 @router.message(Command("here"),
@@ -150,7 +175,8 @@ async def ping_pingable_users(message: Message, db: MDB) -> None:
     message_text = markdown.link(f"@here", f"https://t.me/{bot_name}")
     user_list = await group.get_pingable_user_ids()
     for user_id in user_list:
-        message_text += markdown.link(f"⠀", f"tg://user?id={user_id}")
+        if user_id != message.from_user.id:
+            message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
     await message.answer(text=message_text, disable_web_page_preview=True)
 
 
@@ -166,7 +192,7 @@ async def ping_everyone(message: Message, db: MDB) -> None:
     user_list = await group.get_all_user_ids()
     for user_id in user_list:
         if user_id != message.from_user.id:
-            message_text += markdown.link(f"⠀", f"tg://user?id={user_id}")
+            message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
     await message.answer(text=message_text, disable_web_page_preview=True)
 
 
