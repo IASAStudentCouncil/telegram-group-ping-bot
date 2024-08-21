@@ -13,10 +13,10 @@ private_messages = {
     "help": {
         "en": "I can help you ping members in your group quickly, like in Discord. "
               "Here are some commands you can use:\n\n"
-              "*Personal Chat Commands:*\n"
+              "*Personal Chat Commands*\n"
               "/language - to choose your preferred language.\n"
               "/add_to_group - to add me to a group chat.\n\n"
-              "*Group Chat Commands:*\n"
+              "*Group Chat Commands*\n"
               "/language - change the group chat language.\n"
               "/pingme - allow yourself to be pinged.\n"
               "/dontpingme - disable pings for yourself.\n"
@@ -26,10 +26,10 @@ private_messages = {
               "Use these commands to enhance your group chat experience!",
         "uk": "Я можу допомогти вам швидко відмічати учасників у вашій групі. "
               "Ось деякі команди, які ви можете використовувати:\n\n"
-              "*Персональний чат:*\n"
+              "*Персональний чат*\n"
               "/language - для зміни мови чату.\n"
               "/addtogroup - щоб додати мене до вашої групи.\n\n"
-              "*Груповий чат:*\n"
+              "*Груповий чат*\n"
               "/pingme - дозволити пінгати себе.\n"
               "/dontpingme - заборонити пінгати себе.\n"
               "/here - відмітити лише тих, хто дозволив пінгати себе.\n"
@@ -47,7 +47,7 @@ private_messages = {
     },
     "add_to_group": {
         "en": "Tap the button to add me to your group chat. Let's get pinging!",
-        "uk": "Натисніть, щоб додати мене до групи 😌"
+        "uk": "Натисніть, щоб додати мене до вашої групи 😌"
     },
     "ignore_group_commands_in_private": {
         "en": "Command is only available in group chat. Check /help",
@@ -101,7 +101,7 @@ group_messages = {
     },
     "allow_pinging": {
         "en": "Let's get pinging 😉",
-        "uk": "Тепер я зможу відмічати вас 😉"
+        "uk": "Тепер я зможу пінгувати вас 😉"
     },
     "forbide_pinging": {
         "en": "Ok. I will not ping you 🥲",

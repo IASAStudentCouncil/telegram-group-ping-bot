@@ -71,7 +71,10 @@ async def delete_group_member(message: Message, db: MDB) -> None:
         user = User(db, user_id, username, first_name)
         await user.validation()
         await group.delete_user(user_id)
-        await message.reply(text=messages["delete_user"][group.language])
+        try:
+            await message.reply(text=messages["delete_user"][group.language])
+        except Exception as e:
+            pass
 
 
 @router.message(
