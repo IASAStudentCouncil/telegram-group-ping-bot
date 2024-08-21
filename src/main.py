@@ -1,9 +1,12 @@
 import asyncio
 import logging
 
+from aiogram import Dispatcher
+
 from config import configure_logging
 from db import *
 from bot import *
+from routers import *
 
 
 async def main() -> None:
@@ -11,7 +14,6 @@ async def main() -> None:
         Main asynchronous function to start the bot.
         Establishes connection to MongoDB, configures logging, and starts the bot polling.
     """
-
     configure_logging()
 
     try:
@@ -25,6 +27,8 @@ async def main() -> None:
 
     try:
         logging.info("Start polling...")
+        dp = Dispatcher()
+        dp.include_router(router=main_router)
         await dp.start_polling(bot, db=mdb)
     except Exception as e:
         logging.error("An error occurred while polling!")

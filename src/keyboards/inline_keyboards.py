@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.config import inline_keyboards_text as text
-from src.config import available_languages
+from src.config import bot_name, available_languages
 
 
 def build_language_markup() -> InlineKeyboardMarkup:
@@ -11,7 +11,6 @@ def build_language_markup() -> InlineKeyboardMarkup:
         Returns:
             InlineKeyboardMarkup: An inline keyboard with language selection buttons.
     """
-
     builder = InlineKeyboardBuilder()
     for language_code, language in available_languages.items():
         builder.add(
@@ -34,9 +33,8 @@ def build_add_to_group_markup(language: str) -> InlineKeyboardMarkup:
             InlineKeyboardMarkup: The constructed inline keyboard with a single button.
         The button directs users to a URL for adding the bot to their Telegram group.
     """
-
     builder = InlineKeyboardBuilder()
-    builder.button(text=text["add_to_group_button"][language], url="https://t.me/group_mate_tag_bot?startgroup=test")
+    builder.button(text=text["add_to_group_button"][language], url=f"https://t.me/{bot_name}?startgroup=test")
     return builder.as_markup()
 
 

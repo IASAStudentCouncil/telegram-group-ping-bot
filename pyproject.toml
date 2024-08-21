@@ -1,6 +1,6 @@
 [project]
 name = "telegram-group-ping-bot"
-version = "0.2"
+version = "0.3.5"
 description = "A Telegram bot for pinging group members quickly and easily, like in Discord."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -18,11 +18,12 @@ name = "Yulian Zavodnyk"
 email = "yulianzavodnyk@gmail.com"
 
 [project.dependencies]
-aiogram = "==3.12.0"
-asyncio = "==3.4.3"
-pymongo = "==4.8.0"
-motor = "==3.5.1"
-pytest = "==8.3.2"
-pytest-asyncio = "==0.23.8"
-pyyaml = "==6.0.2"
-python-dotenv = "==1.0.1"
+aiogram = "^3.12.0"
+pymongo = "^4.8.0"
+motor = "^3.5.1"
+pyyaml = "^6.0.2"
+python-dotenv = "^1.0.1"
+
+[project.dev-dependencies]
+pytest = "^8.3.2"
+pytest-asyncio = "^0.23.8"
