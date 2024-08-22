@@ -59,28 +59,3 @@ group_validator = {
         }
     }
 }
-
-"""
-"subgroups": {
-    "bsonType": "array",
-    "description": "Must be an array of subgroups and is required",
-    "items": {
-        "bsonType": "object",
-        "required": ["subgroup_name", "users"],
-        "properties": {
-            "names": {
-                "bsonType": "string",
-                "description": "Must be a string representing the subgroup name"
-            },
-            "users": {
-                "bsonType": "array",
-                "description": "Must be an array of user IDs",
-                "items": {
-                    "bsonType": "int",
-                    "description": "Each item must be a string representing a user ID"
-                }
-            }
-        }
-    }
-}
-"""

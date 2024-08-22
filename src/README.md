@@ -1,3 +1,7 @@
+# Docs
+- [File Structure](#file-structure)
+- [Details](#file-structure)
+
 ## File Structure
 Here’s an overview of the `src` directory structure:
 

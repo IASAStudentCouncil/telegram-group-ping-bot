@@ -32,6 +32,7 @@ async def new_group_and_member(message: Message, db: MDB) -> None:
     group_id = message.chat.id
     group = Group(db, group_id)
     await group.validation()
+
     if message.group_chat_created or message.supergroup_chat_created:
         await message.answer(text=messages["start"][group.language])
     else:
@@ -45,7 +46,7 @@ async def new_group_and_member(message: Message, db: MDB) -> None:
                 first_name = chat_member.first_name
                 user = User(db, user_id, username, first_name)
                 await user.validation()
-                await group.add_user(user_id)
+                await group.user_validation(user_id)
                 await message.reply(text=messages["add_user"][group.language])
 
 
@@ -59,8 +60,8 @@ async def delete_group_member(message: Message, db: MDB) -> None:
     group_id = message.chat.id
     group = Group(db, group_id)
     await group.validation()
-    left_member = message.left_chat_member
 
+    left_member = message.left_chat_member
     if left_member.is_bot:
         if left_member.username == bot_name:
             await group.delete_from_db()

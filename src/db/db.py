@@ -121,27 +121,30 @@ class User:
 
     async def validation(self) -> None:
         """Checks if the user exists in the database and updates or inserts data as necessary."""
-        user_data = await self._collection.find_one({"_id": self.id})
-        if user_data is None:
-            await self._collection.insert_one(
-                {
-                    "_id": self.id,
-                    "username": self.username,
-                    "first_name": self.first_name,
-                    "language": self._default_language
-                }
-            )
-            self.language = self._default_language
-        else:
-            fields_to_check = ["username", "first_name"]
-            updates = {field: getattr(self, field) for field in fields_to_check if
-                       user_data[field] != getattr(self, field)}
-            if updates:
-                await self._collection.update_one(
-                    {"_id": self.id},
-                    {"$set": updates}
+        try:
+            user_data = await self._collection.find_one({"_id": self.id})
+            if user_data is None:
+                await self._collection.insert_one(
+                    {
+                        "_id": self.id,
+                        "username": self.username,
+                        "first_name": self.first_name,
+                        "language": self._default_language
+                    }
                 )
-            self.language = user_data["language"]
+                self.language = self._default_language
+            else:
+                fields_to_check = ["username", "first_name"]
+                updates = {field: getattr(self, field) for field in fields_to_check if
+                           user_data[field] != getattr(self, field)}
+                if updates:
+                    await self._collection.update_one(
+                        {"_id": self.id},
+                        {"$set": updates}
+                    )
+                self.language = user_data["language"]
+        except Exception as e:
+            logging.error(f"Error validation {self.id} user: {e}")
 
     async def change_language(self, language_code: str) -> None:
         """
@@ -150,11 +153,14 @@ class User:
                 language_code (str): New language code to be updated.
         """
         if self.language != language_code:
-            await self._collection.update_one(
-                {"_id": self.id},
-                {"$set": {"language": language_code}}
-            )
-            self.language = language_code
+            try:
+                await self._collection.update_one(
+                    {"_id": self.id},
+                    {"$set": {"language": language_code}}
+                )
+                self.language = language_code
+            except Exception as e:
+                logging.error(f"Error changing user language: {e}")
 
 
 class Group:
@@ -200,14 +206,20 @@ class Group:
             Validates the group's existence in the database. If the group exists, its language is retrieved.
             If the group does not exist, it is added to the database with the default language set to "en".
         """
-        group_data = await self._collection.find_one({"_id": self.id}, {"language": 1, "_id": 0})
-        self.language = group_data["language"] if group_data else "en"
-        if not group_data:
-            await self.add_to_db()
+        try:
+            group_data = await self._collection.find_one({"_id": self.id}, {"language": 1, "_id": 0})
+            self.language = group_data["language"] if group_data else "en"
+            if not group_data:
+                await self.add_to_db()
+        except Exception as e:
+            logging.error(f"Error validating group {self.id}: {e}")
 
     async def delete_from_db(self) -> None:
         """Deletes the group from the database."""
-        await self._collection.delete_one({"_id": self.id})
+        try:
+            await self._collection.delete_one({"_id": self.id})
+        except Exception as e:
+            logging.error(f"Error deleting group {self.id}: {e}")
 
     async def change_language(self, language_code: str) -> None:
         """
@@ -217,10 +229,13 @@ class Group:
         """
         if self.language != language_code:
             self.language = language_code
-            await self._collection.update_one(
-                {"_id": self.id},
-                {"$set": {"language": self.language}}
-            )
+            try:
+                await self._collection.update_one(
+                    {"_id": self.id},
+                    {"$set": {"language": self.language}}
+                )
+            except Exception as e:
+                logging.error(f"Error changing language for group {self.id}: {e}")
 
     async def add_user(self, user_id: int, can_be_pinged: bool = True) -> None:
         """
@@ -229,18 +244,21 @@ class Group:
                 user_id (int): The user's Telegram ID.
                 can_be_pinged (bool): Indicates if the user can be pinged. Defaults to True.
         """
-        await self._collection.update_one(
-            {"_id": self.id, "users.user_id": {"$ne": user_id}},
-            {
-                "$push": {
-                    "users": {
-                        "user_id": user_id,
-                        "can_be_pinged": can_be_pinged
+        try:
+            await self._collection.update_one(
+                {"_id": self.id, "users.user_id": {"$ne": user_id}},
+                {
+                    "$push": {
+                        "users": {
+                            "user_id": user_id,
+                            "can_be_pinged": can_be_pinged
+                        }
                     }
-                }
-            },
-            upsert=True
-        )
+                },
+                upsert=True
+            )
+        except Exception as e:
+            logging.error(f"Error adding user {user_id} to group {self.id}: {e}")
 
     async def user_validation(self, user_id: int):
         """
@@ -248,13 +266,16 @@ class Group:
             Args:
                 user_id (int): The user's Telegram ID.
         """
-        user_exists = await self._collection.find_one(
-            {"_id": self.id, "users.user_id": user_id},
-            {"users.user_id": 1, "_id": 0}
-        )
+        try:
+            user_exists = await self._collection.find_one(
+                {"_id": self.id, "users.user_id": user_id},
+                {"users.user_id": 1, "_id": 0}
+            )
 
-        if not user_exists:
-            await self.add_user(user_id)
+            if not user_exists:
+                await self.add_user(user_id)
+        except Exception as e:
+            logging.error(f"Error validating user {user_id} in group {self.id}: {e}")
 
     async def delete_user(self, user_id: int) -> None:
         """
@@ -262,14 +283,17 @@ class Group:
             Args:
                 user_id (int): The user's Telegram ID.
         """
-        await self._collection.update_one(
-            {"_id": self.id},
-            {
-                "$pull": {
-                    "users": {"user_id": user_id}
+        try:
+            await self._collection.update_one(
+                {"_id": self.id},
+                {
+                    "$pull": {
+                        "users": {"user_id": user_id}
+                    }
                 }
-            }
-        )
+            )
+        except Exception as e:
+            logging.error(f"Error deleting user {user_id} from group {self.id}: {e}")
 
     async def update_user_ping_permission(self, user_id: int, allowed_to_be_pinged: bool = True) -> None:
         """
@@ -279,14 +303,17 @@ class Group:
                 allowed_to_be_pinged (bool): Indicates whether the user is allowed to be pinged.
                                              Defaults to True (allowed).
         """
-        await self._collection.update_one(
-            {"_id": self.id, "users.user_id": user_id},
-            {
-                "$set": {
-                    "users.$.can_be_pinged": allowed_to_be_pinged
+        try:
+            await self._collection.update_one(
+                {"_id": self.id, "users.user_id": user_id},
+                {
+                    "$set": {
+                        "users.$.can_be_pinged": allowed_to_be_pinged
+                    }
                 }
-            }
-        )
+            )
+        except Exception as e:
+            logging.error(f"Error updating ping permission for user {user_id} in group {self.id}: {e}")
 
     async def get_user_ids(self, only_pingable: bool = False) -> List[str]:
         """
@@ -305,48 +332,54 @@ class Group:
             Returns:
                 List[List[Optional[str]]]: A list of lists where each sublist contains the `first_name`, `username`, and `can_be_pinged` status of a user.
         """
-        group_data = await self._collection.find_one(
-            {"_id": self.id},
-            {"users.user_id": 1, "users.can_be_pinged": 1, "_id": 0}
-        )
-        if not group_data:
-            return []
+        try:
+            group_data = await self._collection.find_one(
+                {"_id": self.id},
+                {"users.user_id": 1, "users.can_be_pinged": 1, "_id": 0}
+            )
+            if not group_data:
+                return []
 
-        users_info = group_data.get("users", [])
+            users_info = group_data.get("users", [])
 
-        user_ids = [user["user_id"] for user in users_info]
-        can_be_pinged_map = {user["user_id"]: user["can_be_pinged"] for user in users_info}
+            user_ids = [user["user_id"] for user in users_info]
+            can_be_pinged_map = {user["user_id"]: user["can_be_pinged"] for user in users_info}
 
-        user_collection = self._db["users"]
-        users_data = await user_collection.find(
-            {"_id": {"$in": user_ids}},
-            {"_id": 1, "username": 1, "first_name": 1}
-        ).to_list(length=None)
+            user_collection = self._db["users"]
+            users_data = await user_collection.find(
+                {"_id": {"$in": user_ids}},
+                {"_id": 1, "username": 1, "first_name": 1}
+            ).to_list(length=None)
 
-        result = [
-            [
-                user["_id"],
-                user["username"],
-                user["first_name"],
-                can_be_pinged_map.get(user["_id"])
+            result = [
+                [
+                    user["_id"],
+                    user["username"],
+                    user["first_name"],
+                    can_be_pinged_map.get(user["_id"])
+                ]
+                for user in users_data
             ]
-            for user in users_data
-        ]
 
-        return result
+            return result
+        except Exception as e:
+            logging.error(f"Error retrieving all user data for group {self.id}: {e}")
 
     async def count_users(self) -> int:
         """
             Counts the number of users in the 'users' array for this group.
             Returns:
-                int: The number of users in the group.
+                int: The number of register users in the group.
         """
-        result = await self._collection.aggregate([
-            {"$match": {"_id": self.id}},
-            {"$project": {"number_of_users": {"$size": "$users"}}}
-        ]).to_list(length=1)
+        try:
+            result = await self._collection.aggregate([
+                {"$match": {"_id": self.id}},
+                {"$project": {"number_of_users": {"$size": "$users"}}}
+            ]).to_list(length=1)
 
-        return result[0]["number_of_users"] if result else 0
+            return result[0]["number_of_users"] if result else 0
+        except Exception as e:
+            logging.error(f"Error counting users in group {self.id}: {e}")
 
 
 __all__ = ("connect_to_mongo", "setup_database", "User", "Group")
