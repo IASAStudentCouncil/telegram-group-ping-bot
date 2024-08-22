@@ -176,12 +176,20 @@ async def ping_pingable_users(message: Message, db: MDB) -> None:
         Pings all users in the group who have allowed themselves to be pinged.
     """
     group, user = await setup_group_and_user(db, message)
-    message_text = markdown.link(f"@here", f"https://t.me/{bot_name}")
     user_list = await group.get_user_ids(only_pingable=True)
-    for user_id in user_list:
-        if user_id != message.from_user.id:
-            message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
-    await message.answer(text=message_text, disable_web_page_preview=True)
+
+    if user_list:
+        user_list = [user_id for user_id in user_list if user_id != message.from_user.id]
+        if user_list:
+            message_text = markdown.link(f"@here", f"https://t.me/{bot_name}")
+            for user_id in user_list:
+                message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
+        else:
+            message_text = messages["only_you_in_group_chat"][group.language]
+    else:
+        message_text = messages["no_one_allow_pinging"][group.language]
+
+    await message.reply(text=message_text, disable_web_page_preview=True)
 
 
 @router.message(Command("everyone"),
@@ -192,12 +200,17 @@ async def ping_everyone(message: Message, db: MDB) -> None:
         Pings all users in the group, except the user who issued the command.
     """
     group, user = await setup_group_and_user(db, message)
-    message_text = markdown.link(f"@еvеryone", f"https://t.me/{bot_name}")
     user_list = await group.get_user_ids()
-    for user_id in user_list:
-        if user_id != message.from_user.id:
+
+    user_list = [user_id for user_id in user_list if user_id != message.from_user.id]
+    if user_list:
+        message_text = markdown.link(f"@еvеryone", f"https://t.me/{bot_name}")
+        for user_id in user_list:
             message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
-    await message.answer(text=message_text, disable_web_page_preview=True)
+    else:
+        message_text = messages["only_you_in_group_chat"][group.language]
+
+    await message.reply(text=message_text, disable_web_page_preview=True)
 
 
 @router.message(Command("members"),

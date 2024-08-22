@@ -117,15 +117,34 @@ group_messages = {
     },
     "no_pingable_users": {
         "en": "*No one has allowed pinging.*",
-        "uk": "*Не знайдено жодних користувачів, які дозволили пунгувати себе.*"
+        "uk": "*Не знайдено жодного користувача, який дозволив пунгувати себе.*"
     },
     "how_to_ping_pinable_users": {
         "en": "Type /here to ping only users who allow it.",
         "uk": "Скористайтеся /here, щоб відмітити всіх, хто дозволив пінгувати себе."
     },
     "add_to_list_users_info": {
-        "en": "If you're not on the list, just use any of my commands, and I'll add you.",
-        "uk": "Якщо вас немає у списку, використайте будь-яку з моїх команд, і я додам вас до своєї бази."
+        "en": "If anyone is not on the list, they just need to use any of my commands, and I'll them.",
+        "uk": "Якщо когось немає у списку, вони можуть використати будь-яку з моїх команд, і я додам їх до своєї бази."
+    },
+    "only_you_in_group_chat": {
+        "en": "*It seems like you're the only one I know in this group right now.*\n\n"
+              "To use /here or /everyone, I need to be familiar with at least one other person. "
+              "I can only recognize users who have interacted with me or those who have just joined the group. "
+              "Use /members to see the list of everyone I know in this group.",
+        "uk": "*Здається, що наразі я знаю лише вас у цій групі.*\n\n"
+              "Щоб використати /here або /everyone, мені потрібно знати хоча б ще одну людину. "
+              "Я можу розпізнавати тільки тих користувачів, "
+              "які взаємодіяли зі мною, або тих, хто щойно приєднався до групи. "
+              "Використовуйте /members, щоб побачити список усіх, кого я знаю в цій групі."
+    },
+    "no_one_allow_pinging": {
+        "en": "*No one currently allows pinging.*\n\n"
+              "To change this, use /pingme to enable pinging for yourself. "
+              "You can also check /members to see who has allowed or disabled pinging.",
+        "uk": "*Ніхто наразі не дозволив пінгування.*\n\n"
+              "Щоб це змінити, скористайтеся /pingme, щоб дозволити пінгування для себе. "
+              "Також можете переглянути /members, щоб побачити, хто дозволив або заборонив пінгування."
     }
 }
 
