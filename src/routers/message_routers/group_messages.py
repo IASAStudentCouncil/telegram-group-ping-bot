@@ -78,6 +78,22 @@ async def delete_group_member(message: Message, db: MDB) -> None:
             pass
 
 
+@router.message(F.content_type == ContentType.MIGRATE_TO_CHAT_ID,
+                F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP]))
+async def chat_id_migration(message: Message, db: MDB) -> None:
+    """
+        Handles the migration of a group's chat ID when a group is upgraded to a supergroup.
+        It updates the group ID in the database to reflect the new chat ID.
+    """
+    group_id = message.chat.id
+    group = Group(db, group_id)
+    await group.validation()
+
+    new_group_id = message.migrate_to_chat_id
+    if new_group_id:
+        await group.update_id(new_group_id)
+
+
 @router.message(
     F.from_user.is_bot,
     Command(

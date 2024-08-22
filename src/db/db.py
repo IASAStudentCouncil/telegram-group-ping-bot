@@ -221,6 +221,27 @@ class Group:
         except Exception as e:
             logging.error(f"Error deleting group {self.id}: {e}")
 
+    async def update_id(self, new_group_id) -> None:
+        """
+            Updates the group's ID in the database to reflect a migration to a new chat ID.
+
+            Args:
+                new_group_id (int): The new chat ID for the group.
+        """
+        try:
+            current_group_data = await self._collection.find_one({"_id": self.id})
+            if not current_group_data:
+                raise ValueError(f"Group with ID {self.id} does not exist.")
+
+            current_group_data["_id"] = new_group_id
+            await self._collection.insert_one(current_group_data)
+            await self._collection.delete_one({"_id": self.id})
+
+            logging.info(f"Group ID successfully migrated from {self.id} to {new_group_id}")
+            self.id = new_group_id
+        except Exception as e:
+            logging.error(f"Error updating group ID from {self.id} to {new_group_id}: {e}")
+
     async def change_language(self, language_code: str) -> None:
         """
             Updates the group's preferred language in the database if it has changed.
