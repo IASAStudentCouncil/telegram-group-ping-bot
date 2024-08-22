@@ -335,5 +335,18 @@ class Group:
 
         return result
 
+    async def count_users(self) -> int:
+        """
+            Counts the number of users in the 'users' array for this group.
+            Returns:
+                int: The number of users in the group.
+        """
+        result = await self._collection.aggregate([
+            {"$match": {"_id": self.id}},
+            {"$project": {"number_of_users": {"$size": "$users"}}}
+        ]).to_list(length=1)
+
+        return result[0]["number_of_users"] if result else 0
+
 
 __all__ = ("connect_to_mongo", "setup_database", "User", "Group")

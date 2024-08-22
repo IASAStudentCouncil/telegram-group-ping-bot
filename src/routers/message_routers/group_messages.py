@@ -225,7 +225,11 @@ async def show_users_list(message: Message, db: MDB) -> None:
                         f"{unpingable_users}\n") if unpingable_users else ""
 
     if pingable_users:
-        message_text = f"{pingable_users}{unpingable_users}{messages['how_to_ping_pinable_users'][group.language]}"
+        message_text = (f"{pingable_users}{unpingable_users}"
+                        f"{messages['how_to_ping_pinable_users'][group.language]} "
+                        f"{messages['add_to_list_users_info'][group.language]}")
     else:
-        message_text = unpingable_users
+        message_text = (f"{messages['no_pingable_users'][group.language]}\n\n"
+                        f"{unpingable_users}"
+                        f"{messages['add_to_list_users_info'][group.language]}")
     await message.answer(text=message_text)
