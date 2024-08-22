@@ -1,4 +1,4 @@
-# Telegram Group Mate Ping Bot
+# Telegram Ping Bot
 
 ## Overview
 The **Ping Bot** is your go-to solution for improving communication in Telegram group chats. 
