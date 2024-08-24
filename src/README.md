@@ -31,7 +31,13 @@ Here’s an overview of the `src` directory structure:
 ┃ ┣ 📜group_messages.py     # Handles group messages
 ┃ ┣ 📜private_messages.py   # Handles private chat messages
 ┃ ┗ 📜__init__.py           
-┗ 📜__init__.py             
+┗ 📜__init__.py
+📂utils
+┣ 📂telethon_client
+┃ ┣ 📜__init__.py           # Telethon client setup
+┣ 📜utils.py                # Contains utility functions related to the Telethon client
+┗ 📜__init__.py 
+             
 📜main.py                   # Starts the bot
 ```
 
@@ -67,5 +73,10 @@ Here’s an overview of the `src` directory structure:
     - [`private_messages.py`](./routers/message_routers/private_messages.py): Handles incoming messages in private chats, providing personalized responses and guidance.
     - [`__init__.py`](./routers/message_routers/__init__.py): Initializes the `message_routers` module, integrating message handling across the bot.
   - [`__init__.py`](./routers/__init__.py): Prepares the `routers` directory as a module, linking together all routing logic.
+- [`utils/`](./utils/)
+  - [`telethon_client/`](./utils/telethon_client/)
+    - [`_init__.py`](./utils/telethon_client/__init__.py): Initializes the telethon_client module, contains utility functions for managing the Telethon client.
+  - [`utils.py`](./utils/utils.py): Other utility functions
+  - [`_init__.py`](./utils/__init__.py): Initializes the utils module.
 
 - [`main.py`](./main.py): The entry point for the bot. It initializes all components, starts the event loop, and begins processing updates from **Telegram**.

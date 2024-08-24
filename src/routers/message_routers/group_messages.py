@@ -1,6 +1,8 @@
+import asyncio
+
 from aiogram import Router, F
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import Message, ChatMember
 from aiogram.enums.chat_type import ChatType
 from aiogram.enums import ContentType
 from aiogram.utils import markdown
@@ -11,8 +13,54 @@ from src.db import *
 from src.keyboards import *
 from src.config import bot_name
 from src.config import group_messages as messages
+from src.utils import TelegramClient, parse_users
 
 router = Router(name=__name__)      # Router for group event handling
+
+
+async def bot_joined_group_handler(db: MDB, telethon_client: TelegramClient, group: Group):
+    """
+        Handle scenarios where the bot joins a group.
+        Args:
+            db (MDB): MongoDB database instance.
+            telethon_client (TelegramClient): The Telethon client instance.
+            group (Group): The Group instance being processed.
+    """
+    await group.add_to_db()
+    users_list = await parse_users(telethon_client, group.id)
+
+    batch_size = 100
+    for i in range(0, len(users_list), batch_size):
+        batch = users_list[i:i + batch_size]
+        users = [
+            {
+                "_id": user_details["id"],
+                "username": user_details["username"],
+                "first_name": user_details["first_name"],
+                "language": "en"
+            }
+            for user_details in batch
+        ]
+        user_ids = [user["_id"] for user in users]
+
+        await bulk_insert_users(db, users)
+        await group.bulk_add_users(user_ids)
+
+
+async def new_user_joined_handler(db: MDB, group: Group, chat_member: ChatMember):
+    """
+        Handle scenarios where a new user joins a group.
+        Args:
+            db (MDB): MongoDB database instance.
+            group (Group): The Group instance being processed.
+            chat_member: The chat member who joined the group.
+    """
+    user_id = chat_member.id
+    username = chat_member.username
+    first_name = chat_member.first_name
+    user = User(db, user_id, username, first_name)
+    await user.validation()
+    await group.user_validation(user_id)
 
 
 @router.message(
@@ -23,7 +71,7 @@ router = Router(name=__name__)      # Router for group event handling
     ),
     F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP])
 )
-async def new_group_and_member(message: Message, db: MDB) -> None:
+async def new_group_and_member(message: Message, db: MDB, telethon_client: TelegramClient) -> None:
     """
         Handles new chat creation and members joining group.
         If the new member is the bot itself, it sends a welcome message.
@@ -34,22 +82,17 @@ async def new_group_and_member(message: Message, db: MDB) -> None:
     await group.validation()
 
     if message.group_chat_created or message.supergroup_chat_created:
-        await group.add_to_db()
-        await message.answer(text=messages["start"][group.language])
+        await bot_joined_group_handler(telethon_client, group)
     else:
+        tasks = []
         for chat_member in message.new_chat_members:
-            if chat_member.is_bot:
-                if chat_member.username == bot_name:
-                    await group.add_to_db()
-                    await message.answer(text=messages["start"][group.language])
+            if chat_member.is_bot and chat_member.username == bot_name:
+                tasks.append(asyncio.create_task(bot_joined_group_handler(db, telethon_client, group)))
+                await message.answer(text=messages["start"][group.language])
             else:
-                user_id = chat_member.id
-                username = chat_member.username
-                first_name = chat_member.first_name
-                user = User(db, user_id, username, first_name)
-                await user.validation()
-                await group.user_validation(user_id)
+                tasks.append(asyncio.create_task(new_user_joined_handler(db, group, chat_member)))
                 await message.reply(text=messages["add_user"][group.language])
+        await asyncio.gather(*tasks)
 
 
 @router.message(F.content_type == ContentType.LEFT_CHAT_MEMBER,

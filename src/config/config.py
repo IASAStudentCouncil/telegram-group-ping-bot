@@ -39,4 +39,7 @@ available_languages = {
     "uk": "UA🇺🇦"
 }
 
-__all__ = ("mongo_uri", "db_name", "bot_token", "bot_name", "available_languages")
+__all__ = ("mongo_uri", "db_name",
+           "bot_token", "bot_name",
+           "telegram_api_id", "telegram_api_hash",
+           "available_languages")

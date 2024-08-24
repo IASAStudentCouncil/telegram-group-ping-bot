@@ -17,7 +17,7 @@ handlers:
         class: logging.FileHandler
         level: WARNING
         formatter: simple
-        filename: system/bot_logs.log
+        filename: bot_logs.log
         mode: a
 
 loggers:
@@ -47,6 +47,11 @@ loggers:
         propagate: False
 
     aiogram:
+        level: INFO
+        handlers: [console, file]
+        propagate: False
+
+    telethon:
         level: INFO
         handlers: [console, file]
         propagate: False

@@ -1,11 +1,10 @@
-import asyncio
 import logging
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from motor.core import AgnosticDatabase as MDB
-from pymongo.errors import OperationFailure, ServerSelectionTimeoutError, DuplicateKeyError
-from pymongo import IndexModel, ASCENDING, DESCENDING, TEXT
+from pymongo.errors import OperationFailure, ServerSelectionTimeoutError, DuplicateKeyError, BulkWriteError
+from pymongo import IndexModel, ASCENDING, DESCENDING
 
 from src.config import mongo_uri, db_name
 from .schema_validators import *
@@ -187,6 +186,23 @@ class User:
                 logging.error(f"Error changing user language: {e}")
 
 
+async def bulk_insert_users(db: MDB, users: List[Dict]) -> None:
+    """
+        Inserts a list of users into the users collection in a bulk operation.
+        Args:
+            db (MDB): The MongoDB database reference.
+            users (List[Dict]): A list of user dictionaries to be inserted.
+    """
+    try:
+        await db['users'].insert_many(users, ordered=False)
+    except BulkWriteError as bwe:
+        pass
+    except DuplicateKeyError as e:
+        pass
+    except Exception as e:
+        logging.error(f"Error during bulk user insertion: {e}")
+
+
 class Group:
     """
         This class simplifies interactions with the 'groups' collection in the database. It handles operations
@@ -197,7 +213,7 @@ class Group:
             language (str): The group's default language for communication.
     """
 
-    def __init__(self, db: MDB, group_id: int):
+    def __init__(self, db: MDB, group_id: int) -> None:
         """
             Initializes a Group object for managing group data in the database.
             Args:
@@ -315,7 +331,23 @@ class Group:
         except Exception as e:
             logging.error(f"Error adding user {user_id} to group {self.id}: {e}")
 
-    async def user_validation(self, user_id: int):
+    async def bulk_add_users(self, user_ids: List[int]) -> None:
+        """
+            Bulk inserts users into the group's users array field.
+            Args:
+                user_ids (List[int]): A list of user IDs to be added to the group.
+        """
+        try:
+            if user_ids:
+                await self._collection.update_one(
+                    {"_id": self.id},
+                    {"$addToSet": {
+                        "users": {"$each": [{"user_id": user_id, "can_be_pinged": True} for user_id in user_ids]}}}
+                )
+        except Exception as e:
+            logging.error(f"Error during bulk addition of users to group {self.id}: {e}")
+
+    async def user_validation(self, user_id: int) -> None:
         """
             Validates if a user exists in the group. If not, adds the user to the group.
             Args:
@@ -436,4 +468,4 @@ class Group:
             logging.error(f"Error counting users in group {self.id}: {e}")
 
 
-__all__ = ("connect_to_mongo", "setup_database", "User", "Group")
+__all__ = ("connect_to_mongo", "setup_database", "User", "bulk_insert_users", "Group")

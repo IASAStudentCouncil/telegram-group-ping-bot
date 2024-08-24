@@ -3,7 +3,8 @@ import logging
 
 from aiogram import Dispatcher
 
-from config import configure_logging
+from config import configure_logging, bot_token
+from utils import create_telethon_client
 from db import *
 from bot import *
 from routers import *
@@ -25,11 +26,20 @@ async def main() -> None:
         logging.exception("Exception details:", exc_info=e)
         return
 
+    telethon_client = create_telethon_client()
+    try:
+        await telethon_client.start(bot_token=bot_token)
+        logging.info("Telethon client started successfully.")
+    except Exception as e:
+        logging.error("Failed to start Telethon client!")
+        logging.exception("Exception details:", exc_info=e)
+        return
+
     try:
         logging.info("Start polling...")
         dp = Dispatcher()
         dp.include_router(router=main_router)
-        await dp.start_polling(bot, db=mdb)
+        await dp.start_polling(bot, db=mdb, telethon_client=telethon_client)
     except Exception as e:
         logging.error("An error occurred while polling!")
         logging.exception("Exception details:", exc_info=e)
@@ -38,6 +48,8 @@ async def main() -> None:
         client.close()
         await bot.session.close()
         logging.info("Bot session closed!")
+        await telethon_client.disconnect()
+        logging.info("Telethon client disconnected!")
 
 
 if __name__ == '__main__':
