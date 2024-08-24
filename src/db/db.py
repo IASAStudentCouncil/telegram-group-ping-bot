@@ -4,8 +4,8 @@ from typing import List, Optional
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from motor.core import AgnosticDatabase as MDB
-from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
-from pymongo import ASCENDING
+from pymongo.errors import OperationFailure, ServerSelectionTimeoutError, DuplicateKeyError
+from pymongo import IndexModel, ASCENDING, DESCENDING, TEXT
 
 from src.config import mongo_uri, db_name
 from .schema_validators import *
@@ -47,12 +47,13 @@ async def connect_to_mongo(uri: str = mongo_uri) -> AsyncIOMotorClient:
 
 async def setup_database(client: AsyncIOMotorClient) -> MDB:
     """
-        Sets up required collections and validation rules in the MongoDB database.
+        Sets up required collections, validation rules, and indexes in the MongoDB database.
+        This function ensures that necessary collections exist in the database and applies
+        validation rules to them. It also sets up indexes for efficient querying.
         Args:
             client (AsyncIOMotorClient): Client used to access the database.
         Returns:
             MDB: Configured database with necessary collections.
-        It checks for required collections and creates them if they are missing, applying validation rules.
     """
     db = client[db_name]
     logging.info(f"Connected to the '{db_name}' database")
@@ -81,6 +82,35 @@ async def setup_database(client: AsyncIOMotorClient) -> MDB:
             logging.exception("Error details:", exc_info=e)
             client.close()
             raise
+
+    try:
+        await db["users"].create_indexes([
+            IndexModel([("_id", ASCENDING)]),
+            IndexModel([("language", ASCENDING), ("username", ASCENDING)],
+                       name="user_language_username_compound_index")
+        ])
+        logging.info("Indexes created successfully for 'users' collection")
+    except Exception as e:
+        logging.error("Error creating indexes for 'users' collection.")
+        logging.exception("Error details:", exc_info=e)
+
+    try:
+        await db["groups"].create_indexes([
+            IndexModel([("_id", ASCENDING)]),  # Primary index on document ID
+            IndexModel([("users.user_id", ASCENDING), ("users.can_be_pinged", DESCENDING)],
+                       name="user_ping_partial_index",
+                       partialFilterExpression={"users.can_be_pinged": True}),
+            IndexModel([("users.user_id", ASCENDING)],
+                       name="user_id_index"),
+            IndexModel([("language", ASCENDING)],
+                       name="group_language_index"),
+            IndexModel([("users.user_id", ASCENDING), ("language", ASCENDING)],
+                       name="compound_user_language_index")
+        ])
+        logging.info("Indexes created successfully for 'groups' collection")
+    except Exception as e:
+        logging.error("Error creating indexes for 'groups' collection.")
+        logging.exception("Error details:", exc_info=e)
 
     return db
 
@@ -112,12 +142,6 @@ class User:
         self.first_name = first_name
         self._default_language = "uk" if language_code in ["uk", "ru"] else "en"
         self.language: Optional[str] = None
-
-        asyncio.create_task(self.__ensure_index())
-
-    async def __ensure_index(self) -> None:
-        """Ensures that an index exists on the '_id' field for faster lookups."""
-        await self._collection.create_index([("_id", ASCENDING)])
 
     async def validation(self) -> None:
         """Checks if the user exists in the database and updates or inserts data as necessary."""
@@ -185,21 +209,31 @@ class Group:
         self.id = group_id
         self.language: Optional[str] = None
 
-        asyncio.create_task(self.__ensure_index())
-
-    async def __ensure_index(self) -> None:
-        """Ensures that an index exists on the '_id' field for faster lookups."""
-        await self._collection.create_index([("_id", ASCENDING)])
-
     async def add_to_db(self) -> None:
         """Inserts a new group into the database."""
-        await self._collection.insert_one(
-            {
-                "_id": self.id,
-                "users": [],
-                "language": self.language
-            }
-        )
+        try:
+            await self._collection.insert_one(
+                {
+                    "_id": self.id,
+                    "users": [],
+                    "language": "en"
+                },
+
+            )
+        except DuplicateKeyError:
+            await self.clear_users()
+        except Exception as e:
+            logging.error(f"Error adding group {self.id}: {e}")
+
+    async def clear_users(self) -> None:
+        """Clears the users list for this group in the database."""
+        try:
+            await self._collection.update_one(
+                {"_id": self.id},
+                {"$set": {"users": []}}
+            )
+        except Exception as e:
+            logging.error(f"Error clearing users for group {self.id}: {e}")
 
     async def validation(self) -> None:
         """
@@ -362,7 +396,6 @@ class Group:
                 return []
 
             users_info = group_data.get("users", [])
-
             user_ids = [user["user_id"] for user in users_info]
             can_be_pinged_map = {user["user_id"]: user["can_be_pinged"] for user in users_info}
 

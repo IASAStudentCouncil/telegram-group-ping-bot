@@ -61,7 +61,7 @@ group_messages = {
         "en": "Hey! I'm *Ping Bot* 😊\n\n"
               "Type /help to explore all my commands.",
         "uk": "Привіт! Я — *Ping Bot* 😊\n\n"
-              "Використуйте /help, щоб ознайомитись з усіма моїми командами."
+              "Використовуйте /help, щоб ознайомитись з усіма моїми командами."
     },
     "help": {
         "en": "I can help you ping members in your group quickly, like in Discord. "

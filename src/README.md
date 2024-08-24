@@ -6,34 +6,33 @@
 Here’s an overview of the `src` directory structure:
 
 ```plaintext
-📂src
- ┣ 📂bot
- ┃ ┗ 📜__init__.py             # Bot setup
- ┣ 📂config
- ┃ ┣ 📜config.py               # Loads environment variables from .env
- ┃ ┣ 📜logging_config.py       # Sets up logging
- ┃ ┣ 📜logging_config.yaml     # YAML config for logging
- ┃ ┣ 📜text_config.py          # Manages bot messages and text templates
- ┃ ┗ 📜__init__.py             
- ┣ 📂db
- ┃ ┣ 📜db.py                   # Database operations and classes
- ┃ ┣ 📜schema_validators.py    # MongoDB schema validation
- ┃ ┗ 📜__init__.py             
- ┣ 📂keyboards
- ┃ ┣ 📜inline_keyboards.py     # Defines inline keyboards
- ┃ ┣ 📜keyboards.py            # Defines reply keyboards
- ┃ ┗ 📜__init__.py             
- ┣ 📂routers
- ┃ ┣ 📂callback_routers
- ┃ ┃ ┣ 📜group_callbacks.py    # Handles group callbacks
- ┃ ┃ ┣ 📜private_callbacks.py  # Handles private chat callbacks
- ┃ ┃ ┗ 📜__init__.py           
- ┃ ┣ 📂message_routers
- ┃ ┃ ┣ 📜group_messages.py     # Handles group messages
- ┃ ┃ ┣ 📜private_messages.py   # Handles private chat messages
- ┃ ┃ ┗ 📜__init__.py           
- ┃ ┗ 📜__init__.py             
- ┗ 📜main.py                   # Starts the bot
+📂bot
+┗ 📜__init__.py             # Bot setup
+📂config
+┣ 📜config.py               # Loads environment variables from .env
+┣ 📜logging_config.py       # Sets up logging
+┣ 📜logging_config.yaml     # YAML config for logging
+┣ 📜text_config.py          # Manages bot messages and text templates
+┗ 📜__init__.py             
+📂db
+┣ 📜db.py                   # Database operations and classes
+┣ 📜schema_validators.py    # MongoDB schema validation
+┗ 📜__init__.py             
+📂keyboards
+┣ 📜inline_keyboards.py     # Defines inline keyboards
+┣ 📜keyboards.py            # Defines reply keyboards
+┗ 📜__init__.py             
+📂routers
+┣ 📂callback_routers
+┃ ┣ 📜group_callbacks.py    # Handles group callbacks
+┃ ┣ 📜private_callbacks.py  # Handles private chat callbacks
+┃ ┗ 📜__init__.py           
+┣ 📂message_routers
+┃ ┣ 📜group_messages.py     # Handles group messages
+┃ ┣ 📜private_messages.py   # Handles private chat messages
+┃ ┗ 📜__init__.py           
+┗ 📜__init__.py             
+📜main.py                   # Starts the bot
 ```
 
 ## Details

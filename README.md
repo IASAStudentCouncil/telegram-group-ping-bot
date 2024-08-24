@@ -1,4 +1,31 @@
-# Telegram Ping Bot
+<div align="center">
+   <img width="100px" src="assets/ping_bot_logo.jpg" alt="Ping Bot Logo" >
+   <h1>Telegram Ping Bot</h1>
+   <div align="center">
+   <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot">
+      <img alt="Project version" src="https://img.shields.io/badge/version-0.5-941C2F" />
+    </a>
+   <a href="https://github.com/IASAStudentCouncil">
+      <img alt="Organization: IASA SC" src="https://img.shields.io/badge/organization-IASA SC-E28413" />
+    </a>
+   <a href="https://github.com/yulianzavodnyk">
+      <img alt="Author: Yulian Zavodnyk" src="https://img.shields.io/badge/author-Yulian_Zavodnyk-523A34" />
+    </a>
+   </div>
+   <div align="center">
+   <a href="https://docs.aiogram.dev/en/latest/">
+      <img alt="Aiogram3 Module" src="https://img.shields.io/badge/aiogram-3.12.0-0D3B66" />
+    </a>
+   <a href="https://www.mongodb.com/docs/manual/">
+      <img alt="MongoDB" src="https://img.shields.io/badge/database-MongoDB-4CB944" />
+    </a>
+   <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/LICENSE">
+      <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87" />
+    </a>
+   </div>
+</div>
+<hr/>
+
 
 ## Overview
 The **Ping Bot** is your go-to solution for improving communication in Telegram group chats. 
@@ -9,7 +36,7 @@ This bot ensures that important messages reach the right people, making your gro
 - **Ping Your Mates:** Easily mention people or everyone in your group with a few simple commands.
 - **Control Notifications:** Users can decide if they want to be mentioned or not, giving them control over when they get pinged.
 - **Automatic Updates:** The bot keeps track of members as they join or leave the group, so the list of people is always up-to-date.
-- **Supports Multiple Languages:** Works in different languages.
+- **Supports Multiple Languages:** Works in different languages. At this moment `EN🏴`, `UA🇺🇦`
 
 ## Getting Started
 To start using the **Telegram Ping Bot**, follow these steps:

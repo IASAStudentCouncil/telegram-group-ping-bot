@@ -34,11 +34,13 @@ async def new_group_and_member(message: Message, db: MDB) -> None:
     await group.validation()
 
     if message.group_chat_created or message.supergroup_chat_created:
+        await group.add_to_db()
         await message.answer(text=messages["start"][group.language])
     else:
         for chat_member in message.new_chat_members:
             if chat_member.is_bot:
                 if chat_member.username == bot_name:
+                    await group.add_to_db()
                     await message.answer(text=messages["start"][group.language])
             else:
                 user_id = chat_member.id
@@ -64,7 +66,7 @@ async def delete_group_member(message: Message, db: MDB) -> None:
     left_member = message.left_chat_member
     if left_member.is_bot:
         if left_member.username == bot_name:
-            await group.delete_from_db()
+            await group.clear_users()
     else:
         user_id = left_member.id
         username = left_member.username
@@ -75,7 +77,7 @@ async def delete_group_member(message: Message, db: MDB) -> None:
         try:
             await message.reply(text=messages["delete_user"][group.language])
         except Exception as e:
-            pass
+            await message.answer(text=messages["delete_user"][group.language])
 
 
 @router.message(F.content_type == ContentType.MIGRATE_TO_CHAT_ID,
