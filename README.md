@@ -1,5 +1,5 @@
 <div align="center">
-   <img width="100px" src="assets/ping_bot_logo.jpg" alt="Ping Bot Logo" style="border-radius: 50%">
+   <img width="100px" src="assets/ping_bot_logo.jpg" alt="Ping Bot Logo" style="border-radius: 50%;">
    <h1>Telegram Ping Bot</h1>
    <div align="center">
    <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot">
