@@ -17,15 +17,13 @@
       <img alt="Aiogram3 Module" src="https://img.shields.io/badge/aiogram-3.12.0-0D3B66"/>
     </a>
    <a href="https://www.mongodb.com/docs/manual/">
-      <img alt="MongoDB" src="https://img.shields.io/badge/database-MongoDB-4CB944"/>
+      <img alt="MongoDB" src="https://img.shields.io/badge/database-MongoDB-02641B"/>
     </a>
    <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/LICENSE">
       <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87"/>
     </a>
    </div>
 </div>
-<hr/>
-
 
 ## Overview
 The **Ping Bot** is your go-to solution for improving communication in Telegram group chats. 
