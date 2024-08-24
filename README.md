@@ -1,26 +1,26 @@
 <div align="center">
-   <img width="100px" src="assets/ping_bot_logo.jpg" alt="Ping Bot Logo" >
+   <img width="100px" src="assets/ping_bot_logo.jpg" alt="Ping Bot Logo" style="border-radius: 50%">
    <h1>Telegram Ping Bot</h1>
    <div align="center">
    <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot">
-      <img alt="Project version" src="https://img.shields.io/badge/version-0.5-941C2F" />
+      <img alt="Project version" src="https://img.shields.io/badge/version-0.5-941C2F"/>
     </a>
    <a href="https://github.com/IASAStudentCouncil">
-      <img alt="Organization: IASA SC" src="https://img.shields.io/badge/organization-IASA SC-E28413" />
+      <img alt="Organization: IASA SC" src="https://img.shields.io/badge/organization-IASA SC-E28413"/>
     </a>
    <a href="https://github.com/yulianzavodnyk">
-      <img alt="Author: Yulian Zavodnyk" src="https://img.shields.io/badge/author-Yulian_Zavodnyk-523A34" />
+      <img alt="Author: Yulian Zavodnyk" src="https://img.shields.io/badge/author-Yulian_Zavodnyk-0C0C0C"/>
     </a>
    </div>
    <div align="center">
    <a href="https://docs.aiogram.dev/en/latest/">
-      <img alt="Aiogram3 Module" src="https://img.shields.io/badge/aiogram-3.12.0-0D3B66" />
+      <img alt="Aiogram3 Module" src="https://img.shields.io/badge/aiogram-3.12.0-0D3B66"/>
     </a>
    <a href="https://www.mongodb.com/docs/manual/">
-      <img alt="MongoDB" src="https://img.shields.io/badge/database-MongoDB-4CB944" />
+      <img alt="MongoDB" src="https://img.shields.io/badge/database-MongoDB-4CB944"/>
     </a>
    <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/LICENSE">
-      <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87" />
+      <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87"/>
     </a>
    </div>
 </div>
