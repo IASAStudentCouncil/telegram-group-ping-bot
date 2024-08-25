@@ -8,6 +8,11 @@
        </a>
    </h1>
    <div align="center">
+</div>
+
+> ***Ping everyone in Telegram group with just one command!***
+
+<div align="center">
    <a href="https://github.com/IASAStudentCouncil">
       <img alt="Organization: IASA SC" src="https://img.shields.io/badge/organization-IASA SC-E28413"/>
     </a>
@@ -42,8 +47,7 @@
     </a>
    </div>
 </div>
-
-> ***Ping everyone in Telegram group with just one command!***
+<hr/>
 
 ## Overview
 The **Ping Bot** is your go-to solution for improving communication in **Telegram** group chats. 
