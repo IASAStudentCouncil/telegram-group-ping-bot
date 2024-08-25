@@ -10,7 +10,7 @@
    <div align="center">
 </div>
 
-> ***Ping everyone in Telegram group with just one command!***
+***Ping everyone in Telegram group with just one command!***
 
 <div align="center">
    <a href="https://github.com/IASAStudentCouncil">
@@ -31,7 +31,7 @@
       <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87"/>
     </a>
    </div>
-   <h4>⭐ Star us on GitHub — it motivates us a lot!</h4>
+   <h6>⭐ Star us on GitHub — it motivates us a lot!</h6>
    <div align="center">
    <a href="https://www.linkedin.com/company/iasa-sc">
       <img alt="LinkedIn" src="https://img.shields.io/badge/Follow-405DE6?logo=linkedin&logoColor=white"/>
