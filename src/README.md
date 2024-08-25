@@ -75,8 +75,8 @@ Here’s an overview of the `src` directory structure:
   - [`__init__.py`](./routers/__init__.py): Prepares the `routers` directory as a module, linking together all routing logic.
 - [`utils/`](./utils/)
   - [`telethon_client/`](./utils/telethon_client/)
-    - [`_init__.py`](./utils/telethon_client/__init__.py): Initializes the telethon_client module, contains utility functions for managing the Telethon client.
-  - [`utils.py`](./utils/utils.py): Other utility functions
+    - [`_init__.py`](./utils/telethon_client/__init__.py): Initializes the telethon_client module managing the Telethon client.
+  - [`utils.py`](./utils/utils.py): Other utility functions.
   - [`_init__.py`](./utils/__init__.py): Initializes the utils module.
 
 - [`main.py`](./main.py): The entry point for the bot. It initializes all components, starts the event loop, and begins processing updates from **Telegram**.
