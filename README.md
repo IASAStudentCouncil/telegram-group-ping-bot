@@ -21,11 +21,14 @@
     </a>
    </div>
    <div align="center">
+   <a href="https://www.python.org/">
+      <img alt="Python" src="https://img.shields.io/badge/language-python-blue"/>
+    </a>
    <a href="https://docs.aiogram.dev/en/latest/">
-      <img alt="Aiogram3 Module" src="https://img.shields.io/badge/aiogram-3.12.0-0D3B66"/>
+      <img alt="Aiogram" src="https://img.shields.io/badge/aiogram-3.12.0-0D3B66"/>
     </a>
    <a href="https://www.mongodb.com/docs/manual/">
-      <img alt="MongoDB" src="https://img.shields.io/badge/database-MongoDB-02641B"/>
+      <img alt="MongoDB" src="https://img.shields.io/badge/database-mongodb-02641B"/>
     </a>
    <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/LICENSE">
       <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87"/>
@@ -47,7 +50,7 @@
     </a>
    </div>
 </div>
-<hr/>
+<br/>
 
 ## Overview
 The **Ping Bot** is your go-to solution for improving communication in **Telegram** group chats. 
