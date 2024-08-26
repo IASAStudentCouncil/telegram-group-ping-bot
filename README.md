@@ -7,8 +7,8 @@
          <img alt="Project version" src="https://img.shields.io/badge/v0.5-941C2F"/>
        </a>
    </h1>
-   <div align="center">
 </div>
+<div align="center">
 
 ***Ping everyone in Telegram group with just one command!***
 
@@ -19,36 +19,41 @@
    <a href="https://github.com/yulianzavodnyk">
       <img alt="Author: Yulian Zavodnyk" src="https://img.shields.io/badge/author-Yulian_Zavodnyk-0C0C0C"/>
     </a>
-   </div>
-   <div align="center">
+</div>
+<div align="center">
    <a href="https://www.python.org/">
       <img alt="Python" src="https://img.shields.io/badge/language-python-blue"/>
     </a>
    <a href="https://docs.aiogram.dev/en/latest/">
       <img alt="Aiogram" src="https://img.shields.io/badge/aiogram-3.12.0-0D3B66"/>
     </a>
-   <a href="https://www.mongodb.com/docs/manual/">
-      <img alt="MongoDB" src="https://img.shields.io/badge/database-mongodb-02641B"/>
+   <a href="https://docs.telethon.dev/en/stable/">
+      <img alt="Telethon" src="https://img.shields.io/badge/telethon-1.36.0-0D3B66"/>
     </a>
-   <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/LICENSE">
-      <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87"/>
-    </a>
+   <div align="center">
+      <a href="https://www.mongodb.com/docs/manual/">
+         <img alt="MongoDB" src="https://img.shields.io/badge/database-mongodb-02641B"/>
+       </a>
+      <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/LICENSE">
+         <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87"/>
+       </a>
    </div>
    <h6>⭐ Star us on GitHub — it motivates us a lot!</h6>
    <div align="center">
-   <a href="https://www.linkedin.com/company/iasa-sc">
-      <img alt="LinkedIn" src="https://img.shields.io/badge/Follow-405DE6?logo=linkedin&logoColor=white"/>
-    </a>
-   <a href="https://www.facebook.com/studrada.iasa/">
-      <img alt="Facebook" src="https://img.shields.io/badge/Follow-1877F2?logo=facebook&logoColor=white"/>
-    </a>
-   <a href="https://t.me/IASA_Student_Council">
-      <img alt="Telegram" src="https://img.shields.io/badge/Follow-C13584?logo=instagram&logoColor=white"/>
-    </a>
-   <a href="https://instagram.com/studrada_iasa">
-      <img alt="Instagram" src="https://img.shields.io/badge/Follow-0088CC?logo=telegram&logoColor=white"/>
-    </a>
+      <a href="https://www.linkedin.com/company/iasa-sc">
+         <img alt="LinkedIn" src="https://img.shields.io/badge/Follow-405DE6?logo=linkedin&logoColor=white"/>
+       </a>
+      <a href="https://www.facebook.com/studrada.iasa/">
+         <img alt="Facebook" src="https://img.shields.io/badge/Follow-1877F2?logo=facebook&logoColor=white"/>
+       </a>
+      <a href="https://t.me/IASA_Student_Council">
+         <img alt="Telegram" src="https://img.shields.io/badge/Follow-C13584?logo=instagram&logoColor=white"/>
+       </a>
+      <a href="https://instagram.com/studrada_iasa">
+         <img alt="Instagram" src="https://img.shields.io/badge/Follow-0088CC?logo=telegram&logoColor=white"/>
+       </a>
    </div>
+</div>
 </div>
 <br/>
 

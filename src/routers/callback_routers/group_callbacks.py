@@ -17,13 +17,9 @@ async def set_language(call: CallbackQuery, db: MDB) -> None:
     """Sets the group's language based on language selection and confirms the update."""
     group_id = call.message.chat.id
     user_id = call.from_user.id
-    username = call.from_user.username
-    first_name = call.from_user.first_name
     language_code = call.data
 
     group = Group(db, group_id)
-    user = User(db, user_id, username, first_name)
-    await user.validation()
     await group.validation()
     await group.user_validation(user_id)
     await group.change_language(language_code)

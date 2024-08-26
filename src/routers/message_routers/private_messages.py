@@ -15,15 +15,12 @@ router = Router(name=__name__)      # Router for private command handling
 @router.message(Command(commands=['start', 'help']), F.chat.type == ChatType.PRIVATE)
 async def start_help(message: Message, db: MDB) -> None:
     """
-        Handles '/start' and '/help' commands in private chats. Clears any previous state, validates user,
-        and responds with the appropriate message and keyboard based on the command.
+        Handles '/start', '/help', '/addtogroup', '/language' commands in private chats.
+        Responds with the appropriate message and keyboard based on the command.
     """
     user_id = message.from_user.id
-    username = message.from_user.username
-    first_name = message.from_user.first_name
     user_chat_language = message.from_user.language_code
-
-    user = User(db, user_id, username, first_name, user_chat_language)
+    user = User(db, user_id, user_chat_language)
     await user.validation()
 
     if "/start" in message.text:
@@ -43,12 +40,8 @@ async def setup_user(db: MDB, message: Message) -> User:
             User object.
     """
     user_id = message.from_user.id
-    username = message.from_user.username
-    first_name = message.from_user.first_name
-
-    user = User(db, user_id, username, first_name)
+    user = User(db, user_id)
     await user.validation()
-
     return user
 
 

@@ -17,24 +17,24 @@ handlers:
         class: logging.FileHandler
         level: WARNING
         formatter: simple
-        filename: bot_logs.log
+        filename: system/bot_logs.log
         mode: a
 
 loggers:
     development:
         level: DEBUG
         handlers: [console]
-        propagate: no
+        propagate: False
 
     staging:
         level: INFO
         handlers: [console, file]
-        propagate: no
+        propagate: False
 
     production:
         level: WARNING
         handlers: [file]
-        propagate: no
+        propagate: False
 
     pymongo:
         level: WARNING
@@ -43,7 +43,7 @@ loggers:
 
     motor:
         level: WARNING
-        handlers: [console, file]
+        handlers: [ console, file ]
         propagate: False
 
     aiogram:
@@ -53,7 +53,7 @@ loggers:
 
     telethon:
         level: INFO
-        handlers: [console, file]
+        handlers: [ console, file ]
         propagate: False
 
 root:
