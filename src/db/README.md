@@ -2,13 +2,13 @@
 
 ## Overview
 The `db` directory is a crucial part of the bot's backend, managing interactions with the MongoDB database. 
-This directory contains the logic for handling users and groups within the bot, 
-ensuring data consistency and efficient querying through schema validation and indexing.
+It contains the logic for handling users and groups within the bot, ensuring efficient querying, schema validation and indexing.
 
 ## MongoDB Collections
 
 ### 1. `users` Collection
-This collection stores data related to individual users who interact with the bot. Each document represents a user and includes essential fields such as their unique Telegram ID and language preferences.
+This collection stores data related to individual users who interact with the bot in private chats. 
+Each document represents a user and includes their unique Telegram ID and language preferences.
 
 #### Document Structure:
 ```json
@@ -19,9 +19,6 @@ This collection stores data related to individual users who interact with the bo
 ```
 
 #### Schema Validator:
-The schema ensures that every document in the users collection 
-contains a valid `_id` (user's Telegram ID) and a language field.
-
 ```json
 {
     "$jsonSchema": {
@@ -41,18 +38,22 @@ contains a valid `_id` (user's Telegram ID) and a language field.
 }
 ```
 
-### 2. groups Collection
-This collection maintains information about the groups where the bot is active. 
-Each document in this collection includes the group’s ID, a list of users within the group, and the group’s default language.
+### 2. `groups` Collection
+Maintains information about the groups where the bot is active or have ever been. 
+Each document in this collection includes the group’s chat Telegram ID, a list of users within the group, and the group’s language.
 
 #### Document Structure:
 ```json
 {
-  "_id": 987654321,
+  "_id": -987654321000,
   "users": [
     {
       "user_id": 123456789,
       "can_be_pinged": true
+    },
+    {
+      "user_id": 101010101,
+      "can_be_pinged": false
     }
   ],
   "language": "en"
@@ -60,8 +61,6 @@ Each document in this collection includes the group’s ID, a list of users with
 ```
 
 #### Schema Validator:
-The schema ensures that each group document includes a valid `_id` (group's Telegram ID), 
-a users array containing user IDs and ping permissions, and a language field.
 
 ```json
 {
@@ -103,17 +102,17 @@ a users array containing user IDs and ping permissions, and a language field.
 ## Indexing Strategy
 The database uses indexing to enhance performance, especially for queries related to user and group management.
 
-### Indexes in users Collection:
-Primary Index on `_id`: Ensures that each user's Telegram ID is unique and allows fast lookups.
-### Indexes in groups Collection:
-Primary Index on `_id`: Guarantees that each group’s Telegram ID is unique.
-Compound Index on `users.user_id`: Facilitates efficient querying of users within a group.
+- **Indexes in `users` collection:**
+    - Primary Index on `_id`: Ensures and allows fast lookups.
+- **Indexes in `groups` collection:**
+  - Primary Index on `_id`: Guarantees that each group’s Telegram ID is unique.
+  - Compound Index on `users.user_id`: Efficient querying of users within a group.
 
 ## Database Operations
-The db.py file defines two key classes: `User` and `Group`.
-- **User Class:** Handles operations such as validating user existence, changing language, and inserting or updating user data in the users collection.
-- **Group Class:** Manages the creation, validation, and update of group data. Supports adding and removing users, managing ping permissions, and retrieving user data within groups.
+The [`db.py`](db.py) file defines two key classes: `User` and `Group`.
+- **User:** Operations such as validating user existence, changing language, and inserting user data in the users collection.
+- **Group:** Creation, validation, and update of group data. 
+Supports adding and removing users, managing ping permissions, and retrieving user data within groups.
 
 ## Conclusion
-The `db` directory provides a well-structured approach to managing the bot's data, ensuring consistency, performance, and scalability. 
-By leveraging MongoDB’s capabilities with proper schema validation and indexing, the bot can efficiently handle the operations needed for group and user management.
+By using MongoDB’s capabilities, the bot can efficiently handle the operations needed for group and user management.
