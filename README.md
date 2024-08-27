@@ -94,13 +94,12 @@ To start using the **Telegram Ping Bot**, follow these steps:
 - `/here` - mention all users who have allowed pings.
 - `/everyone` - mention all users in the group.
 - `/language` - change the group's language settings.
-- `/members` - view a list of all members and their ping preferences.
+- `/getmembers` - view a list of all members and their ping preferences.
 
 ### Private Chat Commands
-- `/start` - receive a welcome message and overview.
-- `/help` - display the help message with command instructions.
+- `/help` - command instructions.
 - `/language` - set your personal language preference.
-- `/addtogroup` - get instructions for adding the bot to a group.
+- `/addtogroup` - instructions for adding the bot to a group.
 
 ## Help
 If you need help, type `/help` in your chat with the bot to get more instructions or troubleshooting tips.

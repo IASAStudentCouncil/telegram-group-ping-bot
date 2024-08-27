@@ -11,7 +11,7 @@ from src.db import *
 from src.keyboards import *
 from src.config import bot_name
 from src.config import GroupMessages as GM
-from src.utils import TelegramClient, parse_user_ids, parse_user_data
+from src.utils import TelegramClient, parse_group_chat_user_ids, parse_user_data
 
 router = Router(name=__name__)      # Router for group event handling
 
@@ -37,7 +37,7 @@ async def new_group_or_member_validation(message: Message, db: MDB, telethon_cli
     if message.group_chat_created or message.supergroup_chat_created:
         await group.add_to_db()
         await message.answer(text=GM.PARSING_USERS[group.language])
-        user_ids = await parse_user_ids(telethon_client, group.id)
+        user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
         await group.bulk_users_insert(user_ids)
         await message.answer(text=GM.START[group.language])
     else:
@@ -45,7 +45,7 @@ async def new_group_or_member_validation(message: Message, db: MDB, telethon_cli
             if chat_member.is_bot and chat_member.username == bot_name:
                 await group.add_to_db()
                 await message.answer(text=GM.PARSING_USERS[group.language])
-                user_ids = await parse_user_ids(telethon_client, group.id)
+                user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
                 await group.bulk_users_insert(user_ids)
                 await message.answer(text=GM.START[group.language])
             else:
