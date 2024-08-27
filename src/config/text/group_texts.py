@@ -1,4 +1,4 @@
-# Dictionary to store text for group messages
+# Store text for group chat messages
 class GroupMessages:
     START = {
         "en": "Hey! I'm *Ping Bot* 😊\n\n"
