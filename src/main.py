@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 from aiogram import Dispatcher
 
@@ -15,6 +16,8 @@ async def main() -> None:
         Main asynchronous function to start the bot.
         Establishes connection to MongoDB, configures logging, and starts the bot polling.
     """
+    if not os.path.exists("system"):
+        os.makedirs("system")
     configure_logging()
 
     try:

@@ -1,12 +1,12 @@
 # Dictionary to store text for group messages
-group_messages = {
-    "start": {
+class GroupMessages:
+    START = {
         "en": "Hey! I'm *Ping Bot* 😊\n\n"
               "Type /help to explore all my commands.",
         "uk": "Привіт! Я — *Ping Bot* 😊\n\n"
               "Використовуйте /help, щоб ознайомитись з усіма моїми командами."
-    },
-    "help": {
+    }
+    HELP = {
         "en": "I can help you ping members in your group quickly, like in Discord. "
               "Here are some commands you can use:\n\n"
               "/language - change the group chat language.\n"
@@ -14,7 +14,7 @@ group_messages = {
               "/dontpingme - disable pings for yourself.\n"
               "/here - ping only users who allowed it.\n"
               "/everyone - ping all users.\n"
-              "/members - get a list of all users in the group, that I know.",
+              "/getmembers - get a list of all users in the group, that I know.",
         "uk": "Я допоможу вам швидко відмічати учасників у вашій групі. "
               "Ось команди, які ви можете використовувати:\n\n"
               "/language - змінити мову групового чату.\n"
@@ -22,72 +22,71 @@ group_messages = {
               "/dontpingme - заборонити пінгувати себе.\n"
               "/here - відмітити тільки тих, хто дозволив пінгувати себе.\n"
               "/everyone - відмітити абсолютно всіх учасників.\n"
-              "/members - список всіх учасників групи, які мені відомі."
-    },
-    "parsing_users": {
+              "/getmembers - список всіх учасників групи, які мені відомі."
+    }
+    PARSING_USERS = {
         "en": "Adding all users to my database...",
         "uk": "Додаю усіх користувачів до бази даних..."
-    },
-    "add_user": {
+    }
+    ADD_USER = {
         "en": "Welcome to the group! I'm *Ping Bot* 😊\n"
               "Type /help to learn how to use me.",
         "uk": "Ласкаво просимо до групи! Я — *Ping Bot* 😊\n"
               "Напишіть /help, щоб дізнатися, як користуватись мною."
-    },
-    "delete_user": {
+    }
+    DELETE_USER = {
         "en": "Goodbye! 😣",
         "uk": "Прощавайте! 😣"
-    },
-    "choice_language": {
+    }
+    CHOICE_LANGUAGE = {
         "en": "Choice language...",
         "uk": "Оберіть мову..."
-    },
-    "language_changed": {
+    }
+    LANGUAGE_CHANGED = {
         "en": "Language selected 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
         "uk": "Мову обрано 🇺🇦󠁧󠁢󠁥󠁮󠁧󠁿"
-    },
-    "allow_pinging": {
+    }
+    ALLOW_USER_PINGING = {
         "en": "Let's get pinging 😉",
         "uk": "Тепер я зможу пінгувати вас 😉"
-    },
-    "forbide_pinging": {
+    }
+    FORBIDE_USER_PINGING = {
         "en": "Ok. I will not ping you 🥲",
         "uk": "Добре, домовились 🥲"
-    },
-    "get_all_pingable_users": {
+    }
+    GET_ALL_PINGABLE_USERS = {
         "en": "*Able to be pinged:*",
         "uk": "*Користувачі, яких я можу пінгувати:*"
-    },
-    "get_all_unpingable_users": {
+    }
+    GET_ALL_UNPINGABLE_USERS = {
         "en": "*Disable to ping them:*",
         "uk": "*Користувачі, які не дозволили пінгувати себе:*"
-    },
-    "no_pingable_users": {
+    }
+    NO_PINGABLE_USERS = {
         "en": "*No one has allowed pinging.*",
         "uk": "*Не знайдено жодного користувача, який дозволив пунгувати себе.*"
-    },
-    "how_to_ping_pinable_users": {
+    }
+    HOW_TO_PING_PINDABLE_USERS = {
         "en": "Type /here to ping only users who allow it.",
         "uk": "Скористайтеся /here, щоб відмітити всіх, хто дозволив пінгувати себе."
-    },
-    "add_to_list_users_info": {
+    }
+    HOW_TO_ADD_USERS_TO_THE_LIST = {
         "en": "If anyone is not on the list, they just need to use any of my commands, and I'll them.",
         "uk": "Якщо когось немає у списку, вони можуть використати будь-яку з моїх команд, і я додам їх до своєї бази."
-    },
-    "only_you_in_group_chat": {
+    }
+    ONLY_ONE_USER_IN_GROUP = {
         "en": "*It seems like you're the only one I know in this group right now.*\n\n"
               "To use /here or /everyone, I need to be familiar with at least one other person. "
-              "Use /members to see the list of everyone I know in this group.",
+              "Use /getmembers to see the list of everyone I know in this group.",
         "uk": "*Здається, що наразі я знаю лише вас у цій групі.*\n\n"
               "Щоб використати /here або /everyone, мені потрібно знати хоча б ще одну людину. "
-              "Використовуйте /members, щоб побачити список усіх, кого я знаю в цій групі."
-    },
-    "no_one_allow_pinging": {
+              "Використовуйте /getmembers, щоб побачити список усіх, кого я знаю в цій групі."
+    }
+    NO_ONE_ALLOW_PINGING = {
         "en": "*No one currently allows pinging.*\n\n"
               "To change this, use /pingme to enable pinging for yourself. "
-              "You can also check /members to see who has allowed or disabled pinging.",
+              "You can also check /getmembers to see who has allowed or disabled pinging.",
         "uk": "*Ніхто наразі не дозволив пінгування.*\n\n"
               "Щоб це змінити, скористайтеся /pingme, щоб дозволити пінгування для себе. "
-              "Також можете переглянути /members, щоб побачити, хто дозволив або заборонив пінгування."
+              "Також можете переглянути /getmembers, щоб побачити, хто дозволив або заборонив пінгування."
     }
-}

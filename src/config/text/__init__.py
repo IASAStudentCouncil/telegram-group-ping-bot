@@ -1,4 +1,4 @@
-# Dictionary containing message templates for the bot in different languages
-from .private_messages import private_messages
-from .group_messages import group_messages
-from .keyboards_text import reply_keyboards_text, inline_keyboards_text
+# Classes containing dictionaries containing message templates for the bot in different languages
+from .private_texts import PrivateMessages
+from .group_texts import GroupMessages
+from .buttons_text import KeyboardButtonsText
