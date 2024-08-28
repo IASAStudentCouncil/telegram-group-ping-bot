@@ -72,6 +72,7 @@ class User:
             id (int): User's unique Telegram ID.
             language (str): User's preferred language.
     """
+
     def __init__(self, db: MDB, user_id: int, language_code: str = "en") -> None:
         """
             Initializes a User object for managing user data in the database.
@@ -282,11 +283,12 @@ class Group:
         except Exception as e:
             logging.error(f"Error updating ping permission for user {user_id} in group {self.id}: {e}")
 
-    async def get_user_ids(self, only_pingable: bool = False) -> List[int]:
+    async def get_user_ids(self, only_pingable: bool = False, exclude_user_id: int | None = None) -> List[int]:
         """
             Retrieves a list of user IDs in the group, optionally filtered by ping permission.
             Args:
                 only_pingable (bool): If True, return only the IDs of users who can be pinged (default is False).
+                exclude_user_id (int | None): ID of the user that sent this request and will not be included in the IDs list.
             Returns:
                 List[int]: A list of user IDs.
         """
@@ -295,7 +297,8 @@ class Group:
             return [
                 user["user_id"]
                 for user in all_user_data
-                if not only_pingable or user.get("can_be_pinged", False)
+                if (not only_pingable or user.get("can_be_pinged", False)) and (
+                        exclude_user_id is None or user["user_id"] != exclude_user_id)
             ]
         except Exception as e:
             logging.error(f"Error retrieving user IDs for group {self.id}: {e}")

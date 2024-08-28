@@ -1,6 +1,6 @@
 [project]
 name = "telegram-group-ping-bot"
-version = "0.5.5"
+version = "0.6"
 description = "A Telegram bot for pinging group members quickly and easily, like in Discord."
 readme = "README.md"
 requires-python = ">=3.11"

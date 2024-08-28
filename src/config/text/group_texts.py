@@ -11,29 +11,29 @@ class GroupMessages:
             "I can help you quickly ping members in your group, similar to Discord. "
             "Here are some commands you can use:\n\n"
             "*Regular Commands:*\n"
-            "/pingme - Allow yourself to be pinged.\n"
-            "/dontpingme - Disable pings for yourself.\n"
-            "/here - Ping only users who have allowed it.\n"
-            "/getmembers - Get a list of all users in the group chat.\n"
-            "/getadmins - Get a list of all admins.\n\n"
+            "/pingme - allow yourself to be pinged.\n"
+            "/dontpingme - disable pings for yourself.\n"
+            "/here - ping only users who have allowed it.\n"
+            "/getmembers - get a list of all users in the group chat.\n"
+            "/getadmins - get a list of all admins.\n\n"
             "*Admin Commands:*\n"
-            "/language - Change the group chat language.\n"
-            "/everyone - Ping all users.\n"
-            "/admins - Ping all admins.\n"
+            "/language - change the group chat language.\n"
+            "/everyone - ping all users.\n"
+            "/admins - ping all admins.\n"
         ),
         "uk": (
-            "Я допоможу вам швидко відмічати учасників у вашій групі. "
+            "Я допоможу вам швидко пінгувати учасників у вашій групі. "
             "Ось команди, які ви можете використовувати:\n\n"
             "*Звичайні команди:*\n"
-            "/pingme - Дозволити пінгувати себе.\n"
-            "/dontpingme - Заборонити пінгувати себе.\n"
-            "/here - Відмітити тільки тих, хто дозволив пінгувати себе.\n"
-            "/getmembers - Отримати список всіх учасників групи.\n"
-            "/getadmins - Отримати список всіх адміністраторів.\n\n"
+            "/pingme - дозволити пінгувати себе.\n"
+            "/dontpingme - заборонити пінгувати себе.\n"
+            "/here - пінганути тільки тих, хто дозволив пінгувати себе.\n"
+            "/getmembers - отримати список всіх учасників групи.\n"
+            "/getadmins - отримати список всіх адміністраторів.\n\n"
             "*Команди для адміністраторів:*\n"
-            "/language - Змінити мову групового чату.\n"
-            "/everyone - Відмітити абсолютно всіх учасників.\n"
-            "/admins - Відмітити всіх адміністраторів.\n"
+            "/language - змінити мову групового чату.\n"
+            "/everyone - відмітити абсолютно всіх учасників.\n"
+            "/admins - відмітити всіх адміністраторів.\n"
         )
     }
     PARSING_USERS = {
@@ -125,4 +125,8 @@ class GroupMessages:
     ONLY_ADMINS_CAN_USE_THIS_COMMAND = {
         "en": "*Only admins can use this command.*",
         "uk": "*Ця команда доступна лише для адміністраторів.*"
+    }
+    NO_ADMINS_FOUND = {
+        "en": "*No admins found.*",
+        "uk": "*Не знайдено жодного адміна.*"
     }

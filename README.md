@@ -1,10 +1,10 @@
 <div align="center">
    <a href="https://t.me/group_mate_ping_bot">
-      <img width="100px" src="assets/ping_bot_logo.jpg" alt="Ping Bot Logo" style="border-radius: 50%;">
+      <img width="100px" alt="Ping Bot Logo" src="assets/ping_bot_logo.jpg" style="border-radius: 50%;">
    </a>
    <h1>Telegram Ping Bot
       <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot">
-         <img alt="Project version" src="https://img.shields.io/badge/v0.5-941C2F"/>
+         <img alt="Project version" src="https://img.shields.io/badge/v0.6-941C2F"/>
        </a>
    </h1>
 </div>
@@ -14,7 +14,7 @@
 
 <div align="center">
    <a href="https://github.com/IASAStudentCouncil">
-      <img alt="Organization: IASA SC" src="https://img.shields.io/badge/organization-IASA SC-E28413"/>
+      <img alt="Organization: IASA SC" src="https://img.shields.io/badge/organization-IASA_SC-E28413"/>
     </a>
    <a href="https://github.com/yulianzavodnyk">
       <img alt="Author: Yulian Zavodnyk" src="https://img.shields.io/badge/author-Yulian_Zavodnyk-0C0C0C"/>
