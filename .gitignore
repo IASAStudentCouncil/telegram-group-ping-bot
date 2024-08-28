@@ -6,6 +6,9 @@ __pycache__/
 # C Extensions
 *.so
 
+# Ignore .env files
+.env
+
 # Temporary Files and Backup Artifacts
 tmp/
 *.tmp

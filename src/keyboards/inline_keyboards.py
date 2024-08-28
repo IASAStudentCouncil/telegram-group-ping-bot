@@ -1,8 +1,25 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.config import inline_keyboards_text as text
+from src.config import KeyboardButtonsText as KBT
 from src.config import bot_name, available_languages
+
+
+def build_start_markup(language: str) -> InlineKeyboardMarkup:
+    """
+        Creates an inline keyboard with a button that apears with start message.
+        Args:
+            language (str): The language key to fetch appropriate button text.
+        Returns:
+            InlineKeyboardMarkup: The constructed inline keyboard.
+        The button directs users to a URL for adding the bot to their Telegram group.
+    """
+    builder = InlineKeyboardBuilder()
+    builder.add(InlineKeyboardButton(text=KBT.COMMANDS_LIST_BUTTON_TEXT[language],
+                                     callback_data="commands_list"))
+    builder.add(InlineKeyboardButton(text=KBT.ADD_TO_GROUP_BUTTON_TEXT[language],
+                                     url=f"https://t.me/{bot_name}?startgroup=test"))
+    return builder.as_markup()
 
 
 def build_language_markup() -> InlineKeyboardMarkup:
@@ -19,7 +36,6 @@ def build_language_markup() -> InlineKeyboardMarkup:
                 callback_data=language_code
             )
         )
-
     builder.adjust(2)
     return builder.as_markup(one_time_keyboard=True)
 
@@ -34,8 +50,9 @@ def build_add_to_group_markup(language: str) -> InlineKeyboardMarkup:
         The button directs users to a URL for adding the bot to their Telegram group.
     """
     builder = InlineKeyboardBuilder()
-    builder.button(text=text["add_to_group_button"][language], url=f"https://t.me/{bot_name}?startgroup=test")
+    builder.button(text=KBT.ADD_TO_GROUP_BUTTON_TEXT[language],
+                   url=f"https://t.me/{bot_name}?startgroup=test")
     return builder.as_markup()
 
 
-__all__ = ("build_language_markup", "build_add_to_group_markup")
+__all__ = ("build_start_markup", "build_language_markup", "build_add_to_group_markup")
