@@ -1,5 +1,4 @@
 from telethon import TelegramClient
-from telethon.tl.types import ChannelParticipantsAdmins
 from typing import List, Dict
 import os
 
@@ -24,7 +23,7 @@ async def parse_group_chat_user_ids(client: TelegramClient,
         Args:
             client (TelegramClient): The Telethon client instance used to interact with the Telegram API.
             group_id (int): The unique identifier of the Telegram group.
-            exclude_user_id (int | None): ID of the user that sent this request and will not be included in the IDs list.
+            exclude_user_id (int | None): ID of the user that sent this request and will not be included.
         Returns:
             List[int]: A list of user IDs that are not deleted and not bots.
     """

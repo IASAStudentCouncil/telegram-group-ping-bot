@@ -288,7 +288,7 @@ class Group:
             Retrieves a list of user IDs in the group, optionally filtered by ping permission.
             Args:
                 only_pingable (bool): If True, return only the IDs of users who can be pinged (default is False).
-                exclude_user_id (int | None): ID of the user that sent this request and will not be included in the IDs list.
+                exclude_user_id (int | None): ID of the user that sent this request and will not be included.
             Returns:
                 List[int]: A list of user IDs.
         """

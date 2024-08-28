@@ -4,7 +4,7 @@
    </a>
    <h1>Telegram Ping Bot
       <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot">
-         <img alt="Project version" src="https://img.shields.io/badge/v0.6-941C2F"/>
+         <img alt="Project version" src="https://img.shields.io/badge/v0.6-FF3040"/>
        </a>
    </h1>
 </div>

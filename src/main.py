@@ -16,7 +16,7 @@ async def main() -> None:
         Main asynchronous function to start the bot.
         Establishes connection to MongoDB, configures logging, and starts the bot polling.
     """
-    if not os.path.exists("system"):
+    if not os.path.exists("system"):  # creates 'system' folder were .log and .session files will be. REQUIRED!!!
         os.makedirs("system")
     configure_logging()
 
@@ -31,7 +31,7 @@ async def main() -> None:
 
     telethon_client = create_telethon_client()
     try:
-        await telethon_client.start(bot_token=bot_token)
+        await telethon_client.start(bot_token=bot_token)  # await is required
         logging.info("Telethon client started successfully.")
     except Exception as e:
         logging.error("Failed to start Telethon client!")

@@ -1,3 +1,5 @@
+from contextlib import suppress
+
 from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
@@ -74,10 +76,8 @@ async def group_member_deleting(message: Message, db: MDB) -> None:
     else:
         user_id = left_member.id
         await group.delete_user(user_id)
-        try:
+        with suppress(Exception):
             await message.reply(text=GM.DELETE_USER[group.language])
-        except Exception as e:
-            await message.answer(text=GM.DELETE_USER[group.language])
 
 
 @router.message(F.content_type == ContentType.MIGRATE_TO_CHAT_ID,
