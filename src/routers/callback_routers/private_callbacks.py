@@ -25,7 +25,7 @@ async def start_help(call: CallbackQuery, db: MDB) -> None:
 
 @router.callback_query(F.data.in_(languages.keys()),
                        F.message.chat.type == ChatType.PRIVATE)
-async def change_group_language(call: CallbackQuery, db: MDB) -> None:
+async def change_user_language(call: CallbackQuery, db: MDB) -> None:
     """Sets the user's language based on their selection and confirms the update."""
     user_id = call.from_user.id
     language = call.data

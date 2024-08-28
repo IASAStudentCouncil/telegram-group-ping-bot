@@ -9,7 +9,8 @@ class GroupMessages:
     HELP = {
         "en": "I can help you ping members in your group quickly, like in Discord. "
               "Here are some commands you can use:\n\n"
-              "/language - change the group chat language.\n"
+              "/language - change the group chat language "
+              "(_only for admins and owner of the group chat_).\n"
               "/pingme - allow yourself to be pinged.\n"
               "/dontpingme - disable pings for yourself.\n"
               "/here - ping only users who allowed it.\n"
@@ -17,7 +18,8 @@ class GroupMessages:
               "/getmembers - get a list of all users in the group, that I know.",
         "uk": "Я допоможу вам швидко відмічати учасників у вашій групі. "
               "Ось команди, які ви можете використовувати:\n\n"
-              "/language - змінити мову групового чату.\n"
+              "/language - змінити мову групового чату "
+              "(_можуть використовувати лише адміністратори_).\n"
               "/pingme - дозволити пінгувати себе.\n"
               "/dontpingme - заборонити пінгувати себе.\n"
               "/here - відмітити тільки тих, хто дозволив пінгувати себе.\n"
@@ -27,6 +29,12 @@ class GroupMessages:
     PARSING_USERS = {
         "en": "Adding all users to my database...",
         "uk": "Додаю усіх користувачів до бази даних..."
+    }
+    USERS_HAS_BEEN_PARSED = {
+        "en": "Successfully added all users to my database. Let's get started!\n\n"
+              "I'm *Ping Bot* 😊. Type /help to explore all my commands.",
+        "uk": "Успішно додав усіх користувачів до моєї бази даних.\n\n"
+              "Будемо знайомі! Я — *Ping Bot* 😊. Використовуйте /help, щоб ознайомитись з усіма моїми командами."
     }
     ADD_USER = {
         "en": "Welcome to the group! I'm *Ping Bot* 😊\n"
@@ -41,6 +49,10 @@ class GroupMessages:
     CHOICE_LANGUAGE = {
         "en": "Choice language...",
         "uk": "Оберіть мову..."
+    }
+    ONLY_ADMINS_OR_OWNER_CAN_CHANGE_LANGUAGE = {
+        "en": "Only admins or owner of the group chat can change group language.",
+        "uk": "Лише власник та адміни групи мають право змінювати мову."
     }
     LANGUAGE_CHANGED = {
         "en": "Language selected 🏴󠁧󠁢󠁥󠁮󠁧󠁿",

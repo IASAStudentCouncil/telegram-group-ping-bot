@@ -1,8 +1,9 @@
 from aiogram import Router, F
 from aiogram.filters import Command
-from aiogram.types import Message, ChatMember
+from aiogram.types import Message
 from aiogram.enums.chat_type import ChatType
 from aiogram.enums import ContentType
+from aiogram.enums.chat_member_status import ChatMemberStatus
 from aiogram.utils import markdown
 
 from motor.core import AgnosticDatabase as MDB
@@ -12,6 +13,7 @@ from src.keyboards import *
 from src.config import bot_name
 from src.config import GroupMessages as GM
 from src.utils import TelegramClient, parse_group_chat_user_ids, parse_user_data
+from src.bot import bot
 
 router = Router(name=__name__)      # Router for group event handling
 
@@ -39,7 +41,7 @@ async def new_group_or_member_validation(message: Message, db: MDB, telethon_cli
         await message.answer(text=GM.PARSING_USERS[group.language])
         user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
         await group.bulk_users_insert(user_ids)
-        await message.answer(text=GM.START[group.language])
+        await message.answer(text=GM.USERS_HAS_BEEN_PARSED[group.language])
     else:
         for chat_member in message.new_chat_members:
             if chat_member.is_bot and chat_member.username == bot_name:
@@ -47,7 +49,7 @@ async def new_group_or_member_validation(message: Message, db: MDB, telethon_cli
                 await message.answer(text=GM.PARSING_USERS[group.language])
                 user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
                 await group.bulk_users_insert(user_ids)
-                await message.answer(text=GM.START[group.language])
+                await message.answer(text=GM.USERS_HAS_BEEN_PARSED[group.language])
             else:
                 user_id = chat_member.id
                 await group.user_validation(user_id)
@@ -152,8 +154,12 @@ async def choice_new_languge(message: Message, db: MDB) -> None:
         Sends a language selection keyboard to the chat.
     """
     group = await setup_group(db, message)
-    await message.answer(text=GM.CHOICE_LANGUAGE[group.language],
-                         reply_markup=build_language_markup())
+    member = await bot.get_chat_member(group.id, message.from_user.id)
+    if member.status not in [ChatMemberStatus.CREATOR, ChatMemberStatus.ADMINISTRATOR]:
+        await message.answer(text=GM.ONLY_ADMINS_OR_OWNER_CAN_CHANGE_LANGUAGE[group.language])
+    else:
+        await message.answer(text=GM.CHOICE_LANGUAGE[group.language],
+                             reply_markup=build_language_markup())
 
 
 @router.message(Command("pingme"),
