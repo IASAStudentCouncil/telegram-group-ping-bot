@@ -8,8 +8,7 @@ class PrivateMessages:
         "en": "I can help you ping members in your group quickly, like in Discord. "
               "Here are some commands you can use:\n\n"
               "*Personal Chat Commands*\n"
-              "/language - to choose your preferred language.\n"
-              "/add_to_group - to add me to a group chat.\n\n"
+              "/language - to choose your preferred language.\n\n"
               "*Group Chat Commands*\n"
               "/language - change the group chat language.\n"
               "/pingme - allow yourself to be pinged.\n"
@@ -21,8 +20,7 @@ class PrivateMessages:
         "uk": "Я можу допомогти вам швидко відмічати учасників у вашій групі. "
               "Ось деякі команди, які ви можете використовувати:\n\n"
               "*Персональний чат*\n"
-              "/language - для зміни мови чату.\n"
-              "/addtogroup - щоб додати мене до вашої групи.\n\n"
+              "/language - для зміни мови чату.\n\n"
               "*Груповий чат*\n"
               "/pingme - дозволити пінгувати себе.\n"
               "/dontpingme - заборонити пінгувати себе.\n"
@@ -38,10 +36,6 @@ class PrivateMessages:
     LANGUAGE_CHANGED = {
         "en": "Language selected 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
         "uk": "Мову обрано 🇺🇦󠁧󠁢󠁥󠁮󠁧󠁿"
-    }
-    HOW_TO_ADD_TO_GROUP = {
-        "en": "Tap the button to add me to your group chat. Let's get pinging!",
-        "uk": "Натисніть, щоб додати мене до вашої групи 😌"
     }
     IGNORE_GROUP_COMMANDS_IN_PRIVATE_CHAT = {
         "en": "Command is only available in group chat. Check /help",

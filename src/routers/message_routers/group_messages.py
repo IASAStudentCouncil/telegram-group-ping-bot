@@ -99,7 +99,8 @@ async def chat_id_migration(message: Message, db: MDB) -> None:
     Command(
         commands=['start', 'help', 'language', 'pingme',
                   'dontpingme', 'here', 'everyone', 'getmembers']
-    )
+    ),
+    F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP])
 )
 async def ignore_commands_from_other_bot():
     """
@@ -265,3 +266,10 @@ async def show_members_list(message: Message, db: MDB, telethon_client: Telegram
                         f"{unpingable_users_text}"
                         f"{GM.HOW_TO_ADD_USERS_TO_THE_LIST[group.language]}")
     await message.answer(text=message_text)
+
+
+@router.message(Command("chatid"),
+                F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP]))
+async def get_chat_id(message: Message):
+    """Send chat id to the chat"""
+    await message.answer(text=f"`{message.chat.id}`")

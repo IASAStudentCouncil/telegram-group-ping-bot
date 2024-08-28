@@ -79,7 +79,7 @@ To start using the **Telegram Ping Bot**, follow these steps:
    - Use `/help` to explore all available commands and functionalities.
 
 3. **Invite the Bot to Your Group:**
-   - Click the "Add to Group" button in the start message or use the `/addtogroup` command.
+   - Click the "Add to Group" button in the start or help message.
    - Ensure the bot has the necessary permissions (e.g., sending messages) to function properly.
 
 4. **Set Language Preferences:**
@@ -89,17 +89,17 @@ To start using the **Telegram Ping Bot**, follow these steps:
 ## Commands
 
 ### Group Chat Commands
+- `/help` - command instructions.
+- `/language` - change the group's language settings.
 - `/pingme` - opt-in to be mentioned with pings.
 - `/dontpingme` - opt-out of being mentioned.
 - `/here` - mention all users who have allowed pings.
 - `/everyone` - mention all users in the group.
-- `/language` - change the group's language settings.
 - `/getmembers` - view a list of all members and their ping preferences.
 
 ### Private Chat Commands
 - `/help` - command instructions.
 - `/language` - set your personal language preference.
-- `/addtogroup` - instructions for adding the bot to a group.
 
 ## Help
 If you need help, type `/help` in your chat with the bot to get more instructions or troubleshooting tips.

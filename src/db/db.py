@@ -1,9 +1,10 @@
 import logging
+from contextlib import suppress
 from typing import List, Optional, Dict
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from motor.core import AgnosticDatabase as MDB
-from pymongo.errors import OperationFailure, ServerSelectionTimeoutError, DuplicateKeyError, BulkWriteError
+from pymongo.errors import OperationFailure, ServerSelectionTimeoutError, DuplicateKeyError
 from pymongo import IndexModel, ASCENDING
 
 from src.config import mongo_uri, db_name
@@ -254,13 +255,14 @@ class Group:
                 user_ids (List[int]): A list of user IDs to be added to the group.
         """
         try:
-            if user_ids:
-                await self._collection.update_one(
-                    {"_id": self.id},
-                    {"$addToSet": {
-                        "users": {"$each": [{"user_id": user_id, "can_be_pinged": True} for user_id in user_ids]}
-                    }}
-                )
+            with suppress(DuplicateKeyError):
+                if user_ids:
+                    await self._collection.update_one(
+                        {"_id": self.id},
+                        {"$addToSet": {
+                            "users": {"$each": [{"user_id": user_id, "can_be_pinged": True} for user_id in user_ids]}
+                        }}
+                    )
         except Exception as e:
             logging.error(f"Error during bulk addition of users to group {self.id}: {e}")
 

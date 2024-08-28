@@ -27,7 +27,8 @@ async def start_help(message: Message, db: MDB) -> None:
         await message.answer(text=PM.START[user.language],
                              reply_markup=build_start_markup(user.language))
     else:
-        await message.answer(text=PM.HELP[user.language])
+        await message.answer(text=PM.HELP[user.language],
+                             reply_markup=build_add_to_group_markup(user.language))
 
 
 async def setup_user(db: MDB, message: Message) -> User:
@@ -43,14 +44,6 @@ async def setup_user(db: MDB, message: Message) -> User:
     user = User(db, user_id)
     await user.validation()
     return user
-
-
-@router.message(Command('addtogroup'), F.chat.type == ChatType.PRIVATE)
-async def add_to_group(message: Message, db: MDB) -> None:
-    """Handles the '/addtogroup' command which allows users to add the bot to a group chat."""
-    user = await setup_user(db, message)
-    await message.answer(text=PM.HOW_TO_ADD_TO_GROUP[user.language],
-                         reply_markup=build_add_to_group_markup(user.language))
 
 
 @router.message(Command('language'), F.chat.type == ChatType.PRIVATE)

@@ -6,7 +6,7 @@ It contains the logic for handling users and groups within the bot, ensuring eff
 
 ## MongoDB Collections
 
-### 1. `users` Collection
+### 1. `users` collection
 This collection stores data related to individual users who interact with the bot in private chats. 
 Each document represents a user and includes their unique Telegram ID and language preferences.
 
@@ -38,7 +38,7 @@ Each document represents a user and includes their unique Telegram ID and langua
 }
 ```
 
-### 2. `groups` Collection
+### 2. `groups` collection
 Maintains information about the groups where the bot is active or have ever been. 
 Each document in this collection includes the group’s chat Telegram ID, a list of users within the group, and the group’s language.
 

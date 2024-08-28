@@ -5,6 +5,7 @@ from aiogram.enums.chat_type import ChatType
 from motor.core import AgnosticDatabase as MDB
 
 from src.db import *
+from src.keyboards import *
 from src.config import PrivateMessages as PM
 from src.config import available_languages as languages
 
@@ -18,7 +19,8 @@ async def start_help(call: CallbackQuery, db: MDB) -> None:
     user_id = call.from_user.id
     user = User(db, user_id)
     await user.validation()
-    await call.message.edit_text(text=PM.HELP[user.language])
+    await call.message.edit_text(text=PM.HELP[user.language],
+                                 reply_markup=build_add_to_group_markup(user.language))
 
 
 @router.callback_query(F.data.in_(languages.keys()),

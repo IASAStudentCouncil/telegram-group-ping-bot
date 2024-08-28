@@ -15,7 +15,8 @@ def build_start_markup(language: str) -> InlineKeyboardMarkup:
         The button directs users to a URL for adding the bot to their Telegram group.
     """
     builder = InlineKeyboardBuilder()
-    builder.add(InlineKeyboardButton(text=KBT.GET_COMMANDS_LIST_BUTTON_TEXT, callback_data="commands_list"))
+    builder.add(InlineKeyboardButton(text=KBT.COMMANDS_LIST_BUTTON_TEXT[language],
+                                     callback_data="commands_list"))
     builder.add(InlineKeyboardButton(text=KBT.ADD_TO_GROUP_BUTTON_TEXT[language],
                                      url=f"https://t.me/{bot_name}?startgroup=test"))
     return builder.as_markup()
