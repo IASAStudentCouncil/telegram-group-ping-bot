@@ -93,9 +93,11 @@ To start using the **Telegram Ping Bot**, follow these steps:
 - `/language` - change the group's language settings.
 - `/pingme` - opt-in to be mentioned with pings.
 - `/dontpingme` - opt-out of being mentioned.
-- `/here` - mention all users who have allowed pings.
-- `/everyone` - mention all users in the group.
+- `/here` - ping all users who have allowed pings.
+- `/everyone` - ping everyone in the group.
+- `/admins` - ping all administrators.
 - `/getmembers` - view a list of all members and their ping preferences.
+- `/getadmins` - get a list of all administrators.
 
 ### Private Chat Commands
 - `/help` - command instructions.

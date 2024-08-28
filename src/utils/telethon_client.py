@@ -17,24 +17,18 @@ def create_telethon_client() -> TelegramClient:
 
 
 async def parse_group_chat_user_ids(client: TelegramClient,
-                                    group_id: int,
-                                    only_admins: bool = False) -> List[int]:
+                                    group_id: int) -> List[int]:
     """
         Fetches user IDs from a specified Telegram group, filtering out deleted accounts and bots.
-        Optionally retrieves only admin user IDs if `only_admins` is True.
         Args:
             client (TelegramClient): The Telethon client instance used to interact with the Telegram API.
             group_id (int): The unique identifier of the Telegram group.
-            only_admins (bool): If True, only admin user IDs are returned. Defaults to False.
         Returns:
             List[int]: A list of user IDs that are not deleted and not bots.
     """
     return [
         user.id async for user in
-        client.iter_participants(
-            group_id,
-            filter=ChannelParticipantsAdmins if only_admins else None
-        )
+        client.iter_participants(group_id)
         if not user.deleted and not user.bot
     ]
 
