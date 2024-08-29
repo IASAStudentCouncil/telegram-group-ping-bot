@@ -47,10 +47,10 @@
          <img alt="Facebook" src="https://img.shields.io/badge/Follow-1877F2?logo=facebook&logoColor=white"/>
        </a>
       <a href="https://t.me/IASA_Student_Council">
-         <img alt="Telegram" src="https://img.shields.io/badge/Follow-C13584?logo=instagram&logoColor=white"/>
+         <img alt="Telegram" src="https://img.shields.io/badge/Follow-0088CC?logo=telegram&logoColor=white"/>
        </a>
       <a href="https://instagram.com/studrada_iasa">
-         <img alt="Instagram" src="https://img.shields.io/badge/Follow-0088CC?logo=telegram&logoColor=white"/>
+         <img alt="Instagram" src="https://img.shields.io/badge/Follow-C13584?logo=instagram&logoColor=white"/>
        </a>
    </div>
 </div>

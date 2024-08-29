@@ -54,7 +54,7 @@ async def change_language(message: Message, db: MDB) -> None:
                          reply_markup=build_language_markup())
 
 
-@router.message(Command(commands=['pingme', 'dontpingme', 'here', 'everyone', 'getmembers']),
+@router.message(Command(commands=['pingme', 'dontpingme', 'here', 'everyone', 'getmembers', 'admins', 'getadmins']),
                 F.chat.type == ChatType.PRIVATE)
 async def ignore_group_commands(message: Message, db: MDB) -> None:
     """Handles commands that are meant for group chats but are mistakenly sent in private messages."""

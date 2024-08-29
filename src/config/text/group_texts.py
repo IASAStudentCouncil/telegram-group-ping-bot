@@ -14,10 +14,10 @@ class GroupMessages:
             "/pingme - allow yourself to be pinged.\n"
             "/dontpingme - disable pings for yourself.\n"
             "/here - ping only users who have allowed it.\n"
-            "/getmembers - get a list of all users in the group chat.\n"
+            "/getmembers - get a list of all users in the group chat and their ping preferences..\n"
             "/getadmins - get a list of all admins.\n\n"
             "*Admin Commands:*\n"
-            "/language - change the group chat language.\n"
+            "/language - change the language settings.\n"
             "/everyone - ping all users.\n"
             "/admins - ping all admins.\n"
         ),
@@ -28,12 +28,12 @@ class GroupMessages:
             "/pingme - дозволити пінгувати себе.\n"
             "/dontpingme - заборонити пінгувати себе.\n"
             "/here - пінганути тільки тих, хто дозволив пінгувати себе.\n"
-            "/getmembers - отримати список всіх учасників групи.\n"
+            "/getmembers - отримати список всіх учасників групи з інформацією хто дозволив себе пінгувати.\n"
             "/getadmins - отримати список всіх адміністраторів.\n\n"
             "*Команди для адміністраторів:*\n"
-            "/language - змінити мову групового чату.\n"
-            "/everyone - відмітити абсолютно всіх учасників.\n"
-            "/admins - відмітити всіх адміністраторів.\n"
+            "/language - змінити мовні налаштування.\n"
+            "/everyone - пінганути абсолютно всіх учасників.\n"
+            "/admins - пінганути всіх адміністраторів.\n"
         )
     }
     PARSING_USERS = {
@@ -119,9 +119,9 @@ class GroupMessages:
     }
     HOW_TO_PING_ADMINS = {
         "en": ("Type /admins to ping all admins in group.\n"
-               "_(Note: only admins can use this command.)_"),
+               "_(Note: only admins can use this command)_"),
         "uk": ("Скористайтеся /admins, щоб пінганути адмінів групи.\n"
-               "_(Лише адміністратори можуть використовувати цю команду.)_")
+               "_(Лише адміністратори можуть використовувати цю команду)_")
     }
     ONLY_ADMINS_CAN_USE_THIS_COMMAND = {
         "en": "*Only admins can use this command.*",
@@ -130,4 +130,8 @@ class GroupMessages:
     NO_ADMINS_FOUND = {
         "en": "*No admins found.*",
         "uk": "*Не знайдено жодного адміна.*"
+    }
+    THERE_IS_NO_ADMINS_EXCEPT_YOU = {
+        "en": "*You are the only admin of this group chat.*",
+        "uk": "*Ви єдиний адміністратор цієї групи.*"
     }

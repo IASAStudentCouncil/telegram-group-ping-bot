@@ -208,11 +208,13 @@ async def ping_only_pingable_users(message: Message, db: MDB) -> None:
             await message.reply(GM.ONLY_ONE_USER_IN_GROUP[group.language])
         else:
             message_base = markdown.link(f"@here", f"https://t.me/{bot_name}")
+            users_num = 0
             for i in range(0, len(user_ids), 50):
                 users_batch = user_ids[i:i + 50]
+                users_num += len(users_batch)
                 message_text = message_base + "".join(
                     markdown.link(f"‎", f"tg://user?id={user_id}") for user_id in users_batch
-                )
+                ) + f" ({users_num}/{len(user_ids)})"
                 if i == 0:
                     await message.reply(text=message_text)
                 else:
@@ -238,11 +240,13 @@ async def ping_everyone_in_group(message: Message, db: MDB) -> None:
             await message.reply(text=GM.ONLY_ONE_USER_IN_GROUP[group.language])
         else:
             message_base = markdown.link(f"@еvеryone", f"https://t.me/{bot_name}")
+            users_num = 0
             for i in range(0, len(user_ids), 50):
                 users_batch = user_ids[i:i + 50]
+                users_num += len(users_batch)
                 message_text = message_base + "".join(
                     markdown.link(f"‎", f"tg://user?id={user_id}") for user_id in users_batch
-                ) + f"({i+50}"
+                ) + f" ({users_num}/{len(user_ids)})"
                 if i == 0:
                     await message.reply(text=message_text)
                 else:
@@ -307,7 +311,7 @@ async def show_members_list(message: Message, db: MDB, telethon_client: Telegram
     if member.status not in [ChatMemberStatus.CREATOR, ChatMemberStatus.ADMINISTRATOR]:
         await message.answer(text=GM.ONLY_ADMINS_CAN_USE_THIS_COMMAND[group.language])
     else:
-        user_ids = await parse_group_chat_user_ids(telethon_client, group.id, exclude_user_id=user_id)
+        user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
         admins_ids = [
             user_id for user_id in user_ids
             if (await bot.get_chat_member(group.id, user_id)).status in [ChatMemberStatus.CREATOR,
@@ -315,6 +319,8 @@ async def show_members_list(message: Message, db: MDB, telethon_client: Telegram
         ]
         if not admins_ids:
             await message.reply(text=GM.NO_ADMINS_FOUND[group.language])
+        elif admins_ids == [user_id]:
+            await message.reply(text=GM.THERE_IS_NO_ADMINS_EXCEPT_YOU[group.language])
         else:
             message_base = markdown.link(f"@admins", f"https://t.me/{bot_name}")
             message_text = message_base + "".join(
