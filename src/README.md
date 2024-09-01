@@ -3,8 +3,8 @@
 - [File Details](#file-details)
 
 **Adittional Docs**
-- [Database](db/README.md)
-- [Utils](utils/README.md)
+- [Database (MongoDB)](db/README.md)
+- [Utils (Telethon)](utils/README.md)
 
 ## File Structure
 Here’s an overview of the `src` directory structure:

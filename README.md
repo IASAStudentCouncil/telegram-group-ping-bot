@@ -1,10 +1,10 @@
 <div align="center">
    <a href="https://t.me/group_mate_ping_bot">
-      <img width="100px" src="assets/ping_bot_logo.jpg" alt="Ping Bot Logo" style="border-radius: 50%;">
+      <img width="100px" alt="Ping Bot Logo" src="assets/ping_bot_logo.jpg" style="border-radius: 50%;">
    </a>
    <h1>Telegram Ping Bot
       <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot">
-         <img alt="Project version" src="https://img.shields.io/badge/v0.5-941C2F"/>
+         <img alt="Project version" src="https://img.shields.io/badge/v0.6-FF3040"/>
        </a>
    </h1>
 </div>
@@ -14,7 +14,7 @@
 
 <div align="center">
    <a href="https://github.com/IASAStudentCouncil">
-      <img alt="Organization: IASA SC" src="https://img.shields.io/badge/organization-IASA SC-E28413"/>
+      <img alt="Organization: IASA SC" src="https://img.shields.io/badge/organization-IASA_SC-E28413"/>
     </a>
    <a href="https://github.com/yulianzavodnyk">
       <img alt="Author: Yulian Zavodnyk" src="https://img.shields.io/badge/author-Yulian_Zavodnyk-0C0C0C"/>
@@ -47,10 +47,10 @@
          <img alt="Facebook" src="https://img.shields.io/badge/Follow-1877F2?logo=facebook&logoColor=white"/>
        </a>
       <a href="https://t.me/IASA_Student_Council">
-         <img alt="Telegram" src="https://img.shields.io/badge/Follow-C13584?logo=instagram&logoColor=white"/>
+         <img alt="Telegram" src="https://img.shields.io/badge/Follow-0088CC?logo=telegram&logoColor=white"/>
        </a>
       <a href="https://instagram.com/studrada_iasa">
-         <img alt="Instagram" src="https://img.shields.io/badge/Follow-0088CC?logo=telegram&logoColor=white"/>
+         <img alt="Instagram" src="https://img.shields.io/badge/Follow-C13584?logo=instagram&logoColor=white"/>
        </a>
    </div>
 </div>
@@ -93,9 +93,11 @@ To start using the **Telegram Ping Bot**, follow these steps:
 - `/language` - change the group's language settings.
 - `/pingme` - opt-in to be mentioned with pings.
 - `/dontpingme` - opt-out of being mentioned.
-- `/here` - mention all users who have allowed pings.
-- `/everyone` - mention all users in the group.
+- `/here` - ping all users who have allowed pings.
+- `/everyone` - ping everyone in the group.
+- `/admins` - ping all administrators.
 - `/getmembers` - view a list of all members and their ping preferences.
+- `/getadmins` - get a list of all administrators.
 
 ### Private Chat Commands
 - `/help` - command instructions.

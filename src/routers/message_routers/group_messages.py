@@ -1,8 +1,11 @@
+from contextlib import suppress
+
 from aiogram import Router, F
 from aiogram.filters import Command
-from aiogram.types import Message, ChatMember
+from aiogram.types import Message
 from aiogram.enums.chat_type import ChatType
 from aiogram.enums import ContentType
+from aiogram.enums.chat_member_status import ChatMemberStatus
 from aiogram.utils import markdown
 
 from motor.core import AgnosticDatabase as MDB
@@ -12,6 +15,7 @@ from src.keyboards import *
 from src.config import bot_name
 from src.config import GroupMessages as GM
 from src.utils import TelegramClient, parse_group_chat_user_ids, parse_user_data
+from src.bot import bot
 
 router = Router(name=__name__)      # Router for group event handling
 
@@ -39,7 +43,7 @@ async def new_group_or_member_validation(message: Message, db: MDB, telethon_cli
         await message.answer(text=GM.PARSING_USERS[group.language])
         user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
         await group.bulk_users_insert(user_ids)
-        await message.answer(text=GM.START[group.language])
+        await message.answer(text=GM.USERS_HAS_BEEN_PARSED[group.language])
     else:
         for chat_member in message.new_chat_members:
             if chat_member.is_bot and chat_member.username == bot_name:
@@ -47,7 +51,7 @@ async def new_group_or_member_validation(message: Message, db: MDB, telethon_cli
                 await message.answer(text=GM.PARSING_USERS[group.language])
                 user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
                 await group.bulk_users_insert(user_ids)
-                await message.answer(text=GM.START[group.language])
+                await message.answer(text=GM.USERS_HAS_BEEN_PARSED[group.language])
             else:
                 user_id = chat_member.id
                 await group.user_validation(user_id)
@@ -72,10 +76,8 @@ async def group_member_deleting(message: Message, db: MDB) -> None:
     else:
         user_id = left_member.id
         await group.delete_user(user_id)
-        try:
+        with suppress(Exception):
             await message.reply(text=GM.DELETE_USER[group.language])
-        except Exception as e:
-            await message.answer(text=GM.DELETE_USER[group.language])
 
 
 @router.message(F.content_type == ContentType.MIGRATE_TO_CHAT_ID,
@@ -98,12 +100,15 @@ async def chat_id_migration(message: Message, db: MDB) -> None:
     F.from_user.is_bot,
     Command(
         commands=['start', 'help', 'language', 'pingme',
-                  'dontpingme', 'here', 'everyone', 'getmembers']
+                  'dontpingme', 'here', 'everyone', 'getmembers',
+                  'admins', 'getadmins', 'chatid']
     ),
     F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP])
 )
 async def ignore_commands_from_other_bot():
     """
+        Just in case if it's ever happened. :)
+
         Ignores commands issued by other bots.
         This function is triggered when a message is sent by another bot
         containing any of the specified commands
@@ -152,8 +157,12 @@ async def choice_new_languge(message: Message, db: MDB) -> None:
         Sends a language selection keyboard to the chat.
     """
     group = await setup_group(db, message)
-    await message.answer(text=GM.CHOICE_LANGUAGE[group.language],
-                         reply_markup=build_language_markup())
+    member = await bot.get_chat_member(group.id, message.from_user.id)
+    if member.status not in [ChatMemberStatus.CREATOR, ChatMemberStatus.ADMINISTRATOR]:
+        await message.answer(text=GM.ONLY_ADMINS_OR_OWNER_CAN_CHANGE_LANGUAGE[group.language])
+    else:
+        await message.answer(text=GM.CHOICE_LANGUAGE[group.language],
+                             reply_markup=build_language_markup())
 
 
 @router.message(Command("pingme"),
@@ -186,22 +195,30 @@ async def ping_only_pingable_users(message: Message, db: MDB) -> None:
     """
         Handles the '/here' command in group chats.
         Pings all users in the group who have allowed themselves to be pinged.
+        Due to limitation of 50 mention per message it offen send multiple messages with mentions.
     """
     group = await setup_group(db, message)
     user_ids = await group.get_user_ids(only_pingable=True)
 
-    if user_ids:
-        user_ids = [user_id for user_id in user_ids if user_id != message.from_user.id]
-        if user_ids:
-            message_text = markdown.link(f"@here", f"https://t.me/{bot_name}")
-            for user_id in user_ids:
-                message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
-        else:
-            message_text = GM.ONLY_ONE_USER_IN_GROUP[group.language]
+    if not user_ids:
+        await message.reply(GM.NO_ONE_ALLOW_PINGING[group.language])
     else:
-        message_text = GM.NO_ONE_ALLOW_PINGING[group.language]
-
-    await message.reply(text=message_text)
+        user_ids = [user_id for user_id in user_ids if user_id != message.from_user.id]
+        if not user_ids:
+            await message.reply(GM.ONLY_ONE_USER_IN_GROUP[group.language])
+        else:
+            message_base = markdown.link(f"@here", f"https://t.me/{bot_name}")
+            users_num = 0
+            for i in range(0, len(user_ids), 50):
+                users_batch = user_ids[i:i + 50]
+                users_num += len(users_batch)
+                message_text = message_base + "".join(
+                    markdown.link(f"‎", f"tg://user?id={user_id}") for user_id in users_batch
+                ) + f" ({users_num}/{len(user_ids)})"
+                if i == 0:
+                    await message.reply(text=message_text)
+                else:
+                    await message.answer(text=message_text)
 
 
 @router.message(Command("everyone"),
@@ -210,25 +227,37 @@ async def ping_everyone_in_group(message: Message, db: MDB) -> None:
     """
         Handles the '/everyone' command in group chats.
         Pings all users in the group, except the user who issued the command.
+        Due to limitation of 50 mention per message it offen send multiple messages with mentions.
     """
+    user_id = message.from_user.id
     group = await setup_group(db, message)
-    user_ids = await group.get_user_ids()
-    user_ids = [user_id for user_id in user_ids if user_id != message.from_user.id]
-    if user_ids:
-        message_text = markdown.link(f"@еvеryone", f"https://t.me/{bot_name}")
-        for user_id in user_ids:
-            message_text += markdown.link(f"‎", f"tg://user?id={user_id}")
+    member = await bot.get_chat_member(group.id, user_id)
+    if member.status not in [ChatMemberStatus.CREATOR, ChatMemberStatus.ADMINISTRATOR]:
+        await message.answer(text=GM.ONLY_ADMINS_CAN_USE_THIS_COMMAND[group.language])
     else:
-        message_text = GM.ONLY_ONE_USER_IN_GROUP[group.language]
-
-    await message.reply(text=message_text)
+        user_ids = await group.get_user_ids(exclude_user_id=user_id)
+        if not user_ids:
+            await message.reply(text=GM.ONLY_ONE_USER_IN_GROUP[group.language])
+        else:
+            message_base = markdown.link(f"@еvеryone", f"https://t.me/{bot_name}")
+            users_num = 0
+            for i in range(0, len(user_ids), 50):
+                users_batch = user_ids[i:i + 50]
+                users_num += len(users_batch)
+                message_text = message_base + "".join(
+                    markdown.link(f"‎", f"tg://user?id={user_id}") for user_id in users_batch
+                ) + f" ({users_num}/{len(user_ids)})"
+                if i == 0:
+                    await message.reply(text=message_text)
+                else:
+                    await message.answer(text=message_text)
 
 
 @router.message(Command("getmembers"),
                 F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP]))
 async def show_members_list(message: Message, db: MDB, telethon_client: TelegramClient) -> None:
     """
-        Handles the '/members' command in group chats.
+        Handles the '/getmembers' command in group chats.
         Sends a list of all users in the group, separating those who allow pinging and those who don't.
     """
     group = await setup_group(db, message)
@@ -252,9 +281,9 @@ async def show_members_list(message: Message, db: MDB, telethon_client: Telegram
     pingable_users_text = '\n'.join(pingable_users)
     unpingable_users_text = '\n'.join(unpingable_users)
 
-    pingable_users_text = (f"{GM.GET_ALL_PINGABLE_USERS[group.language]}\n"
+    pingable_users_text = (f"{GM.GET_ALL_PINGABLE_USERS_LIST_TITLE[group.language]}\n"
                            f"{pingable_users_text}\n\n") if pingable_users else ""
-    unpingable_users_text = (f"{GM.GET_ALL_UNPINGABLE_USERS[group.language]}\n"
+    unpingable_users_text = (f"{GM.GET_ALL_UNPINGABLE_USERS_LIST_TITLE[group.language]}\n"
                              f"{unpingable_users_text}\n\n") if unpingable_users else ""
 
     if pingable_users_text:
@@ -265,6 +294,67 @@ async def show_members_list(message: Message, db: MDB, telethon_client: Telegram
         message_text = (f"{GM.NO_PINGABLE_USERS[group.language]}\n\n"
                         f"{unpingable_users_text}"
                         f"{GM.HOW_TO_ADD_USERS_TO_THE_LIST[group.language]}")
+
+    await message.answer(text=message_text)
+
+
+@router.message(Command("admins"),
+                F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP]))
+async def show_members_list(message: Message, db: MDB, telethon_client: TelegramClient) -> None:
+    """
+        Handles the '/admins' command in group chats. Pings all admins in the group.
+        Due to limitation of only 50 admins per group chat and 50 mentions per message it only sends one message.
+    """
+    user_id = message.from_user.id
+    group = await setup_group(db, message)
+    member = await bot.get_chat_member(group.id, user_id)
+    if member.status not in [ChatMemberStatus.CREATOR, ChatMemberStatus.ADMINISTRATOR]:
+        await message.answer(text=GM.ONLY_ADMINS_CAN_USE_THIS_COMMAND[group.language])
+    else:
+        user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
+        admins_ids = [
+            user_id for user_id in user_ids
+            if (await bot.get_chat_member(group.id, user_id)).status in [ChatMemberStatus.CREATOR,
+                                                                         ChatMemberStatus.ADMINISTRATOR]
+        ]
+        if not admins_ids:
+            await message.reply(text=GM.NO_ADMINS_FOUND[group.language])
+        elif admins_ids == [user_id]:
+            await message.reply(text=GM.THERE_IS_NO_ADMINS_EXCEPT_YOU[group.language])
+        else:
+            message_base = markdown.link(f"@admins", f"https://t.me/{bot_name}")
+            message_text = message_base + "".join(
+                markdown.link(f"‎", f"tg://user?id={user_id}") for user_id in admins_ids
+            )
+            await message.reply(text=message_text)
+
+
+@router.message(Command("getadmins"),
+                F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP]))
+async def show_members_list(message: Message, db: MDB, telethon_client: TelegramClient) -> None:
+    """
+        Handles the '/getadmins' command in group chats.
+        Sends a list of all admins (including owner) in the group chat.
+    """
+    group = await setup_group(db, message)
+    user_ids = await parse_group_chat_user_ids(telethon_client, group.id)
+
+    admins_data_list = [
+        await parse_user_data(telethon_client, user_id)
+        for user_id in user_ids
+        if (await bot.get_chat_member(group.id, user_id)).status in [ChatMemberStatus.CREATOR,
+                                                                     ChatMemberStatus.ADMINISTRATOR]
+    ]
+
+    admins_list = [
+        f"*{i + 1}.* {user['first_name']} (`{user['username']}`)"
+        for i, user in enumerate(admins_data_list)
+    ]
+    admins_list_text = '\n'.join(admins_list)
+    message_text = (f"{GM.GET_ALL_ADMINS_LIST_TITLE[group.language]}\n"
+                    f"{admins_list_text}\n\n"
+                    f"{GM.HOW_TO_PING_ADMINS[group.language]}")
+
     await message.answer(text=message_text)
 
 
@@ -272,4 +362,4 @@ async def show_members_list(message: Message, db: MDB, telethon_client: Telegram
                 F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP]))
 async def get_chat_id(message: Message):
     """Send chat id to the chat"""
-    await message.answer(text=f"`{message.chat.id}`")
+    await message.reply(text=f"`{message.chat.id}`")
