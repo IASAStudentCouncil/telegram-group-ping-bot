@@ -5,10 +5,10 @@ from typing import List, Optional, Dict
 from motor.motor_asyncio import AsyncIOMotorClient
 from motor.core import AgnosticDatabase as MDB
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError, DuplicateKeyError
-from pymongo import IndexModel, ASCENDING
+from pymongo import IndexModel, ASCENDING, TEXT
 
 from src.config import mongo_uri, db_name
-from .schema_validators import *
+from .schema_validators import SchemaValidators
 
 
 async def connect_to_mongo(uri: str = mongo_uri) -> AsyncIOMotorClient:
@@ -43,11 +43,15 @@ async def setup_database(client: AsyncIOMotorClient) -> MDB:
     db = client[db_name]
     logging.info(f"Connected to the '{db_name}' database")
 
-    collections = {"users": user_validator, "groups": group_validator}
+    collections = {"users": SchemaValidators.USER_VALIDATOR, "groups": SchemaValidators.GROUP_VALIDATOR}
     indexes = {
         "users": [IndexModel([("_id", ASCENDING)])],
-        "groups": [IndexModel([("_id", ASCENDING)]),
-                   IndexModel([("users.user_id", ASCENDING)])]
+        "groups": [
+            IndexModel([("_id", ASCENDING)]),
+            IndexModel([("users.user_id", ASCENDING)]),
+            IndexModel([("custom_tags.name", TEXT)]),
+            IndexModel([("custom_tags.user_ids", ASCENDING)])
+        ]
     }
     actual_db_collections = await db.list_collection_names()
 

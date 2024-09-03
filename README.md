@@ -4,7 +4,7 @@
    </a>
    <h1>Telegram Ping Bot
       <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot">
-         <img alt="Project version" src="https://img.shields.io/badge/v0.6-FF3040"/>
+         <img alt="Project version" src="https://img.shields.io/badge/v0.7-3A1772"/>
        </a>
    </h1>
 </div>
@@ -38,7 +38,7 @@
          <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87"/>
        </a>
    </div>
-   <h6>⭐ Star us on GitHub — it motivates us a lot!</h6>
+   <p>⭐ Star us on GitHub — it motivates us a lot!</p>
    <div align="center">
       <a href="https://www.linkedin.com/company/iasa-sc">
          <img alt="LinkedIn" src="https://img.shields.io/badge/Follow-405DE6?logo=linkedin&logoColor=white"/>

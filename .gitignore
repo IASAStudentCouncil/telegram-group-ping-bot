@@ -9,6 +9,9 @@ __pycache__/
 # Ignore .env files
 .env
 
+# Until v1.0
+.github/
+
 # Temporary Files and Backup Artifacts
 tmp/
 *.tmp

@@ -1,5 +1,6 @@
-# These messages are used for private chat interactions
 class PrivateMessages:
+    """These messages are used for private chat interactions."""
+
     START = {
         "en": "Hey! I'm *Ping Bot* 😊",
         "uk": "Привіт! Я — *Ping Bot* 😊"

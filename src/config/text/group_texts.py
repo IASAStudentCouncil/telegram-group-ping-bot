@@ -1,5 +1,6 @@
-# Store text for group chat messages
 class GroupMessages:
+    """Store text templates for group chat messages."""
+
     START = {
         "en": ("Hey! I'm *Ping Bot* 😊\n\n"
                "Type /help to explore all my commands."),

@@ -34,11 +34,13 @@ Here’s an overview of the `src` directory structure:
 ┗ 📜keyboards.py            # Defines reply keyboards       
 📂routers
 ┣ 📜__init__.py  
-┣ 📂callback_routers
+┣ 📂admin_router
+┃ ┣ 📜__init__.py           # Handles special admin messages
+┣ 📂callback_router
 ┃ ┣ 📜__init__.py  
 ┃ ┣ 📜group_callbacks.py    # Handles group callbacks
 ┃ ┗ 📜private_callbacks.py  # Handles private chat callbacks         
-┗ 📂message_routers
+┗ 📂message_router
   ┣ 📜__init__.py  
   ┣ 📜group_messages.py     # Handles group messages
   ┗ 📜private_messages.py   # Handles private chat messages
@@ -78,14 +80,16 @@ Here’s an overview of the `src` directory structure:
   - [`__init__.py`](./keyboards/__init__.py): Makes the `keyboards` directory a module, enabling its contents to be easily imported.
 
 - [`routers/`](./routers)
-  - [`callback_routers/`](./routers/callback_routers)
+  - [`admin_router/`](./routers/admin_router)
+    - [`__init__.py`](./routers/callback_routers/__init__.py): Sets up the `admin_router` module. Manages messages from admin.
+  - [`callback_router/`](./routers/callback_router)
     - [`group_callbacks.py`](./routers/callback_routers/group_callbacks.py): Handles callback queries specific to group-related interactions, such as button presses in group chats.
     - [`private_callbacks.py`](./routers/callback_routers/private_callbacks.py): Manages callback queries in private chats, facilitating user-specific interactions.
-    - [`__init__.py`](./routers/callback_routers/__init__.py): Sets up the `callback_routers` module for use in routing callback queries.
-  - [`message_routers/`](./routers/message_routers)
+    - [`__init__.py`](./routers/callback_routers/__init__.py): Sets up the `callback_router` module for use in routing callback queries.
+  - [`message_router/`](./routers/message_router)
     - [`group_messages.py`](./routers/message_routers/group_messages.py): Processes and responds to messages sent in group chats, including commands and text messages.
     - [`private_messages.py`](./routers/message_routers/private_messages.py): Handles incoming messages in private chats, providing personalized responses and guidance.
-    - [`__init__.py`](./routers/message_routers/__init__.py): Initializes the `message_routers` module, integrating message handling across the bot.
+    - [`__init__.py`](./routers/message_routers/__init__.py): Initializes the `message_router` module, integrating message handling across the bot.
   - [`__init__.py`](./routers/__init__.py): Prepares the `routers` directory as a module, linking together all routing logic.
 
 - [`utils/`](./utils)
