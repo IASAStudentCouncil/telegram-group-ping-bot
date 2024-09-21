@@ -1,6 +1,7 @@
 from aiogram import Router
-from .private_messages import router as private_messages_router
+
 from .group_messages import router as group_messages_router
+from .private_messages import router as private_messages_router
 
 # Commands router for handling all bot commands
 message_router = Router(name=__name__)

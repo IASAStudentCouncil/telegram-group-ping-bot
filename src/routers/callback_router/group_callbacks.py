@@ -1,14 +1,13 @@
-from aiogram import Router, F
-from aiogram.types import CallbackQuery
-from aiogram.enums.chat_type import ChatType
+from aiogram import F, Router
 from aiogram.enums.chat_member_status import ChatMemberStatus
-
+from aiogram.enums.chat_type import ChatType
+from aiogram.types import CallbackQuery
 from motor.core import AgnosticDatabase as MDB
 
-from src.db import *
 from src.bot import bot
 from src.config import GroupMessages as GM
 from src.config import available_languages as languages
+from src.db import *
 
 router = Router(name=__name__)  # Router for group callbacks handling
 

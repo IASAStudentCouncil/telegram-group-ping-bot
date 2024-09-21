@@ -1,8 +1,8 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from src.config import KeyboardButtonsText as KBT
-from src.config import bot_name, available_languages
+from src.config import available_languages, bot_name
 
 
 def build_start_markup(language: str) -> InlineKeyboardMarkup:

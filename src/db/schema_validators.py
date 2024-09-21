@@ -17,7 +17,8 @@ class SchemaValidators:
                     "description": ("Specifies the user's preferred language for bot interactions. "
                                     "Ensuring the bot communicates in a supported language.")
                 },
-            }
+            },
+            "additionalProperties": False
         }
     }
 

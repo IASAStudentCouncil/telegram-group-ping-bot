@@ -1,14 +1,20 @@
 import asyncio
 import logging
 import os
+from datetime import datetime
 
 from aiogram import Dispatcher
 
-from config import configure_logging, bot_token
-from utils import create_telethon_client
-from db import *
 from bot import *
+from config import admin_chat_id, bot_token, configure_logging
+from db import *
 from routers import *
+from utils import (
+    check_all_groups,
+    create_telethon_client,
+    send_bot_endup_message,
+    send_bot_startup_message,
+)
 
 
 async def main() -> None:
@@ -42,20 +48,33 @@ async def main() -> None:
         logging.info("Start polling...")
         dp = Dispatcher()
         dp.include_router(router=main_router)
-        await dp.start_polling(bot, db=mdb, telethon_client=telethon_client)
+
+        await check_all_groups(mdb, telethon_client)
+
+        polling_task = dp.start_polling(bot, db=mdb, telethon_client=telethon_client)
+        admin_startup_message_task = bot.send_message(
+            admin_chat_id,
+            f"*Bot started* ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})\n"
+        )
+        startup_message_task = send_bot_startup_message(mdb)
+        await asyncio.gather(polling_task, admin_startup_message_task, startup_message_task)
     except Exception as e:
         logging.error("An error occurred while polling!")
         logging.exception("Exception details:", exc_info=e)
         client.close()
     finally:
-        client.close()
         await bot.session.close()
         logging.info("Bot session closed!")
         await telethon_client.disconnect()
         logging.info("Telethon client disconnected!")
 
+        await bot.send_message(admin_chat_id, f"*Bot stopped* ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})")
+        await send_bot_endup_message(mdb)
 
-if __name__ == '__main__':
+        client.close()
+
+
+if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

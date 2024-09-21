@@ -1,7 +1,8 @@
 from aiogram import Router
-from .message_router import message_router
-from .callback_router import callback_router
+
 from .admin_router import router as admin_router
+from .callback_router import callback_router
+from .message_router import message_router
 
 main_router = Router(name=__name__)     # Main router that handles everything
 main_router.include_routers(

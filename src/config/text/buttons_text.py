@@ -5,6 +5,7 @@ class KeyboardButtonsText:
         "en": "My commands",
         "uk": "Мої команди"
     }
+
     ADD_TO_GROUP_BUTTON_TEXT = {
         "en": "Add to group chat",
         "uk": "Додати до групи"

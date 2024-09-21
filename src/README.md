@@ -21,9 +21,9 @@ Here’s an overview of the `src` directory structure:
 ┃ ┗ 📜logging_config.yaml   # YAML config for logging
 ┗ 📂text
   ┣ 📜__init__.py          
-  ┣ 📜buttons_text.py     # Keyboard button text templates
-  ┣ 📜group_texts.py     # Group message templates
-  ┗ 📜private_texts.py   # Private message templates
+  ┣ 📜buttons_text.py       # Keyboard button text templates
+  ┣ 📜group_texts.py        # Group message templates
+  ┗ 📜private_texts.py      # Private message templates
 📂db
 ┣ 📜__init__.py  
 ┣ 📜db.py                   # Database operations and classes
@@ -46,7 +46,8 @@ Here’s an overview of the `src` directory structure:
   ┗ 📜private_messages.py   # Handles private chat messages
 📂utils
 ┣ 📜__init__.py  
-┗ 📜telethon_client.py      # Telethon client functions and user entity parsing         
+┣ 📜telethon_client.py      # Telethon client functions and user entity parsing      
+┗ 📜bot_utils.py            # Functions for informing users whether bot started or stopped      
 
 📜main.py                   # Starts the bot
 ```
@@ -65,7 +66,7 @@ Here’s an overview of the `src` directory structure:
     - [`__init__.py`](./config/text/__init__.py): Initializes the `text` module for easy import.
     - [`buttons_text.py`](./config/text/buttons_text.py): Stores text templates for keyboard buttons.
     - [`group_texts.py`](./config/text/group_texts.py): Contains group-specific message templates for the bot.
-    - [`private_texts.py`](./config/text/private_texts.py): Manages private chat messages and responses.
+    - [`private_texts.py`](./config/text/private_texts.py): Private chat messages and responses.
   - [`config.py`](./config/config.py): Loads critical environment variables from the `.env` file, such as tokens and database connection strings.
   - [`__init__.py`](./config/logging/__init__.py): Initializes the `config` module.
   
@@ -94,6 +95,7 @@ Here’s an overview of the `src` directory structure:
 
 - [`utils/`](./utils)
   - [`telethon_client.py`](./utils/telethon_client.py): Contains Telethon client functions and utilities for parsing user entities.
+  - [`bot_utils.py`](./utils/bot_utils.py): Informing users whether bot started or stopped.
   - [`__init__.py`](./utils/__init__.py): Initializes the `utils` module.
 
 - [`main.py`](./main.py): The entry point for the bot. It initializes all components, starts the event loop, and begins processing updates from **Telegram**.
