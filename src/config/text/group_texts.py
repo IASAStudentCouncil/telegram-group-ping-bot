@@ -53,14 +53,14 @@ class GroupMessages:
     }
 
     BOT_HAS_BEEN_STARTED = {
-        "en": "Hello there! I'm back online, ready to ping you. 😊",
-        "uk": "Привіт, на зв'язку Ping Bot. Я знову працюю і готовий пінгувати усіх! 😊"
+        "en": "Hello there! I'm back online, ready to ping you. 👋",
+        "uk": "Привіт, на зв'язку Ping Bot. Я знову працюю і готовий пінгувати усіх! 👋"
     }
 
     BOT_HAS_BEEN_STOPPED = {
         "en": ("I'm going offline for updates and improvements. "
-               "Commands won't be available for a while, but I'll be back soon! 👋"),
-        "uk": "Йду на оновлення та покращення. Команди тимчасово не будуть доступні, але я скоро повернусь! 👋"
+               "Commands won't be available for a while, but I'll be back soon!"),
+        "uk": "Йду на оновлення та покращення. Команди тимчасово не будуть доступні, але я скоро повернусь!"
     }
 
     ADD_USER = {

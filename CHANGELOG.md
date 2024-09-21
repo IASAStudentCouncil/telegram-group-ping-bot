@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Added
-- `CHANGELOG.md` created.
+- `CHANGELOG.md` and `CODE_OF_CONDUCT.md` created.
 - Ruff code linter integrated.
 - `ADMIN_CHAT_ID` added to `.env`.
 - `admin_router` for admin commands and "ping-pong" health check.

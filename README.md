@@ -27,15 +27,12 @@
    <a href="https://docs.aiogram.dev/en/latest/">
       <img alt="Aiogram" src="https://img.shields.io/badge/aiogram-3.12.0-0D3B66"/>
     </a>
-   <a href="https://docs.telethon.dev/en/stable/">
-      <img alt="Telethon" src="https://img.shields.io/badge/telethon-1.36.0-0D3B66"/>
-    </a>
    <div align="center">
       <a href="https://www.mongodb.com/docs/manual/">
          <img alt="MongoDB" src="https://img.shields.io/badge/database-mongodb-02641B"/>
        </a>
       <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/LICENSE">
-         <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-MIT-5F0A87"/>
+         <img alt="Lisence: MIT" src="https://img.shields.io/badge/license-GNU_GPL_v3.0-5F0A87"/>
        </a>
    </div>
    <p>⭐ Star us on GitHub — it motivates us a lot!</p>

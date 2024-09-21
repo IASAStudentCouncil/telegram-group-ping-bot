@@ -22,8 +22,9 @@ Here’s an overview of the `src` directory structure:
 ┗ 📂text
   ┣ 📜__init__.py          
   ┣ 📜buttons_text.py       # Keyboard button text templates
-  ┣ 📜group_texts.py        # Group message templates
-  ┗ 📜private_texts.py      # Private message templates
+  ┣ 📜admin_texts.py        # Admin chat message templates
+  ┣ 📜group_texts.py        # Group chat message templates
+  ┗ 📜private_texts.py      # Private chat message templates
 📂db
 ┣ 📜__init__.py  
 ┣ 📜db.py                   # Database operations and classes
@@ -65,6 +66,7 @@ Here’s an overview of the `src` directory structure:
   - [`text/`](./config/text)
     - [`__init__.py`](./config/text/__init__.py): Initializes the `text` module for easy import.
     - [`buttons_text.py`](./config/text/buttons_text.py): Stores text templates for keyboard buttons.
+    - [`admin_texts.py`](./config/text/admin_texts.py): Contains admin chat specified message templates.
     - [`group_texts.py`](./config/text/group_texts.py): Contains group-specific message templates for the bot.
     - [`private_texts.py`](./config/text/private_texts.py): Private chat messages and responses.
   - [`config.py`](./config/config.py): Loads critical environment variables from the `.env` file, such as tokens and database connection strings.

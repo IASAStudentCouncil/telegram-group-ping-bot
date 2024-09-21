@@ -1,20 +1,14 @@
 import asyncio
 import logging
 import os
-from datetime import datetime
 
 from aiogram import Dispatcher
 
 from bot import *
-from config import admin_chat_id, bot_token, configure_logging
+from config import bot_token, configure_logging
 from db import *
 from routers import *
-from utils import (
-    check_all_groups,
-    create_telethon_client,
-    send_bot_endup_message,
-    send_bot_startup_message,
-)
+from utils import *
 
 
 async def main() -> None:
@@ -35,9 +29,9 @@ async def main() -> None:
         logging.exception("Exception details:", exc_info=e)
         return
 
-    telethon_client = create_telethon_client()
+    tc = create_telethon_client()
     try:
-        await telethon_client.start(bot_token=bot_token)  # await is required
+        await tc.start(bot_token=bot_token)  # await is required
         logging.info("Telethon client started successfully.")
     except Exception as e:
         logging.error("Failed to start Telethon client!")
@@ -49,15 +43,12 @@ async def main() -> None:
         dp = Dispatcher()
         dp.include_router(router=main_router)
 
-        await check_all_groups(mdb, telethon_client)
+        await check_all_groups(mdb, tc)
 
-        polling_task = dp.start_polling(bot, db=mdb, telethon_client=telethon_client)
-        admin_startup_message_task = bot.send_message(
-            admin_chat_id,
-            f"*Bot started* ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})\n"
-        )
-        startup_message_task = send_bot_startup_message(mdb)
-        await asyncio.gather(polling_task, admin_startup_message_task, startup_message_task)
+        await asyncio.gather(
+            dp.start_polling(bot, db=mdb, telethon_client=tc),
+            send_admin_startup_message(mdb),
+            send_bot_startup_message(mdb))
     except Exception as e:
         logging.error("An error occurred while polling!")
         logging.exception("Exception details:", exc_info=e)
@@ -65,11 +56,11 @@ async def main() -> None:
     finally:
         await bot.session.close()
         logging.info("Bot session closed!")
-        await telethon_client.disconnect()
+        await tc.disconnect()
         logging.info("Telethon client disconnected!")
 
-        await bot.send_message(admin_chat_id, f"*Bot stopped* ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})")
-        await send_bot_endup_message(mdb)
+        await send_admin_shutdown_message(mdb)
+        await send_bot_shutdown_message(mdb)
 
         client.close()
 
