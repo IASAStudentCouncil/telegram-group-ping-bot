@@ -26,8 +26,10 @@ classifiers = [
 ]
 
 [project.urls]
-homepage = "https://t.me/group_mate_ping_bot"
-repository = "https://github.com/IASAStudentCouncil/telegram-group-ping-bot"
+Homepage  = "https://t.me/group_mate_ping_bot"
+Repository = "https://github.com/IASAStudentCouncil/telegram-group-ping-bot"
+Issues = "https://github.com/IASAStudentCouncil/telegram-group-ping-bot/issues"
+Changelog = "https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/CHANGELOG.md"
 
 [project.dependencies]
 aiogram = "^3.12.0"

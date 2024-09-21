@@ -1,86 +1,89 @@
 # Changelog
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [v0.7] - 2023-09-22
+## [Unreleased]
 ### Added
-- Created CHANGELOG.md
-- Add Ruff code linter
+- `CHANGELOG.md` created.
+- Ruff code linter integrated.
+- `ADMIN_CHAT_ID` added to `.env`.
+- `admin_router` for admin commands and "ping-pong" health check.
+- Startup/shutdown messages for user's groups and admin-reports.
 ### Changed
-- Switch from MIT License to GNU GENERAL PUBLIC LICENSE
-- Structured [pyproject.py](pyproject.toml)
+- License switched from MIT to GNU GPL v3.0.
+- Improved `pyproject.toml` and documentation.
 ### Fixed
-- Linted code with [ruff](https://astral.sh/ruff)
-- Schema validators for `group` collection
+- Linted code with Ruff.
+- Fixed schema validators and `group` collection indexes.
+- Fixed `parse_group_chat_user_ids()`.
 
-## [v0.6] - 2023-08-22
+## [v0.6] - 2024-09-01
 ### Added
-- Added critical notes to the `.env` file for better clarity and usage.
-- Introduced `/admins` and `/getadmins` commands for efficient admin management.
-- Integrated Telethon client for enhanced Telegram bot interactions.
+- Notes in `.env` for better usage.
+- `/admins` and `/getadmins` commands.
+- User batching for large groups in `/everyone` and `/here`.
 ### Changed
-- Refined and restructured text resources, encapsulating them into classes for better maintainability.
-- Structured the documentation to reflect new changes and integrations.
+- Documentation overhaul.
+- Text resources encapsulated in classes.
+- Command restrictions for non-admin members.
 ### Fixed
-- Performance optimizations for `/everyone` and `/here` commands to handle larger groups more efficiently.
+- Telethon integration for improved bot interactions.
 
-## [v0.5] - 2023-08-19
+## [v0.5] - 2024-08-28
 ### Added
-- Introduced a new `assets` directory to store project assets, including the logo.
-- Comprehensive documentation for `utils` and `db` modules.
+- `.env` setup instructions.
+- `assets` directory for project assets like the logo.
+- Full documentation for `utils` and `db` modules.
 ### Changed
-- Refined configuration management for logging and bot settings.
-- Reorganized project file structure for better maintainability and readability.
+- Reorganized file structure for clarity.
+- Telethon integrated for enhanced Telegram bot functionality.
+- Improved text storage for multi-language support.
 ### Fixed
-- Improved database methods in the `User` and `Group` classes.
+- Database optimizations in `User` and `Group` classes.
 
-## [v0.4] - 2023-08-18
+## [v0.4] - 2024-08-24
 ### Added
-- Functionality in `group_messages.py` to manage chat ID migration when a group is upgraded to a supergroup or migrated.
+- Detailed documentation for `src` directory.
+- Chat ID migration handling in `group_messages.py`.
+- New messages in `text_config.py`.
+- Error logging in `User` and `Group` classes.
 ### Changed
-- Documentation and structure of the `src` directory for clarity.
-- New messages added in `text_config.py`.
-### Fixed
-- Error logging in `User` and `Group` classes in `db.py`.
+- README.md improvements.
+- Small function updates.
 
-## [v0.3.5] - 2023-08-17
+## [v0.3.5] - 2024-08-21
 ### Added
-- Added handlers for group events.
-- Added `Group` class to `db.py` for managing group data.
+- Group event handlers.
+- `Group` class in `db.py`.
 ### Changed
-- Improved comments and directory naming for better structure.
+- Moved `dispatcher` to `main.py`.
+- Refactored `private_messages.py`.
+- Updated directory structure and `pyproject.toml`.
 ### Fixed
-- Adjusted logging date format.
+- Adjusted logging format and removed unnecessary directories.
 
-## [v0.3] - 2023-08-12
+## [v0.2] - 2024-08-19
 ### Added
-- MongoDB connection and logging configuration improvements.
+- New callback routers and group command handlers.
+- Proper MongoDB connection handling.
 ### Changed
-- Improved `logging_config.yaml` and set different log levels for environments.
-- Enhanced bot polling functionality using `aiogram`.
+- Switched "language change" keyboard to inline markup.
+- Reorganized `routers` directory.
+- Schema validators and logging improved.
+- Upgraded `aiogram` from 3.11 to 3.12.
 ### Fixed
-- Connection issues to MongoDB with better logging for troubleshooting.
+- Cleaned up `.gitignore` and added comments across project.
 
-## [v0.2] - 2023-08-10
+## [v0.1] - 2024-08-16
 ### Added
-- Group-specific commands for better event handling in group chats.
+- Project files: `.env`, `.gitignore`, `LICENSE`, `pyproject.toml`, `README.md`, `requirements.txt`.
+- Initial MongoDB integration.
+- Command handlers for `/ping` and `/help`.
+- Basic bot polling with `aiogram`.
 ### Changed
-- Schema validators for MongoDB data validation.
-- Directory reorganization for better code clarity.
+- Refined `logging_config.yaml`.
+- Log levels for development, staging, and production.
 ### Fixed
-- Errors in group commands mistakenly used in private chats.
-
-## [v0.1] - 2023-08-08
-### Added
-- Initial release with MongoDB interaction.
-- Basic command handlers for `/ping` and `/help`.
-- Basic bot polling functionality using `aiogram`, allowing the bot to start receiving and responding to user messages.
-### Changed
-- Refined the `logging_config.yaml` file.
-- Implemented different log levels for development, staging, and production environments.
-### Fixed
-- Established a reliable connection to MongoDB, ensuring smooth interaction with the database.
-- Added logic to handle potential connection issues and provide informative logging for troubleshooting.
-- Added specific loggers for `pymongo`, `motor`, and `asyncio`.
-
+- MongoDB connection and error logging.
+- Loggers for `pymongo`, `motor`, and `asyncio`.

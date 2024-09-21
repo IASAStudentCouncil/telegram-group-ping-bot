@@ -1,6 +1,6 @@
 <div align="center">
    <a href="https://t.me/group_mate_ping_bot">
-      <img width="100px" alt="Ping Bot Logo" src="assets/ping_bot_logo.jpg" style="border-radius: 50%;">
+      <img width="100px" alt="Ping Bot Logo" src="assets/logo.jpg" style="border-radius: 50%;">
    </a>
    <h1>Telegram Ping Bot
       <a href="https://github.com/IASAStudentCouncil/telegram-group-ping-bot">
