@@ -108,7 +108,7 @@ async def check_group_status(db: MDB, client: TelegramClient, group_id: int) -> 
         logging.error(f"Unexpected error when checking group {group_id}: {e}")
 
 
-async def check_all_groups(db: MDB, client: TelegramClient) -> None:
+async def validate_all_groups(db: MDB, client: TelegramClient) -> None:
     """
         Iterates through all Telegram group IDs stored in the database and checks their status.
         Args:
@@ -121,4 +121,4 @@ async def check_all_groups(db: MDB, client: TelegramClient) -> None:
 
 
 __all__ = ("TelegramClient", "create_telethon_client",
-           "parse_group_chat_user_ids", "parse_user_data", "check_all_groups")
+           "parse_group_chat_user_ids", "parse_user_data", "validate_all_groups")

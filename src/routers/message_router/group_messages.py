@@ -54,8 +54,8 @@ async def new_group_or_member_validation(message: Message, db: MDB, telethon_cli
             else:
                 user_id = chat_member.id
                 await group.user_validation(user_id)
-                with suppress(Exception):
-                    await message.reply(text=GM.ADD_USER[group.language])
+            with suppress(Exception):
+                await message.reply(text=GM.ADD_USER[group.language])
 
 
 @router.message(F.content_type == ContentType.LEFT_CHAT_MEMBER,

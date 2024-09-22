@@ -28,7 +28,10 @@ Here’s an overview of the `src` directory structure:
 📂db
 ┣ 📜__init__.py  
 ┣ 📜db.py                   # Database operations and classes
-┗ 📜schema_validators.py    # MongoDB schema validation           
+┗ 📜schema_validators.py    # MongoDB schema validation  
+📂middlewares
+┣ 📜__init__.py  
+┗ 📜startup_shutdown_middleware.py    # Handle bot startup and shutdown actions.
 📂keyboards
 ┣ 📜__init__.py  
 ┣ 📜inline_keyboards.py     # Defines inline keyboards
@@ -76,6 +79,10 @@ Here’s an overview of the `src` directory structure:
   - [`db.py`](./db/db.py): Contains classes and methods for interacting with the **MongoDB** database, handling user and group data.
   - [`schema_validators.py`](./db/schema_validators.py): Defines JSON schemas to validate the structure of documents in **MongoDB** collections.
   - [`__init__.py`](./db/__init__.py): Initializes the `db` module for use across the bot.
+
+- [`middlewares/`](./middlewares)
+  - [`startup_shotdown_middleware.py`](./middlewares/startup_shutdown_middleware.py): Middleware with 2 methods to handle bot startup and shutdown actions.
+  - [`__init__.py`](./middlewares/__init__.py): Initializes the `middlewares` module.
 
 - [`keyboards/`](./keyboards)
   - [`inline_keyboards.py`](./keyboards/inline_keyboards.py): Defines inline keyboards that appear within messages, allowing users to interact without sending new messages.

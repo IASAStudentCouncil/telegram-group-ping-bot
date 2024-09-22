@@ -4,65 +4,68 @@ from motor.core import AgnosticDatabase as MDB
 
 from src.bot import bot
 from src.config import AdminMessages as AM
+from src.config import GroupMessages as GM
 from src.config import admin_chat_id
-from src.config.text import GroupMessages as GM
 from src.db import Group, User, get_group_ids_list
 
 
-async def send_message_to_groups(db: MDB, message_template: dict, action: str) -> None:
+async def send_message_to_groups(db: MDB, message_template: dict, action: str, admin_language: str) -> None:
     """
         Sends a message to all groups in the database and logs the result.
         Args:
             db (MDB): MongoDB database instance.
             message_template (dict): The message template (e.g., BOT_HAS_BEEN_STARTED or BOT_HAS_BEEN_STOPPED).
             action (str): A string indicating whether it's a startup or shutdown operation.
+            admin_language (str): The language to use for the admin's report message.
     """
     group_ids = [id_ for id_ in await get_group_ids_list(db) if id_ != admin_chat_id]
     if group_ids:
         group_count = len(group_ids)
         sended_count = 0
-        for _id in group_ids:
-            group = Group(db, _id)
+
+        for group_id in group_ids:
+            group = Group(db, group_id)
             await group.validation()
             try:
-                await bot.send_message(_id, message_template[group.language])
+                await bot.send_message(group_id, message_template[group.language])
                 sended_count += 1
             except Exception as e:
-                logging.error(f"Failed to send message to group {_id}: {e}")
+                logging.error(f"Failed to send message to group {group_id}: {e}")
 
-        admin = User(db, admin_chat_id)
-        await admin.validation()
-        await bot.send_message(admin_chat_id,
-                               AM.BOT_REPORT_MESSAGE[admin.language].format(action, group_count, sended_count))
+        try:
+            await bot.send_message(admin_chat_id,
+                                   AM.BOT_REPORT_MESSAGE[admin_language].format(action, group_count, sended_count))
+        except Exception as e:
+            logging.error(f"Failed to send report to admin: {e}")
 
-        logging.info(f"{action} message sent to {f'{sended_count}/{group_count}' if group_count != 0 else 0} groups.")
-
-
-async def send_bot_startup_message(db: MDB) -> None:
-    """Sends the startup message to all groups."""
-    await send_message_to_groups(db, GM.BOT_HAS_BEEN_STARTED, "Startup")
+        logging.info(f"{action} message sent to {sended_count}/{group_count} groups.")
 
 
-async def send_bot_shutdown_message(db: MDB) -> None:
-    """Sends the shutdown message to all groups."""
-    await send_message_to_groups(db, GM.BOT_HAS_BEEN_STOPPED, "Endup")
+async def send_bot_action_message(db: MDB, action: str) -> None:
+    """
+        Sends both the admin and group messages based on the action (startup or shutdown).
+        Args:
+            db (MDB): MongoDB database instance.
+            action (str): Either "Startup" or "Endup" to specify the action.
+    """
+    ACTION_MESSAGES = {
+        "Startup": [GM.BOT_HAS_BEEN_STARTED, AM.BOT_STARTUP_ADMIN_MESSAGE],
+        "Shutdown": [GM.BOT_HAS_BEEN_STOPPED, AM.BOT_SHUTDOWN_ADMIN_MESSAGE]
+    }
 
-
-async def send_admin_startup_message(db: MDB) -> None:
-    """Sends the startup report to the admin chat."""
     admin = User(db, admin_chat_id)
     await admin.validation()
-    await bot.send_message(admin_chat_id, AM.BOT_STARTUP_MESSAGE[admin.language])
+    admin_language = admin.language
+
+    try:
+        await bot.send_message(admin_chat_id, ACTION_MESSAGES[action][1][admin.language])
+    except Exception as e:
+        logging.error(f"Failed to send {action} message to admin: {e}")
+
+    try:
+        await send_message_to_groups(db, ACTION_MESSAGES[action][0], action, admin_language)
+    except Exception as e:
+        logging.error(f"Failed to send {action} message to groups: {e}")
 
 
-async def send_admin_shutdown_message(db: MDB) -> None:
-    """Sends the shutdown report to the admin chat."""
-    admin = User(db, admin_chat_id)
-    await admin.validation()
-    await bot.send_message(admin_chat_id, AM.BOT_SHUTDOWN_MESSAGE[admin.language])
-
-__all__ = ("send_message_to_groups",
-           "send_bot_startup_message",
-           "send_bot_shutdown_message",
-           "send_admin_startup_message",
-           "send_admin_shutdown_message")
+__all__ = ("send_message_to_groups", "send_bot_action_message")

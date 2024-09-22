@@ -8,7 +8,8 @@ from bot import *
 from config import bot_token, configure_logging
 from db import *
 from routers import *
-from utils import *
+from utils import create_telethon_client
+from middlewares import StartupShutdownMiddleware
 
 
 async def main() -> None:
@@ -43,26 +44,21 @@ async def main() -> None:
         dp = Dispatcher()
         dp.include_router(router=main_router)
 
-        await check_all_groups(mdb, tc)
+        ssm = StartupShutdownMiddleware(db=mdb, tc=tc)
+        dp.startup.register(ssm.on_startup)
+        dp.shutdown.register(ssm.on_shutdown)
 
-        await asyncio.gather(
-            dp.start_polling(bot, db=mdb, telethon_client=tc),
-            send_admin_startup_message(mdb),
-            send_bot_startup_message(mdb))
+        await dp.start_polling(bot, db=mdb, telethon_client=tc)
     except Exception as e:
         logging.error("An error occurred while polling!")
         logging.exception("Exception details:", exc_info=e)
-        client.close()
     finally:
         await bot.session.close()
         logging.info("Bot session closed!")
         await tc.disconnect()
         logging.info("Telethon client disconnected!")
-
-        await send_admin_shutdown_message(mdb)
-        await send_bot_shutdown_message(mdb)
-
         client.close()
+        logging.info("MongoDB connection closed.")
 
 
 if __name__ == "__main__":
