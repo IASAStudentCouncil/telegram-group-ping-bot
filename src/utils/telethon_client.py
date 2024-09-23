@@ -120,5 +120,4 @@ async def validate_all_groups(db: MDB, client: TelegramClient) -> None:
         await check_group_status(db, client, _id)
 
 
-__all__ = ("TelegramClient", "create_telethon_client",
-           "parse_group_chat_user_ids", "parse_user_data", "validate_all_groups")
+__all__ = ("create_telethon_client", "parse_group_chat_user_ids", "parse_user_data", "validate_all_groups")

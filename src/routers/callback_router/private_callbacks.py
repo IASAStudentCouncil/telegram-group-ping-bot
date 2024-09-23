@@ -3,8 +3,8 @@ from aiogram.enums.chat_type import ChatType
 from aiogram.types import CallbackQuery
 from motor.core import AgnosticDatabase as MDB
 
+from src.config import AVAILABLE_LANGUAGES as languages
 from src.config import PrivateMessages as PM
-from src.config import available_languages as languages
 from src.db import *
 from src.keyboards import *
 

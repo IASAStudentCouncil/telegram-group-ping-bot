@@ -7,9 +7,9 @@ from aiogram import Dispatcher
 from bot import *
 from config import bot_token, configure_logging
 from db import *
+from middlewares import StartupShutdownMiddleware
 from routers import *
 from utils import create_telethon_client
-from middlewares import StartupShutdownMiddleware
 
 
 async def main() -> None:

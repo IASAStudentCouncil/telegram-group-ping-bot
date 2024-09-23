@@ -1,8 +1,8 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from src.config import AVAILABLE_LANGUAGES, bot_name
 from src.config import KeyboardButtonsText as KBT
-from src.config import available_languages, bot_name
 
 
 def build_start_markup(language: str) -> InlineKeyboardMarkup:
@@ -29,7 +29,7 @@ def build_language_markup() -> InlineKeyboardMarkup:
             InlineKeyboardMarkup: An inline keyboard with language selection buttons.
     """
     builder = InlineKeyboardBuilder()
-    for language_code, language in available_languages.items():
+    for language_code, language in AVAILABLE_LANGUAGES.items():
         builder.add(
             InlineKeyboardButton(
                 text=language,

@@ -53,7 +53,10 @@ async def send_bot_action_message(db: MDB, action: str) -> None:
         "Shutdown": [GM.BOT_HAS_BEEN_STOPPED, AM.BOT_SHUTDOWN_ADMIN_MESSAGE]
     }
 
-    admin = User(db, admin_chat_id)
+    try:
+        admin = User(db, admin_chat_id)
+    except Exception:
+        admin = Group(db, admin_chat_id)
     await admin.validation()
     admin_language = admin.language
 

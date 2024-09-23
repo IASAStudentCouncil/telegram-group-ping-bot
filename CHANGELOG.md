@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Ruff code linter integrated.
 - `ADMIN_CHAT_ID` added to `.env`.
 - `admin_router` for admin commands and "ping-pong" health check.
-- Add new middleware: startup/shutdown messages for user's groups and admin-reports.
+- New middleware: startup/shutdown messages for user's groups and admin-reports.
 - Group size cheacking. Restricting some commands in groups with 500+ users.
 ### Changed
 - License switched from MIT to GNU GPL v3.0.
@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed schema validators and `group` collection indexes.
 - Fixed `parse_group_chat_user_ids()`.
 
-## [v0.6] - 2024-09-01
+## [0.6] - 2024-09-01
 ### Added
 - Notes in `.env` for better usage.
 - `/admins` and `/getadmins` commands.
@@ -31,7 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Telethon integration for improved bot interactions.
 
-## [v0.5] - 2024-08-28
+## [0.5] - 2024-08-28
 ### Added
 - `.env` setup instructions.
 - `assets` directory for project assets like the logo.
@@ -43,7 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Database optimizations in `User` and `Group` classes.
 
-## [v0.4] - 2024-08-24
+## [0.4] - 2024-08-24
 ### Added
 - Detailed documentation for `src` directory.
 - Chat ID migration handling in `group_messages.py`.
@@ -53,7 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - README.md improvements.
 - Small function updates.
 
-## [v0.3.5] - 2024-08-21
+## [0.3.5] - 2024-08-21
 ### Added
 - Group event handlers.
 - `Group` class in `db.py`.
@@ -64,7 +64,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Adjusted logging format and removed unnecessary directories.
 
-## [v0.2] - 2024-08-19
+## [0.2] - 2024-08-19
 ### Added
 - New callback routers and group command handlers.
 - Proper MongoDB connection handling.
@@ -76,7 +76,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Cleaned up `.gitignore` and added comments across project.
 
-## [v0.1] - 2024-08-16
+## [0.1] - 2024-08-16
 ### Added
 - Project files: `.env`, `.gitignore`, `LICENSE`, `pyproject.toml`, `README.md`, `requirements.txt`.
 - Initial MongoDB integration.

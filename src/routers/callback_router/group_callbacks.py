@@ -5,8 +5,8 @@ from aiogram.types import CallbackQuery
 from motor.core import AgnosticDatabase as MDB
 
 from src.bot import bot
+from src.config import AVAILABLE_LANGUAGES as languages
 from src.config import GroupMessages as GM
-from src.config import available_languages as languages
 from src.db import *
 
 router = Router(name=__name__)  # Router for group callbacks handling
