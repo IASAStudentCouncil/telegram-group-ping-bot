@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - New middleware: startup/shutdown messages for user's groups and admin-reports.
 - Group size cheacking. Restricting some commands in groups with 500+ users.
 - Fetching @everyone / @here in any message.
-- More messages templates
+- More message templates
 ### Changed
 - License switched from MIT to GNU GPL v3.0.
 - Improved `pyproject.toml` and documentation.
