@@ -8,16 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `CHANGELOG.md` and `CODE_OF_CONDUCT.md` created.
 - Ruff code linter integrated.
 - `ADMIN_CHAT_ID` added to `.env`.
-- `admin_router` for admin commands and "ping-pong" health check.
+- "ping-pong" health check for admins.
 - New middleware: startup/shutdown messages for user's groups and admin-reports.
 - Group size cheacking. Restricting some commands in groups with 500+ users.
+- Fetching @everyone / @here in any message.
+- More messages templates
 ### Changed
 - License switched from MIT to GNU GPL v3.0.
 - Improved `pyproject.toml` and documentation.
 ### Fixed
 - Linted code with Ruff.
 - Fixed schema validators and `group` collection indexes.
-- Fixed `parse_group_chat_user_ids()`.
 
 ## [0.6] - 2024-09-01
 ### Added
