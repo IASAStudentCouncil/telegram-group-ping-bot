@@ -1,17 +1,14 @@
-from datetime import datetime
-
-
 class AdminMessages:
     """These messages are used for admin chat."""
 
     BOT_STARTUP_ADMIN_MESSAGE = {
-        "en": f"*Bot started* ({datetime.now().strftime('%d-%m-%Y %H:%M:%S')})\n",
-        "uk": f"*Бота запущено* ({datetime.now().strftime('%d-%m-%Y %H:%M:%S')})\n"
+        "en": "*Bot started* ({0})\n",
+        "uk": "*Бота запущено* ({0})\n"
     }
 
     BOT_SHUTDOWN_ADMIN_MESSAGE = {
-        "en": f"*Bot stopped* ({datetime.now().strftime('%d-%m-%Y %H:%M:%S')})\n",
-        "uk": f"*Бота зупинено* ({datetime.now().strftime('%d-%m-%Y %H:%M:%S')})\n"
+        "en": "*Bot stopped* ({0})\n",
+        "uk": "*Бота зупинено* ({0})\n"
     }
 
     BOT_REPORT_MESSAGE = {

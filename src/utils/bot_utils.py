@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from motor.core import AgnosticDatabase as MDB
 
@@ -61,7 +62,10 @@ async def send_bot_action_message(db: MDB, action: str) -> None:
     admin_language = admin.language
 
     try:
-        await bot.send_message(admin_chat_id, ACTION_MESSAGES[action][1][admin.language])
+        await bot.send_message(admin_chat_id,
+                               ACTION_MESSAGES[action][1][admin.language].format(
+                                   datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+                               ))
     except Exception as e:
         logging.error(f"Failed to send {action} message to admin: {e}")
 
