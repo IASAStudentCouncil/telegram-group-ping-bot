@@ -1,14 +1,18 @@
 import logging
 from contextlib import suppress
-from typing import List, Optional, Dict
 
-from motor.motor_asyncio import AsyncIOMotorClient
 from motor.core import AgnosticDatabase as MDB
-from pymongo.errors import OperationFailure, ServerSelectionTimeoutError, DuplicateKeyError
-from pymongo import IndexModel, ASCENDING
+from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import ASCENDING, TEXT, IndexModel
+from pymongo.errors import (
+    DuplicateKeyError,
+    OperationFailure,
+    ServerSelectionTimeoutError,
+)
 
-from src.config import mongo_uri, db_name
-from .schema_validators import *
+from src.config import db_name, mongo_uri
+
+from .schema_validators import SchemaValidators
 
 
 async def connect_to_mongo(uri: str = mongo_uri) -> AsyncIOMotorClient:
@@ -23,7 +27,7 @@ async def connect_to_mongo(uri: str = mongo_uri) -> AsyncIOMotorClient:
     """
     client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=5000)
     try:
-        await client.admin.command('ping')
+        await client.admin.command("ping")
         logging.info("Connected to MongoDB")
     except (ServerSelectionTimeoutError, OperationFailure, Exception) as e:
         logging.error(f"Failed to connect to MongoDB: {e}")
@@ -43,11 +47,13 @@ async def setup_database(client: AsyncIOMotorClient) -> MDB:
     db = client[db_name]
     logging.info(f"Connected to the '{db_name}' database")
 
-    collections = {"users": user_validator, "groups": group_validator}
+    collections = {"users": SchemaValidators.USER_VALIDATOR, "groups": SchemaValidators.GROUP_VALIDATOR}
     indexes = {
         "users": [IndexModel([("_id", ASCENDING)])],
-        "groups": [IndexModel([("_id", ASCENDING)]),
-                   IndexModel([("users.user_id", ASCENDING)])]
+        "groups": [
+            IndexModel([("_id", ASCENDING)]),
+            IndexModel([("users.user_id", ASCENDING)])
+        ]
     }
     actual_db_collections = await db.list_collection_names()
 
@@ -55,13 +61,16 @@ async def setup_database(client: AsyncIOMotorClient) -> MDB:
         if collection_name not in actual_db_collections:
             await db.create_collection(collection_name)
             logging.info(f"Collection '{collection_name}' created successfully")
-            await db.command("collMod", collection_name, validator=validator)
-            logging.info(f"Validator set for collection '{collection_name}'")
+            try:
+                await db.command("collMod", collection_name, validator=validator)
+                logging.info(f"Validator updated for collection '{collection_name}'")
+            except OperationFailure as e:
+                logging.warning(f"Validator could not be updated for '{collection_name}': {e}")
             try:
                 await db[collection_name].create_indexes(indexes[collection_name])
-                logging.info(f"Indexes created successfully for '{collection_name}' collections")
+                logging.info(f"Indexes updated successfully for '{collection_name}'")
             except Exception as e:
-                logging.error(f"Error creating indexes: {e}")
+                logging.error(f"Error updating indexes for '{collection_name}': {e}")
     return db
 
 
@@ -84,7 +93,7 @@ class User:
         self._collection = db["users"]
         self.id = user_id
         self._default_language = "uk" if language_code in ["uk", "ru"] else "en"
-        self.language: Optional[str] = None
+        self.language: str | None = None
 
     async def validation(self) -> None:
         """Validates user data, inserting if not found."""
@@ -126,13 +135,18 @@ class Group:
         """
         self._collection = db["groups"]
         self.id = group_id
-        self.language: Optional[str] = None
+        self.language: str | None = None
 
     async def add_to_db(self) -> None:
         """Inserts the group into the database. If the group already exists, clears the user list."""
         try:
             await self._collection.insert_one(
-                {"_id": self.id, "users": [], "language": "en"}
+                {
+                    "_id": self.id,
+                    "users": [],
+                    "language": "en",
+                    "custom_tags": []
+                }
             )
         except DuplicateKeyError:
             await self.clear_users()
@@ -193,12 +207,9 @@ class Group:
                 language_code (str): The new language code.
         """
         if self.language != language_code:
-            self.language = language_code
             try:
-                await self._collection.update_one(
-                    {"_id": self.id},
-                    {"$set": {"language": language_code}}
-                )
+                await self._collection.update_one({"_id": self.id}, {"$set": {"language": language_code}})
+                self.language = language_code
             except Exception as e:
                 logging.error(f"Error changing language for group {self.id}: {e}")
 
@@ -249,7 +260,7 @@ class Group:
         except Exception as e:
             logging.error(f"Error deleting user {user_id} from group {self.id}: {e}")
 
-    async def bulk_users_insert(self, user_ids: List[int]) -> None:
+    async def bulk_users_insert(self, user_ids: list[int]) -> None:
         """
             Bulk inserts users into the group's users array field.
             Args:
@@ -283,7 +294,7 @@ class Group:
         except Exception as e:
             logging.error(f"Error updating ping permission for user {user_id} in group {self.id}: {e}")
 
-    async def get_user_ids(self, only_pingable: bool = False, exclude_user_id: int | None = None) -> List[int]:
+    async def get_user_ids(self, only_pingable: bool = False, exclude_user_id: int | None = None) -> list[int]:
         """
             Retrieves a list of user IDs in the group, optionally filtered by ping permission.
             Args:
@@ -304,7 +315,7 @@ class Group:
             logging.error(f"Error retrieving user IDs for group {self.id}: {e}")
             return []
 
-    async def get_all_user_data(self) -> List[Dict[str, bool]]:
+    async def get_all_user_data(self) -> list[dict[str, bool]]:
         """
             Retrieves all user records from the group, including their IDs and ping permission status.
             Returns:
@@ -335,3 +346,27 @@ class Group:
         except Exception as e:
             logging.error(f"Error counting users in group {self.id}: {e}")
             return 0
+
+    async def add_custom_tag(self, tag_name: str) -> None:
+        try:
+            await self._collection.update_one(
+                {"_id": self.id, "custom_tags.name": {"$ne": tag_name}},
+                {"$push": {"custom_tags": {"name": tag_name, "user_ids": []}}},
+                upsert=True
+            )
+        except Exception as e:
+            logging.error(f"Error adding custom tag @{tag_name} to group {self.id}: {e}")
+
+    async def delete_custom_tag(self, tag_name: str) -> None:
+        try:
+            await self._collection.update_one(
+                {"_id": self.id},
+                {"$pull": {"custom_tags": {"name": tag_name}}}
+            )
+        except Exception as e:
+            logging.error(f"Error deleting custom tag @{tag_name} from group {self.id}: {e}")
+
+
+async def get_group_ids_list(db: MDB) -> list[int]:
+    collection = db["groups"]
+    return [group["_id"] async for group in collection.find({})]

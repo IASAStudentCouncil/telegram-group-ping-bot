@@ -21,30 +21,37 @@ Here’s an overview of the `src` directory structure:
 ┃ ┗ 📜logging_config.yaml   # YAML config for logging
 ┗ 📂text
   ┣ 📜__init__.py          
-  ┣ 📜buttons_text.py     # Keyboard button text templates
-  ┣ 📜group_texts.py     # Group message templates
-  ┗ 📜private_texts.py   # Private message templates
+  ┣ 📜buttons_text.py       # Keyboard button text templates
+  ┣ 📜admin_texts.py        # Admin chat message templates
+  ┣ 📜group_texts.py        # Group chat message templates
+  ┗ 📜private_texts.py      # Private chat message templates
 📂db
 ┣ 📜__init__.py  
 ┣ 📜db.py                   # Database operations and classes
-┗ 📜schema_validators.py    # MongoDB schema validation           
+┗ 📜schema_validators.py    # MongoDB schema validation  
+📂middlewares
+┣ 📜__init__.py  
+┗ 📜startup_shutdown_middleware.py    # Handle bot startup and shutdown actions.
 📂keyboards
 ┣ 📜__init__.py  
 ┣ 📜inline_keyboards.py     # Defines inline keyboards
 ┗ 📜keyboards.py            # Defines reply keyboards       
 📂routers
 ┣ 📜__init__.py  
-┣ 📂callback_routers
+┣ 📂admin_router
+┃ ┣ 📜__init__.py           # Handles special admin messages
+┣ 📂callback_router
 ┃ ┣ 📜__init__.py  
 ┃ ┣ 📜group_callbacks.py    # Handles group callbacks
 ┃ ┗ 📜private_callbacks.py  # Handles private chat callbacks         
-┗ 📂message_routers
+┗ 📂message_router
   ┣ 📜__init__.py  
   ┣ 📜group_messages.py     # Handles group messages
   ┗ 📜private_messages.py   # Handles private chat messages
 📂utils
 ┣ 📜__init__.py  
-┗ 📜telethon_client.py      # Telethon client functions and user entity parsing         
+┣ 📜telethon_client.py      # Telethon client functions and user entity parsing      
+┗ 📜bot_utils.py            # Functions for informing users whether bot started or stopped      
 
 📜main.py                   # Starts the bot
 ```
@@ -62,8 +69,9 @@ Here’s an overview of the `src` directory structure:
   - [`text/`](./config/text)
     - [`__init__.py`](./config/text/__init__.py): Initializes the `text` module for easy import.
     - [`buttons_text.py`](./config/text/buttons_text.py): Stores text templates for keyboard buttons.
+    - [`admin_texts.py`](./config/text/admin_texts.py): Contains admin chat specified message templates.
     - [`group_texts.py`](./config/text/group_texts.py): Contains group-specific message templates for the bot.
-    - [`private_texts.py`](./config/text/private_texts.py): Manages private chat messages and responses.
+    - [`private_texts.py`](./config/text/private_texts.py): Private chat messages and responses.
   - [`config.py`](./config/config.py): Loads critical environment variables from the `.env` file, such as tokens and database connection strings.
   - [`__init__.py`](./config/logging/__init__.py): Initializes the `config` module.
   
@@ -72,24 +80,31 @@ Here’s an overview of the `src` directory structure:
   - [`schema_validators.py`](./db/schema_validators.py): Defines JSON schemas to validate the structure of documents in **MongoDB** collections.
   - [`__init__.py`](./db/__init__.py): Initializes the `db` module for use across the bot.
 
+- [`middlewares/`](./middlewares)
+  - [`startup_shotdown_middleware.py`](./middlewares/startup_shutdown_middleware.py): Middleware with 2 methods to handle bot startup and shutdown actions.
+  - [`__init__.py`](./middlewares/__init__.py): Initializes the `middlewares` module.
+
 - [`keyboards/`](./keyboards)
   - [`inline_keyboards.py`](./keyboards/inline_keyboards.py): Defines inline keyboards that appear within messages, allowing users to interact without sending new messages.
   - [`keyboards.py`](./keyboards/keyboards.py): Contains standard reply keyboards that show up at the bottom of the chat, giving users preset response options.
   - [`__init__.py`](./keyboards/__init__.py): Makes the `keyboards` directory a module, enabling its contents to be easily imported.
 
 - [`routers/`](./routers)
-  - [`callback_routers/`](./routers/callback_routers)
+  - [`admin_router/`](./routers/admin_router)
+    - [`__init__.py`](./routers/callback_routers/__init__.py): Sets up the `admin_router` module. Manages messages from admin.
+  - [`callback_router/`](./routers/callback_router)
     - [`group_callbacks.py`](./routers/callback_routers/group_callbacks.py): Handles callback queries specific to group-related interactions, such as button presses in group chats.
     - [`private_callbacks.py`](./routers/callback_routers/private_callbacks.py): Manages callback queries in private chats, facilitating user-specific interactions.
-    - [`__init__.py`](./routers/callback_routers/__init__.py): Sets up the `callback_routers` module for use in routing callback queries.
-  - [`message_routers/`](./routers/message_routers)
+    - [`__init__.py`](./routers/callback_routers/__init__.py): Sets up the `callback_router` module for use in routing callback queries.
+  - [`message_router/`](./routers/message_router)
     - [`group_messages.py`](./routers/message_routers/group_messages.py): Processes and responds to messages sent in group chats, including commands and text messages.
     - [`private_messages.py`](./routers/message_routers/private_messages.py): Handles incoming messages in private chats, providing personalized responses and guidance.
-    - [`__init__.py`](./routers/message_routers/__init__.py): Initializes the `message_routers` module, integrating message handling across the bot.
+    - [`__init__.py`](./routers/message_routers/__init__.py): Initializes the `message_router` module, integrating message handling across the bot.
   - [`__init__.py`](./routers/__init__.py): Prepares the `routers` directory as a module, linking together all routing logic.
 
 - [`utils/`](./utils)
   - [`telethon_client.py`](./utils/telethon_client.py): Contains Telethon client functions and utilities for parsing user entities.
+  - [`bot_utils.py`](./utils/bot_utils.py): Informing users whether bot started or stopped.
   - [`__init__.py`](./utils/__init__.py): Initializes the `utils` module.
 
 - [`main.py`](./main.py): The entry point for the bot. It initializes all components, starts the event loop, and begins processing updates from **Telegram**.

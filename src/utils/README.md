@@ -1,4 +1,4 @@
-# Telethon Integration
+## Telethon Integration
 
 This project utilizes [Telethon](https://github.com/LonamiWebs/Telethon) — library for interacting with the Telegram API. 
 

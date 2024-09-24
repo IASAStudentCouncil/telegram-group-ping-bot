@@ -1,9 +1,11 @@
-# These messages are used for private chat interactions
 class PrivateMessages:
+    """These messages are used for private chat interactions."""
+
     START = {
         "en": "Hey! I'm *Ping Bot* 😊",
         "uk": "Привіт! Я — *Ping Bot* 😊"
     }
+
     HELP = {
         "en": (
             "I can help you quickly ping members in your group, just like in Discord. "
@@ -38,14 +40,17 @@ class PrivateMessages:
             "Використовуйте ці команди, щоб покращити комунікацію в груповому чаті!"
         )
     }
+
     CHOICE_LANGUUAGE = {
         "en": "Choice language...",
         "uk": "Оберіть мову..."
     }
+
     LANGUAGE_CHANGED = {
         "en": "Language selected 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
         "uk": "Мову обрано 🇺🇦󠁧󠁢󠁥󠁮󠁧󠁿"
     }
+
     IGNORE_GROUP_COMMANDS_IN_PRIVATE_CHAT = {
         "en": "Command is only available in group chat. Check /help",
         "uk": "Команда допуступна лише в груповому чаті. Скористайтеся /help"

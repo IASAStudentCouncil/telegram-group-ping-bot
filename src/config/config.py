@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -7,6 +8,9 @@ load_dotenv()
 # Bot configuration
 bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
 bot_name = os.getenv("TELEGRAM_BOT_NAME")
+
+# Admin configuration
+admin_chat_id = int(os.getenv("ADMIN_CHAT_ID"))
 
 # Telegram API configuration
 telegram_api_id = os.getenv("TELEGRAM_API_ID")
@@ -25,6 +29,7 @@ db_name = os.getenv("MONGO_DB_NAME")
 required_env_vars = {
     "TELEGRAM_BOT_TOKEN": bot_token,
     "TELEGRAM_BOT_NAME": bot_name,
+    "ADMIN_CHAT_ID": admin_chat_id,
     "TELEGRAM_API_ID": telegram_api_id,
     "TELEGRAM_API_HASH": telegram_api_hash,
     "MONGO_USER_NAME": mongo_user,
@@ -36,17 +41,19 @@ required_env_vars = {
 
 missing_vars = [key for key, value in required_env_vars.items() if not value]
 if missing_vars:
-    raise EnvironmentError(f"Missing critical environment variables: {', '.join(missing_vars)}")
+    raise OSError(f"Missing critical environment variables: {', '.join(missing_vars)}")
 
-# Supported languages
-available_languages = {
+AVAILABLE_LANGUAGES = {     # Supported languages
     "en": "EN🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "uk": "UA🇺🇦"
 }
 
+GROUP_LIMIT_SIZE = 500
+MENTION_PER_MESSAGE_LIMIT = 50
+
 __all__ = (
     "mongo_uri", "db_name",
-    "bot_token", "bot_name",
+    "bot_token", "bot_name", "admin_chat_id",
     "telegram_api_id", "telegram_api_hash",
-    "available_languages"
+    "AVAILABLE_LANGUAGES", "GROUP_LIMIT_SIZE", "MENTION_PER_MESSAGE_LIMIT"
 )

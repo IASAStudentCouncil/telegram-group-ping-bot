@@ -1,21 +1,35 @@
 [project]
 name = "telegram-group-ping-bot"
-version = "0.6"
+version = "0.7"
 description = "A Telegram bot for pinging group members quickly and easily, like in Discord."
+organization = { name = "IASA Student Council", email = "studrada@gmail.com" }
+authors = [
+    { name = "Yulian Zavodnyk", email = "yulianzavodnyk@gmail.com" }
+]
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
-keywords = ["telegram", "bot", "group", "pinging", "automation"]
-homepage = "https://t.me/group_mate_ping_bot"
-repository = "https://github.com/IASAStudentCouncil/telegram-group-ping-bot"
+keywords = [
+    "automation",
+    "telegram",
+    "bot",
+    "pinging"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Framework :: AsyncIO",
+    "Topic :: Communications :: Chat",
+]
 
-[project.organization]
-name = "IASA Student Council"
-email = "studrada@gmail.com"
-
-[[project.authors]]
-name = "Yulian Zavodnyk"
-email = "yulianzavodnyk@gmail.com"
+[project.urls]
+Homepage  = "https://t.me/group_mate_ping_bot"
+Repository = "https://github.com/IASAStudentCouncil/telegram-group-ping-bot"
+Issues = "https://github.com/IASAStudentCouncil/telegram-group-ping-bot/issues"
+Changelog = "https://github.com/IASAStudentCouncil/telegram-group-ping-bot/blob/main/CHANGELOG.md"
 
 [project.dependencies]
 aiogram = "^3.12.0"
@@ -28,3 +42,51 @@ python-dotenv = "^1.0.1"
 [project.dev-dependencies]
 pytest = "^8.3.2"
 pytest-asyncio = "^0.23.8"
+ruff = "^0.6.5"
+
+[tool.ruff]
+exclude = [
+    ".venv",
+    "venv",
+    ".vscode",
+    "build",
+    "dist",
+    "__pycache__",
+    "__pypackages__",
+    ".git",
+    ".tox",
+    "node_modules",
+    "site-packages"
+]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",       # Style issues (PEP 8)
+    "F",       # Logic errors (Pyflakes)
+    "T",       # Type-related issues
+    "I",       # Import sorting (isort)
+    "B",       # Common bugs (flake8-bugbear)
+    "SIM",     # Simplification (flake8-simplify)
+    "C4",      # Complexity checks (McCabe)
+    "Q",       # Quotes consistency (flake8-quotes)
+    "ANN"      # Type annotations checks
+]
+ignore = [
+    "E501",    # Ignore long line warnings
+    "F401",    # Ignore unused imports
+    "F403",    # Ignore wildcard imports
+    "F405",    # Ignore wildcard imports not defined in the module
+    "ANN101"   # Ignore missing type annotation for `self`
+]
+fixable = ["ALL"]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+skip-magic-trailing-comma = false
+docstring-code-format = true
+docstring-code-line-length = 72

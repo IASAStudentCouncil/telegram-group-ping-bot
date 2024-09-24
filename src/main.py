@@ -4,11 +4,12 @@ import os
 
 from aiogram import Dispatcher
 
-from config import configure_logging, bot_token
-from utils import create_telethon_client
-from db import *
 from bot import *
+from config import bot_token, configure_logging
+from db import *
+from middlewares import StartupShutdownMiddleware
 from routers import *
+from utils import create_telethon_client
 
 
 async def main() -> None:
@@ -16,7 +17,7 @@ async def main() -> None:
         Main asynchronous function to start the bot.
         Establishes connection to MongoDB, configures logging, and starts the bot polling.
     """
-    if not os.path.exists("system"):  # creates 'system' folder were .log and .session files will be. REQUIRED!!!
+    if not os.path.exists("system"):  # creates 'system' folder were .log and .session files will be stored. REQUIRED!!!
         os.makedirs("system")
     configure_logging()
 
@@ -29,9 +30,9 @@ async def main() -> None:
         logging.exception("Exception details:", exc_info=e)
         return
 
-    telethon_client = create_telethon_client()
+    tc = create_telethon_client()
     try:
-        await telethon_client.start(bot_token=bot_token)  # await is required
+        await tc.start(bot_token=bot_token)  # await is required
         logging.info("Telethon client started successfully.")
     except Exception as e:
         logging.error("Failed to start Telethon client!")
@@ -42,20 +43,25 @@ async def main() -> None:
         logging.info("Start polling...")
         dp = Dispatcher()
         dp.include_router(router=main_router)
-        await dp.start_polling(bot, db=mdb, telethon_client=telethon_client)
+
+        ssm = StartupShutdownMiddleware(db=mdb, tc=tc)
+        dp.startup.register(ssm.on_startup)
+        dp.shutdown.register(ssm.on_shutdown)
+
+        await dp.start_polling(bot, db=mdb, telethon_client=tc)
     except Exception as e:
         logging.error("An error occurred while polling!")
         logging.exception("Exception details:", exc_info=e)
-        client.close()
     finally:
-        client.close()
         await bot.session.close()
         logging.info("Bot session closed!")
-        await telethon_client.disconnect()
+        await tc.disconnect()
         logging.info("Telethon client disconnected!")
+        client.close()
+        logging.info("MongoDB connection closed.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

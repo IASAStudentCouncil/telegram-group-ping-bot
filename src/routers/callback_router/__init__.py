@@ -1,6 +1,7 @@
 from aiogram import Router
-from .private_callbacks import router as private_callbacks_router
+
 from .group_callbacks import router as group_callbacks_router
+from .private_callbacks import router as private_callbacks_router
 
 # Commands router for handling all callbacks
 callback_router = Router(name=__name__)
